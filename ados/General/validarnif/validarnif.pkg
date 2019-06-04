@@ -1,0 +1,14 @@
+v 3
+
+d VALIDARNIF: 
+d
+d Author: BPLIM Team. Banco de Portugal
+d Contact: bplim@bportugal.pt
+d
+d KW: nif/nipc
+d
+d
+d Distribution-Date: 20170827
+d
+f validarnif.ado
+f validarnif.sthlp
