@@ -8,7 +8,7 @@ Portuguese Fiscal Identification Numbers (NIFs) always have nine digits and the 
 
 To install run the following in Stata:
 
-net install validarnif, from("https://github.com/bplim/tools/raw/master/ados/General/")
+net install validarnif, from("https://raw.githubusercontent.com/bplim/tools/master/ados/general/validarnif/")
 
 ## Author
 
