@@ -1,0 +1,3 @@
+v 3
+d BPLIM Team, BPLIM (bplim@bportugal.pt)
+p validarnif - Checks if NIF is valid
