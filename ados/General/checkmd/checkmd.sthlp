@@ -117,12 +117,12 @@ Example 1:
 Checks for dataset auto with the csv file presented above as the auxiliary file.
 
 {p 8 16}{inp:. sysuse auto, clear}{p_end}
-{p 8 16}{inp:. check_consistency, csv_file(auto) internal save_obs(10) }{p_end}
+{p 8 16}{inp:. checkmd, csv_file(auto) internal save_obs(10) }{p_end}
 
 Example 2:
 
 {p 8 16}{inp:. sysuse auto, clear}{p_end}
-{p 8 16}{inp:. check_consistency, csv_file(auto) internal save_obs(10) mpz(nompz) inc_only verbose}{p_end}
+{p 8 16}{inp:. checkmd, csv_file(auto) internal save_obs(10) mpz(nompz) inc_only verbose}{p_end}
 
 Example 3:
 Checks for a merged dataset
@@ -133,7 +133,7 @@ Checks for a merged dataset
 {p 8 16}{inp:. replace price = price + 100 if _n > 30}{p_end}
 {p 8 16}{inp:. save auto2, replace}{p_end}
 {p 8 16}{inp:. use auto1, clear}{p_end}
-{p 8 16}{inp:. check_consistency, csv_file("dir/auto1_auto2") id(make) internal save_obs(10) merge(file("dir/auto2") type(1:1) key(make) keep1(price) keep2(price))}{p_end}
+{p 8 16}{inp:. checkmd, csv_file("dir/auto1_auto2") id(make) internal save_obs(10) merge(file("dir/auto2") type(1:1) key(make) keep1(price) keep2(price))}{p_end}
 
 
 {title:Remarks}
