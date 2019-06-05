@@ -1,0 +1,3 @@
+v 3
+d BPLIM Team, BPLIM (bplim@bportugal.pt)
+p checkmd - Verifies multiple logical conditions in an html file
