@@ -1,0 +1,27 @@
+v 3
+
+d CHECKMD: Verifies multiple logical conditions in an html file
+d
+d Author: BPLIM team. Banco de Portugal
+d Contact: bportugal@bportugal.pt
+d
+d
+d Requires: Stata version 15
+d
+d Required packages:
+d
+d markstat
+d matrixtools
+d gtools
+d
+d Distribution-Date: 20190605
+d
+f checkmd.ado
+f checkmd.sthlp
+f check_prog1.ado
+f ext_inf.ado
+f file_write.ado
+f matmpz.ado
+f readmstr.ado
+f str_clean.ado
+f valid_data.ado
