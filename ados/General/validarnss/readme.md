@@ -7,7 +7,7 @@ Portuguese Social Security Number (NSS) always have eleven digits and the last o
 
 To install run the following in Stata:
 
-net install validarnif, from("https://github.com/BPLIM/Tools/raw/master/ados/General/validarnss")
+net install validarnss, from("https://github.com/BPLIM/Tools/raw/master/ados/General/validarnss")
 
 ## Author
 
