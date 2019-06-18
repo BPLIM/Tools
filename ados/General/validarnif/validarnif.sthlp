@@ -18,27 +18,24 @@ validarnif - validates the tax identification number (nipc/nif)
 {title:Description}
 
 {p} 
-This command validates the tax identification number of firms operating in Portugal, returning a variable _valid with the following values:
+This command validates the tax identification number of firms operating in Portugal, returning a variable {it:_valid} with the following values:
 
-- 0 for valid observations;
-- 1, 2, 3 4 and 5 for invalid observations that are subdivided in five categories:
-	- first digit invalid (1)
-	- less than 9 digits (2)
-	- check digit invalid (3)
-	- missing {it:var} (4)
-	- non-numeric type (5)
-	
-Note: non-numeric type only applies when the variable's type is string.
+0 - for valid observations;
+1 - first digit invalid
+2 - less than 9 digits
+3 - check digit invalid
+4 - missing {it:var}
+5 - non-numeric type
+
+Note: non-numeric type only applies when the variable is a string.
 
 {title:Options}
 
-{p 0 4}{opt force} creates a numeric variable {it:var_n} when the argument's type is string.
-
+{p 0 4}{opt force} creates a numeric variable {it:var_n} when the argument type is string.
 
 {title:Examples}
 
 {p 8 16}{inp:. validarnif nipc}{p_end}
-
 
 {title:Remarks}
 
@@ -58,5 +55,5 @@ BPlim, Banco de Portugal, Portugal.
 {p}
 Email: {browse "mailto:bplim@bportugal.pt":bplim@bportugal.pt}
 
-I appreciate your feedback. Comments are welcome!
+We appreciate your feedback. Comments are welcome!
 
