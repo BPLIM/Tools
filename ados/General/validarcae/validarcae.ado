@@ -1,7 +1,7 @@
-*! 0.0.2 19jun2019
+*! 0.2 19jun2019
 * Programmed by Gustavo Iglésias
 
-program define validarcae
+program define validarcae_v2
 
 syntax varlist(min=1 max=1), [rev(int 3) path(string) cfl dropzero getlevels(string) fl fr en]
 
@@ -209,16 +209,16 @@ if "`getlevels'" != "" {
 	}
 
 	if `rev' == 1 {
-		get_div1 `varlist', file(`temp') levels(`getlevels') `fr' cfl(`cfl') namevar(`namevar') `en'
+		get_div1 `varlist', file(`temp') levels(`getlevels') `fr' `cfl' namevar(`namevar') `en'
 	}
 	else if `rev' == 2 {
-		get_div2 `varlist', file(`temp') levels(`getlevels') `fl' `fr' cfl(`cfl') namevar(`namevar') `en'
+		get_div2 `varlist', file(`temp') levels(`getlevels') `fl' `fr' `cfl' namevar(`namevar') `en'
 	}
 	else if `rev' == 21 {
-		get_div21 `varlist', file(`temp') levels(`getlevels') `fl' `fr' cfl(`cfl') namevar(`namevar') `en'
+		get_div21 `varlist', file(`temp') levels(`getlevels') `fl' `fr' `cfl' namevar(`namevar') `en'
 	}
 	else {
-		get_div3 `varlist', file(`temp') levels(`getlevels') `fl' `fr' cfl(`cfl') namevar(`namevar') `en'
+		get_div3 `varlist', file(`temp') levels(`getlevels') `fl' `fr' `cfl' namevar(`namevar') `en'
 	}
 }
 
