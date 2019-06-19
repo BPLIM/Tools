@@ -1,7 +1,7 @@
 *! 0.2 19jun2019
 * Programmed by Gustavo Iglésias
 
-program define validarcae_v2
+program define validarcae
 
 syntax varlist(min=1 max=1), [rev(int 3) path(string) cfl dropzero getlevels(string) fl fr en]
 
