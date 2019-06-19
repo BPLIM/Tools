@@ -10,7 +10,7 @@ net install panelstat, from("https://github.com/BPLIM/Tools/raw/master/ados/Gene
 
 ## User guide
 
-The file `panelstat_UG.html` contains a small user guide. This file was written using the Stata markdown due to German Rodriguez and compiled with (`markstat`)[https://data.princeton.edu/stata/markdown].
+The file `panelstat_UG.html` contains a small user guide. This file was written using the Stata markdown due to German Rodriguez and compiled with [`markstat`](https://data.princeton.edu/stata/markdown).
 The source file is `panelstat_UG.stmd`. After installing the `markstat` ado file type
 ```
 markstat using panelstat_UG.stmd
