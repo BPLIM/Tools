@@ -1,0 +1,567 @@
+﻿
+---
+title: A user guide for *panelstat*
+author: Paulo Guimaraes, BPlim
+date:  17jun2019
+version: 3.5
+---
+
+
+1 Introduction
+==============
+
+`panelstat ` is a Stata user-written command to help understand the characteristics of standard panel data sets. Usage of `panelstat` command is quite simple:
+
+```
+panelstat panelvar timevar [if] [in] [ , options]
+
+```
+
+where `panelvar` is a unit identifier for the panel and `timevar` identifies the time variable. `panelstat` has many
+options which we will discuss using examples. For now, if you want to see the full list of options
+simply check the help file for `panelstat`.
+
+2 Basic Usage
+==============
+
+To illustrate the usage of `panelstat` we start by loading Stata's *nlswork* file set which is a sample of the National Longitudinal Survey
+of young women aged 14 to 26 years in 1968, and which were observed for several years.
+
+```s
+    sysuse nlswork.dta, clear
+```
+
+The unit identifier for this panel is *idcode* -- a unique identifier for each participant in the study. The time variable is *year*.
+To obtain basic descriptive statistics for this panel we can run `panelstat`:
+
+```s
+    panelstat idcode year
+```
+As a result `panelstat` produced three pieces of information. The first block, under the heading *Basic Descriptives*,
+provides information on the total number of observations, individuals, and the time span of the panel.
+It also tries to give you an idea of how close the panel is to a fully balanced one. Since we have $4,711$ individuals and we
+have observed data for a total of 21 years, if we had a fully balanced dataset we should have $4,711 \times 21=98,931$ observations. However, 
+we only have $28,534$ observations which gives a level of completeness of $28,534/98,931=28.84\%$.
+
+The second block of information is simply a tabulation of the number of observations per individual. We can immediately see that there
+are 547 individuals with only one observation (these are called *singletons*) and that only 86 individuals are observed for 15 years - the largest
+number of periods an individual is observed.
+
+The final block gives us a simple tabulation of the number observations in each year. To avoid calculation of the tables of "Basic Descriptives"
+we can use the `nosum` option.
+
+
+3 General Options
+=================
+
+## The *excel* option
+
+When working with `panelstat` you may want to save the output of your analyses to an excel spreadsheet. This is
+done by specifying the name of an output file where you want the results to be stored. For example,
+
+```
+    panelstat idcode year, excel(myresults)
+```
+
+will create an excel spreadsheet that contains all information displayed by the command. By default, the new excel file
+will be created in Stata's working directory. You can, however, specify a full path as in
+
+```
+    panelstat idcode year, excel("C:\mystuff\myresults")
+```
+If you use other `panelstat` options then all results will be stored in the same excel spreadsheet under different worksheets.
+To replace an existing spreadsheet you can specify the sub-option `replace` as in
+
+```
+    panelstat idcode year, excel(myresults, replace)
+
+```
+
+and the sub-option `modify` will let you overwrite an existing spreadsheet.
+
+```
+    panelstat idcode year, excel(myresults, modify)
+
+```
+
+## The *force1*, *force2*,  and *force3* options
+
+If you try `panelstat` in a dataset that is not a "proper panel" you will obtain an error. This will happen, for example, if there are
+repeated observations for the unit identifier in the same time period. The options `force1`, `force2`, and `force3` are intended to help
+you obtain results by ignoring the observations that are causing the problem.
+
+To understand how these options work we will modify the *nlswork* dataset to force an error that will prevent `panelstat` from running.
+The observations for the first individual in the dataset are
+
+```s
+    list idcode year if idcode==1
+```
+But, we will force now an error in the dataset by replacing the time value of the first 3 observations by $70$.
+
+```s
+    replace year=70 in 1/3
+    list idcode year if idcode==1
+```
+
+If you now try to run `panelstat` you will obtain an error because this is not a proper panel. You can force `panelstat` to run
+by ignoring some observations. There are 3 options:
+
+- `force1` - uses the first observation per repeated value so in this case it ignores the second and third observations.
+
+- `force2` - ignore all repeated values, that is, the first three observations.
+
+- `force3` - ignores all observations for the panel unit so, in this case, all observations for which idcode==1.
+
+In our example we only had repeated observations for one individual but if there were multiple individuals with troublesome observations
+then the same logic would be applied. Note that these options do not modify your dataset -- they simply ignore the
+troubling observations in the ensuing calculations.
+
+
+## The *cont* option
+
+The `cont` option should be used if there is a time gap that is common to all panel units. Looking at the table produced above
+with the heading "Number of individuals per time unit" we see that some years are missing. If you use the `cont` option
+then these years will be ignored in all subsequent calculations. This will make a difference in calculations that make use of lagged values.
+
+## The *forcestata* option
+
+Working with large panels can be extremely slow. Fortunately, there user-written command
+[`gtools`](http://gtools.readthedocs.io/en/latest/index.html) written by Mauricio Caceres is much faster than official *Stata* commands.
+To install an updated version do
+```
+ssc install gtools
+gtools, upgrade
+```
+If `panelstat` finds that the `gtools` package is installed then it will use it. 
+The option `forcestata` will force the use of *Stata* official commands.
+
+4 The structure of the panel
+============================
+
+There are a set of options that allow us to gain a better understanding of the structure of the panel.
+These are the `pattern`, `gaps`, `runs`,`vars`, and `demog` options. In the following, to prevent redisplaying the basic descriptives
+for the panel we will use the `nosum` option.
+
+## The *pattern* option
+
+We start with the `pattern` option
+
+```s
+    use nlswork, clear
+    panelstat idcode year, pattern nosum
+```
+The table that was produced shows the 10 most common patterns in the data. Thus, the most common situation are
+individuals that were only observed in the first year of the study (136 individuals) while the second
+most common pattern are individuals observed in the last period (114 individuals). Note that by default we only see the first 10 most
+common patterns. This behavior can be modified by using the `setmaxpat` option. For example, to report the
+25 most common patterns you do
+
+```
+    panelstat idcode year, pattern setmaxpat(25)
+```
+
+## The *gaps* option
+
+A gap is simply a "hole" in the data. Option `gaps` gives you some ideia about the gaps in your panel.
+```s
+    panelstat idcode year, gaps nosum
+```
+The first table that is produced - *Distribution of the size of the time gaps* - gives an idea of how large these gaps are.
+The most common situation in this data set is a gap of size 1 - which happens 9,757 times. On the other extreme we see that there are
+2 gaps of size 19. Since the maximum time dimension of this panel is 21 years this means that two individuals were observed in the
+first year and again in the last year without having any other observations in between. The second table  - *Distribution of the number of gaps by individual* - tells you how many gaps there are per individual. For 984 women there are no gaps - although some of these women may have been observed
+only once - and, out of the 4,711 women, 13 had a total of 8 gaps!
+
+Notice that there are some years (74, 76, 79, 81, 84 and 86) for which we do not have data. Perhaps there was no
+data collected in those particular years, and so this fact may be "inflating" the actual number of gaps. With the `cont` option we can correct this
+by considering all time periods in the panel as consecutive. If we do this we see that the number of gaps is substantially reduced
+```s
+    panelstat idcode year, gaps nosum cont
+```
+If you want you can create variables that capture the number of gaps per panel unit or the size of the largest gap for the panel unit.
+You do this by adding the option `keepngaps(varname)` or `keepmaxgaps(varname)` where *varname* are names of new variables.
+For example,
+```s
+    panelstat idcode year, keepngaps(ngap) keepmaxgap(maxgap) nosum cont
+```
+As a result the variables *ngap* and *maxgap* are added to the dataset. Note that the values for these variables will be different if you do not specify the `cont` option.
+
+## The *runs* option
+
+A *run* is a set of consecutive time periods for which a panel unit is observed. If a panel unit has a run of size 3, this means
+that this panel unit was observed for three consecutive time periods. Of course, a panel unit may have several *runs* (which
+means it also has gaps). Next, we run `panelstat` with the `runs` (as well as the `cont`) option
+```s
+    panelstat idcode year, runs nosum cont
+```
+We have 3,001 runs of size 1 (some of these are *singletons*) while we have 86 women that are observed for 15 consecutive years (ignoring
+years for which we do not have any data).
+
+## The *vars* option
+
+The `vars` option produces a table with information for all variables in your dataset indicating how many panel units
+fall in each of the following categories
+
+  - singleton observation with nonmissing value of the variable
+  - singleton observation with missing value for the variable
+  - non-singleton with all missing values of the variable
+  - non-singleton with only one valid value of the variable
+  - non-singleton with time-invariant values and nonmissing values for the variable
+  - non-singleton with time-invariant values and missing values for the variable
+  - non-singleton with time-variant values and nonmissing values for the variable
+  - non-singleton with time-variant values and missing values for the variable
+
+Running this option in our dataset we obtain
+```s
+      panelstat idcode year, vars nosum cont
+```
+To create a variable with an indicator showing the above cases for a particular variable you need to use the `wiv` option (see below).
+
+## The *demog* option
+
+Finally, we discuss the `demog` option. This option characterizes the flows of the panel units that occur between consecutive time periods.
+```s
+    panelstat idcode year, demog nosum
+```
+If we look at the table we see that in the first year of the panel - 1968 - we had a total of 1,375 individuals. Of those, 851 will be observed again
+in the following year. Of the remaining 524 which are not observed in 1969, 136 where never again observed in the panel while 388, although not
+present in 1969, eventually come back in a later year. Moving now to the 1970 row we see that there are 1,686 individuals. 1,001 had
+been observed in the previous year while 685 are entering the dataset in this year. Of these 685, 476 show up in the data for the first
+time while 209 had already showed up in a previous year (so they must have gaps). It is no surprise that in 1975 all individuals
+enter the data - because there was no data in 1974. To account for this we could have specified the `cont` option.
+
+## The *all* option
+
+The `all` option is equivalent to simultaneously selecting the options `pattern`, `gaps`, `runs`,`vars` and `demog`
+
+5 Describing your data
+====================
+
+`panelstat` offers a set of options that allow you to inspect your variables taking advantage of the panel structure.
+
+## The `statovert` option
+
+This option produces descriptive statistics over time for a list of variables. It is quite simple to use. To obtain
+year by year statistics for the variable *grade* do
+```s
+    panelstat idcode year, nosum statovert(grade)
+```
+We could have listed several variables in the argument of `statovert`, in which case `panelstat` would create
+a table for each variable. `statovert` also supports the suboption `detail` which, as suggested by the name, provides
+additional descriptives on the variables (the 1, 5, 95 and 99th quantile of the variable(s)).
+
+## The `wiv` and `wtv` options
+
+The `wiv` option provides statistics for a list of selected variables alongside the panel unit dimension. Using this option
+on the variables *race* and *union*
+```s
+    panelstat idcode year, nosum wiv(race union)
+```
+we obtain a piece of information for each variable. At the top we have information at the level of the individual followed
+by a table with information at the observation level. Inspecting the output produced by `panelstat` we can see
+that there are no missing observations for *race*. The panel has 547 singletons (individuals observed only once) but there
+are no missing values of *race* for the singletons "547 singleton idcode-observations with non-missing value (11.61%)". The
+remaining 4,164 individual level observations for *race* are all (as expected) time-invariant and no missing values are recorded
+"4164 non-singleton idcode-observations with year invariant and non-missing values (88.39%)". Singletons represent close to
+2% of all observations. The situation is more diverse for the *union* variable. A little less than a third of the observations
+ are missing for the *union* variable. The majority of the singleton observations have missing values for this variable (292 out of 547).
+There are 269 individuals, observed more than once, that have all observations for *union* missing "269 non-singleton idcode-observations with all values missing ( 5.71%)"
+On the other hand, for 409 individuals there is only one value for *union* recorded with the other values missing for the variable.
+We can see that 527 women have no missing values *and* have maintained the same status over time while 1,536 also show consistent
+values over time but have some missing values. A smaller number, 221 women, have no missing values in the variable *union* but change status over time.
+Finally, 1,202 participants see their union status altered over time but have some missing observations.
+The distribution in terms of observations shows that the largest proportion of the observations (42.5%) are "time-invariant with missing".
+We could retain in our data a variable indicating the situation of each observation. Running the command with the suboption `keep` as in
+```
+    panelstat idcode year, nosum wiv(race union, keep)
+```
+would add to the data two variables -- $\_wiv\_race$ and  $\_wiv\_union$ -- to identify the type assigned to each observation.
+
+A less used option is the `wtv` option. It does exactly the same as `wiv` but exchanges the roles of the panel unit and time variable.
+
+## The `tabovert` option
+
+This is an option to be used with categorical variables. It simply tabulates the frequency
+of each category over time. Say, we wanted to understand how the variable union had changed over time. To avoid
+working with a wide table we restrict the analysis to the period 1968-1977.
+```s
+    panelstat idcode year if year<78, nosum tabovert(union)
+```
+This way we obtain a distribution over time for all values of the variable *union* including missing values.
+
+## The `demoby` option
+
+This is also an option to be used only with categorical variables. It can be seen as an extension of the previous option.
+This option tries to provide some idea about the movements over time of the panel units across the categories of a given variable.
+Thus, if we run the option on the *union* variable we obtain
+```s
+    panelstat idcode year, nosum demoby(union)
+```
+
+The above table shows us that in 1970, the first year for which there are nonmissing values of *union*, of the 798 reported
+values, 68 are for women that only reported values for *union* once. If we move to the row corresponding to the year 1972,
+we can see that, out of 1,244 valid values reported for the variable *union*, 477 are for women that are reporting their *union*
+status for the first time, and for 123 women these are the last reported values of *union* status. But there is more information.
+660 women maintain the same union status as in the previous year, while 107 have changed their union status. Of those that
+changed union status, 92 are new to their present category while the other 15 are now returning to a category in which
+they have been in the past.
+The suboption `keep` will create a variable identifying each situation at the level of the observation. Thus, if we run
+```
+    panelstat idcode year, nosum demoby(union, keep)
+```
+```s/
+    capture panelstat idcode year, nosum demoby(union, keep)
+```
+the variable $\_demoby\_union$ is created and it will contain an indicator of all possible cases. To understand how this
+variable is coded consider the list of values for this variable for the first individual in the datase:
+```s
+    list idcode year union _demoby_union if idcode==1
+```
+By default `demoby` does not report information for periods when all values of the variable are missing. That
+behavior can be overrun with the suboption `missing`
+
+## The `flows` option
+
+The option `flows` decomposes the change in the stock of each variable between consecutive periods.
+Thus, for each time period, it identifies the changes that result from panel units that already exist (incumbent),
+and those that enter and exit. To illustrate the use of the command we consider the variable *hours* which
+contains the amount of hours worked by each woman.
+```s
+    panelstat idcode year, nosum flows(hours)
+```
+Consider the second row of the table that was produced. It shows that in 1969 the total amount of hours reported
+was 46,713 and that represented a decrease of 4,606 when compared with the previous year. Incumbents (those women that were
+present in 1969 and also in the previous year) increased their working hours by 536. The change in hours worked by incumbents can
+be decomposed in changes by women that reported an increase in hours worked (2,096 hours) and women that decreased the
+amount of hours worked (1,560 hours). The next column shows the amount of hours added by women that entered the survey in 1969
+ (were not present in the previous year) - a total contribution of 14,003 while women that exited from 1968 to 1969 contributed with
+a change of -19,112 hours. We also see that there are no incumbents with missing data in 1968 but there is a reduction of 33
+hours which is accounted for by missing data of incumbent(s) who had hours reported in 1968.
+You can specify several variables and a table will be produced for each variable.
+
+If you want to know how many panel units are behind the numbers produced by the option `flows` you need to specify the *unit* option.
+That is, you should instead do
+```
+    panelstat idcode year, nosum flows(hours, unit)
+```
+
+5 Inspecting your data
+====================
+
+This set of commands is particularly helpful to spot problems in the data.
+
+## The `rel` and `abs` options
+
+These options report on changes over time for the specified variable. The options are particularly
+suited for continuous variables. As an example we will use the `rel` option with the variable *hours*
+```s
+    panelstat idcode year, nosum rel(hours) cont
+```
+The output classifies all relative changes from two consecutive periods for the same panel unit and
+tabulates the results. It distinguishes between no change, positive and negative change, and abnormal
+positive, and abnormal negative changes. Abnormal changes are those that exceed a specified threshold value for a relative
+change (by default 100). You can change the threshold value using the suboption `val`. For example, if we try
+```s
+    panelstat idcode year, nosum rel(hours, val(50)) cont
+```
+we see that the number of abnormal positive (and negative) changes increases because we are now classifying
+as abnormal a relative change exceeding 50%.
+We should also note that, by default, relative changes are calculated with respect to the average of starting and end point.
+This behavior can be changed with the `denlag` suboption. If that option is specified then the relative change
+is calculated with respect to the lagged value. We can also change the number of lags used on the calculation of the relative
+change. By default that value is 1. But you could specify a different value with the option `lags`. Finally,
+suboption `keep` creates a variable that stores the classification of type of change attributed to the observations of the variable.
+The command
+```
+    panelstat idcode year, nosum rel(hours, keep) cont
+```
+would create a variable named $\_rel\_L1\_hours$.
+
+The option `abs` operates similarly but it classifies the absolute changes. The threshold change to report abnormal changes
+is 10 and may be changed with the suboption `val`. As with the option `rel` you can use a different value for the
+lag (the default is 1). This is done with suboption `lags`. If using a lag larger than one you may prefer to use differences in
+differences. In that case you need to specify suboption `dif`. Finally, you can use the `keep` option to retain
+the variable with the classifications.
+
+## The `fromto` option
+
+This is another option intended for categorical variables. Basically, for a given variable, it tabulates all combinations of values
+at two different time periods. The `cont` option is ignored if you specify the `fromto` option because you have
+to explicitly identify the time periods. Thus, if I wanted to find out the changes in variable *union* from 87 to 88
+I would do
+```s
+    panelstat idcode year, nosum fromto(union, from(87) to(88) )
+```
+The results show that from 1987 to 1988, 80 women became unionized while 75 left the union. 1072 remained unionized
+while 304 remained unionized. If we add the suboption `missing` then the missing observations of *union* are also
+accounted for:
+```s
+    panelstat idcode year, nosum fromto(union, from(87) to(88) missing )
+```
+The `from` argument is required and it must contain a valid value for the time variable, while the `to` argument may
+be omitted. If that is the case then it is assumed that the change is for the following time period. Thus,
+the same results would obtain had we specified
+```
+    panelstat idcode year, nosum fromto(union, from(87) missing )
+```
+If you want the displayed table to be sorted from lowest to highest frequency you can use the `ascend` option while
+the `descend` option does the reverse. `fromto` also supports two other suboptions -- `save` and `keep`. The `save` will save a *Stata* file with
+the results shown in the table, while the `keep` option adds a variable to the dataset that identifies for
+each observation the following situations:
+
+• 0 not flagged - observation was not considered
+
+• 1 exit - missing value of the variable at *to*
+
+• 2 entry - missing value of the variable at *from*
+
+• 3 same - values are the same
+
+• 4 dif  - values are different
+
+In this case the variable name would be $\_ft\_union\_87\_88$.
+
+## The `return` option
+
+This is another option intended to look at the change within panel unit of the values of a specific variable.
+It considers three time periods say $x_t$, $x_{t+1}$, and $x_{t+2}$. It checks whether the value of $x_t$ and $x_{t+2}$
+are identical but $x_{t+1}$ differs.
+If we try
+```s
+    panelstat idcode year, nosum return(union, from(71) middle(72) to(73) )
+```
+then we are requesting `panelstat` to identify observations of union for which values of 71 and 73 are identical
+with differing values in 72. We see that there are 12 women with a "0 1 0" sequence and another 4 with a "1 0 1" sequence.
+These may signal coding errors. Since we have three consecutive time values we can simply code
+```
+    panelstat idcode year, nosum return(union, from(71))
+```
+to obtain the same result. But remember that the arguments for the `from`, `middle` and `to` suboptions
+must be valid time values. The suboption `save` will save the table of results to a Stata file. You can also use the
+`keep` suboption to add a variable to the dataset that identifies the flagged observations.
+In this case the variable would be named $\_ret\_union\_71\_73$.
+The `return` option can also be used with continuous variables. In that case you need to specify the `within` suboption.
+With this suboption the command will look for cases where $x_{t+1}$ is outside the interval $[x_t*(1-a\%),x_t*(1+a\%)]$
+where $a$ is the value used in the argument of the `within` suboption. To illustrate let us check for abnormal changes in wages
+for 72.
+```s
+    panelstat idcode year, nosum return(ln_wage, from(71) within(50))
+```
+The above table gives a list of all cases where *ln_wage* in 72 is outside a 50% percent interval constructed around the 71 value
+while the 73 value is within that interval.
+
+## The `trans` option
+
+Again this is an option meant to help you identify potential problems in the data. It is meant to be used with categorical
+variables. The idea is simple. For all units in each category of the variable in year *t* it calculates the
+share of those same units that came from each different category of the variable at *t-1*. We call this the *transition probabilities*.
+Thus, if in a given year a panel unit has a transition probability of 100% it means that all individuals that belong to the
+same category at year *t* also belonged to the same category at *t-1* (but the categories in *t* and *t-1* need not be the same).
+Likewise, a transition probability of 10% means that 10% of individuals in a given category at year *t* came
+from the same category where they were classified in *t-1*. The results are presented in a table
+that shows, for each time period, the number of panel units grouped into 4 categories of the *transition probabilities*.
+To exemplify, let us apply this option to the variable age
+```s
+    panelstat idcode year, nosum trans(age, keep)
+```
+The option `keep` adds the variable $\_trans\_age$ where the transition probabilities are stored.
+The results are summarized in the table. If we look at the last year, 1988, we can see that we were able to compute
+transition probabilities for 1,805 individuals (these were individuals with valid values for age in 87 and 88). One individual
+has a transition probability lower than 25%. Digging into the data we find that  the idcode for this individual is
+```s
+    list idcode if _trans_age<25 & year==88
+```
+and if we list the observations for this individual we obtain
+```s
+    list idcode year age if idcode==3462
+```
+This subject was flagged because it was aged 32 in 1987 and 34 in 1988. It was the only individual out of 42 with valid
+age values in 1987 and 1988 that moved from age 32 in 1987 to age 34 in 1988 (a "transition probability" of 1/42=2.38%).
+
+The suboption `missing` also accounts for transitions from missing to a valid value of the variable. In
+that case we would have to specify
+```
+    panelstat idcode year, nosum trans(age, miss)
+```
+We can use the suboptions `low` and `upper` to define the threshold levels used in the table that is displayed. If, say, we
+want to find out how many women, each year, had transition probabilities below 1% and above 99% we could write:
+```s
+    panelstat idcode year, nosum trans(age, low(1) upper(99))
+```
+
+## The `quantr` option
+
+The `quantr` option is also intended to help find problems in the data. However, it is intended for use
+with continuous data. As an example, we use this option with the $ln\_wage$ variable. For each year,
+we compute the 25th, 50th and 75th percentile. Next we look, for consecutive years, how individuals move between these
+percentiles. Thus, if we do,
+```s
+    panelstat idcode year, nosum quantr(ln_wage)
+```
+we can find the year-to-year movements across the percentiles of $ln\_wage$. Of the 851 individuals in 1969 (those that had non missing
+wage values in that and the previous year) 106 moved from the first quartile in 1968 to the first quartile in 1969 (1to1 column).
+More relevant are probably the 16 individuals that had a wage above the 3rd quartile in 1969 but a wage below the 1st quartile in 1968 (1to3 column)
+If we want we can show the table in terms of shares. For this we use the suboption `rel` as in,
+```s
+    panelstat idcode year, nosum quantr(ln_wage, rel)
+```
+We can, if we want, redefine the cut-off percentiles used to define the quartiles. For this we use the suboptions
+`low` and `upper`, as in
+```s
+    panelstat idcode year, nosum quantr(ln_wage, low(10) upper(90))
+```
+Now, quartile 1 would correspond to all individuals with wages up to the 10th percentile, while the quartile 3
+would correspond to all individuals with wages above the 90th quartile.
+
+The tables created by the `quantr` option ignore the transitions that originate from missing values. For example,
+the values reported in 1969 ignore individuals that had missing wage data in 1968. We can report these values
+by adding the `missing`  option as in
+```
+    panelstat idcode year, nosum trans(ln_wage, missing)
+```
+Finally, as with several other options, we may add a variable to the data set that contains information about the case
+that applies to each observation. This is done using the suboption `keep`.
+
+# Miscellaneous
+
+## The `checkid` option
+
+This option is used if you have an alternative identifier for the panel unit var and want to find out if how close
+that variable is to your known panel unit identifier. For example, suppose that in this dataset, besides the *idcode*
+you had available another variable -- say the tax id number (*taxid*). To understand how close *taxid* is to a panel unit
+identifier you can compare it to *idcode*. This is done by running the `checkid` option as in
+```
+    panelstat idcode year, checkid(taxid)
+```
+This option will produce a table with the number of panel units that fit in each of the following cases:
+
+• 1 - 1:1 ids coincide  - idcode and taxid coincide
+
+• 2 - 1:m multiple values of taxid - one idcode corresponds to multiple values of taxid
+
+• 3 m:1 multiple values of id - there are multiple idcodes with the same taxid
+
+• 4 m:m multiple values of taxid and id - there are multiple idcodes mixed with multiple taxid
+
+• 5 1:. all values missing for taxid " - one idcode with all values missing for taxcode
+
+• 6 1:.1 unique values of taxid with missing - one idcode with unique values of taxid but with missing values
+
+• 7 1:.m multiple values of taxid with missing - one idcode with multiple values of taxid and missing
+
+• 8 m:. multiple values of id with missing - multiple values of idcode with multiple taxids and missing
+
+You can create a variable that stores each one of these cases using the suboption `keep`. Note that to
+run this option you need to previously install `group2hdfe` a Stata user-written command available at SSC.
+If not already installed simply type
+```
+    ssc install group2hdfe
+```
+at the Stata prompt.
+
+6 Acknowledgements
+===================
+
+I am grateful for all the comments, suggestions, and bug corrections by the BPLIM staff,
+particularly Marta Silva and Emma Zhao. Other researchers, such as Ana Rute Cardoso, have also
+provided valuable suggestions.

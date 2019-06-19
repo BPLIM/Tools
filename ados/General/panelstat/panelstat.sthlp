@@ -34,9 +34,7 @@ from 2000 to 2010 but no observation recorded in 2005, it would ignore the year 
 
 {p 0 4} {opt force3} ignores all observations for an unit identifier that has repeated values of {it:timevar}
 
-{p 0 4} {opt forcestata} by default {it:panelstat} uses faster user-written commands if installed ({cmd:sreshape}, {cmd:fastreshape}, and {cmd:gtools}). This option forces the use of Stata official ados
-
-{p 0 4} {opt forcereshape} if {cmd:sreshape} and {cmd:fastreshape} are both installed {it:panelstat} will use the latter command. The option forces the use of {cmd:sreshape}
+{p 0 4} {opt forcestata} by default {it:panelstat} relies on {cmd:gtools}) for faster calculations. This option forces the use of Stata official ados instead
 
 Basic Descriptives
 
@@ -48,7 +46,7 @@ Basic Descriptives
 
 {p 0 4}{opt demog} characterizes the flows of panelvar units that occur between two consecutive time periods: entrants, exiters, incumbents.
 
-{p 0 4}{opt vars} produces a table for all numeric variables in the dataset with information along the panel unit dimension.
+{p 0 4}{opt vars} produces a table for all variables in the dataset with information along the panel unit dimension.
 
 {p 0 4}{opt nosum} does not report summary statistics for the panel
 
@@ -206,8 +204,7 @@ connected to the use of the item, whether or not based upon warranty, contract, 
 {title:Dependencies}
 
 option {opt checkid} requires installation of package {cmd:group2hdfe} (version 1.01 03jul2014) by Paulo Guimaraes
-option {opt pattern} and {opt tabovert} may benefit from installation of {cmd:sreshape} by Kenneth L. Simons or {cmd:fastreshape} by Michael Droste
-if available the code takes advantage of the {cmd:gtools} package by Mauricio Bravo
+if available the code takes advantage of the excellent {cmd:gtools} package by Mauricio Bravo
 
 {title:Author}
 

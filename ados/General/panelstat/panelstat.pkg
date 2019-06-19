@@ -1,0 +1,22 @@
+v 3
+
+d PANELSTAT: tool to explore unbalanced panel data sets
+d
+d Author: Paulo Guimaraes. Banco de Portugal
+d Contact: pguimaraes2001@gmail.com
+d
+d KW: panel data
+d
+d Requires: Stata version 13
+d
+d Required packages:
+d
+d group2hdfe
+d excelcol
+d sreshape
+d ftools
+d
+d Distribution-Date: 20170827
+d
+f panelstat.ado
+f panelstat.sthlp

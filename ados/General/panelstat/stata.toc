@@ -1,0 +1,3 @@
+v 3
+d Paulo Guimaraes, Banco de Portugal (pguimaraes2001@gmail.com)
+p panelstat - Descriptive statistics for panels

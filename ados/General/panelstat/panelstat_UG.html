@@ -57,7 +57,7 @@ table tbody:last-child tr:last-child td {border-bottom:1px solid black;}
 <header>
 <h1 class="title">A user guide for <em>panelstat</em></h1>
 <p class="author">Paulo Guimaraes, BPlim</p>
-<p class="date">28jun2018</p>
+<p class="date">17jun2019</p>
 </header>
 <h1 id="introduction">1 Introduction</h1>
 <p><code>panelstat</code> is a Stata user-written command to help understand the characteristics of standard panel data sets. Usage of <code>panelstat</code> command is quite simple:</p>
@@ -72,6 +72,7 @@ table tbody:last-child tr:last-child td {border-bottom:1px solid black;}
 <p>The unit identifier for this panel is <em>idcode</em> – a unique identifier for each participant in the study. The time variable is <em>year</em>. To obtain basic descriptive statistics for this panel we can run <code>panelstat</code>:</p>
 <pre class='stata'>. panelstat idcode year
 
+Using gtools for faster results
 
 *****************************************************
 Analyzing ./nlswork.dta
@@ -140,7 +141,7 @@ Number of individuals per time unit
 ────────────┼───────────────────────────────────
       Total │     28,534      100.00
 </pre>
-<p>As a result <code>panelstat</code> produced three pieces of information. The first block, under the heading <em>Basic Descriptives</em>, provides information on the total number of observations, individuals, and the time span of the panel. It also tries to give you an idea of how close the panel is to a fully balanced one. Since we have <span class="math inline">4, 711</span> individuals and we observe data for a total of 21 years, if we had a fully balanced dataset we would have <span class="math inline">4, 711 × 21 = 98, 931</span> observations. Since we only have <span class="math inline">28, 534</span> observations the level of completeness is <span class="math inline">28, 534/98, 931 = 28.84%</span>.</p>
+<p>As a result <code>panelstat</code> produced three pieces of information. The first block, under the heading <em>Basic Descriptives</em>, provides information on the total number of observations, individuals, and the time span of the panel. It also tries to give you an idea of how close the panel is to a fully balanced one. Since we have <span class="math inline">4, 711</span> individuals and we have observed data for a total of 21 years, if we had a fully balanced dataset we should have <span class="math inline">4, 711 × 21 = 98, 931</span> observations. However, we only have <span class="math inline">28, 534</span> observations which gives a level of completeness of <span class="math inline">28, 534/98, 931 = 28.84%</span>.</p>
 <p>The second block of information is simply a tabulation of the number of observations per individual. We can immediately see that there are 547 individuals with only one observation (these are called <em>singletons</em>) and that only 86 individuals are observed for 15 years - the largest number of periods an individual is observed.</p>
 <p>The final block gives us a simple tabulation of the number observations in each year. To avoid calculation of the tables of “Basic Descriptives” we can use the <code>nosum</code> option.</p>
 <h1 id="general-options">3 General Options</h1>
@@ -213,10 +214,13 @@ Number of individuals per time unit
 <p>In our example we only had repeated observations for one individual but if there were multiple individuals with troublesome observations then the same logic would be applied. Note that these options do not modify your dataset – they simply ignore the troubling observations in the ensuing calculations.</p>
 <h2 id="the-cont-option">The <em>cont</em> option</h2>
 <p>The <code>cont</code> option should be used if there is a time gap that is common to all panel units. Looking at the table produced above with the heading “Number of individuals per time unit” we see that some years are missing. If you use the <code>cont</code> option then these years will be ignored in all subsequent calculations. This will make a difference in calculations that make use of lagged values.</p>
-<h2 id="the-forcestata-and-forcesreshape-option">The <em>forcestata</em> and <em>forcesreshape</em> option</h2>
-<p>Working with large panels can be extremely slow. Fortunately, there are some user-written tools such as <a href="http://gtools.readthedocs.io/en/latest/index.html"><code>gtools</code></a> written by Mauricio Caceres, <code>fastreshape</code> by Michael Droste and <code>sreshape</code> by Kenneth L. Simons. By default <code>panelstat</code> will check to see if any of these tools is installed in your machine. If it finds the <code>gtools</code> package then it will use it. <code>fastreshape</code> is also selected by default but if it cannot find it <code>panelstat</code> tries to use <code>sreshape</code> instead. Only if the user-written commands are not found will it resort to using <em>Stata</em> official commands. However, you can change the behavior of <code>panelstat</code>. The option <code>forcestata</code> will always use <em>Stata</em> official commands while the <code>forcesreshape</code> will force the use of <code>sreshape</code> even if <code>fastreshape</code> is installed. Note, however, that the reshape commands are only used with <code>panelstat</code>’s options <code>tabovert</code> and <code>pattern</code>.</p>
+<h2 id="the-forcestata-option">The <em>forcestata</em> option</h2>
+<p>Working with large panels can be extremely slow. Fortunately, there user-written command <a href="http://gtools.readthedocs.io/en/latest/index.html"><code>gtools</code></a> written by Mauricio Caceres is much faster than official <em>Stata</em> commands. To install an updated version do</p>
+<pre><code>ssc install gtools
+gtools, upgrade</code></pre>
+<p>If <code>panelstat</code> finds that the <code>gtools</code> package is installed then it will use it. The option <code>forcestata</code> will force the use of <em>Stata</em> official commands.</p>
 <h1 id="the-structure-of-the-panel">4 The structure of the panel</h1>
-<p>There are a set of options that allow us to gain a better understanding of the structure of the panel. These are the <code>pattern</code>, <code>gaps</code>, <code>runs</code>,<code>vars</code> and <code>demog</code> options. In the following, to prevent redisplaying the basic descriptives for the panel we will use the <code>nosum</code> option.</p>
+<p>There are a set of options that allow us to gain a better understanding of the structure of the panel. These are the <code>pattern</code>, <code>gaps</code>, <code>runs</code>,<code>vars</code>, and <code>demog</code> options. In the following, to prevent redisplaying the basic descriptives for the panel we will use the <code>nosum</code> option.</p>
 <h2 id="the-pattern-option">The <em>pattern</em> option</h2>
 <p>We start with the <code>pattern</code> option</p>
 <pre class='stata'>. use nlswork, clear
@@ -224,6 +228,7 @@ Number of individuals per time unit
 
 . panelstat idcode year, pattern nosum
 
+Using gtools for faster results
 
 *****************************************************
 Top 10 patterns in the data
@@ -253,6 +258,7 @@ Note: 1 if observation is in the dataset; 0 otherwise
 <p>A gap is simply a “hole” in the data. Option <code>gaps</code> gives you some ideia about the gaps in your panel.</p>
 <pre class='stata'>. panelstat idcode year, gaps nosum
 
+Using gtools for faster results
 *****************************************************
 Distribution of the size of the time gaps
 *****************************************************
@@ -303,9 +309,10 @@ Distribution of the number of gaps by individual
       Total │      4,711      100.00
 </pre>
 <p>The first table that is produced - <em>Distribution of the size of the time gaps</em> - gives an idea of how large these gaps are. The most common situation in this data set is a gap of size 1 - which happens 9,757 times. On the other extreme we see that there are 2 gaps of size 19. Since the maximum time dimension of this panel is 21 years this means that two individuals were observed in the first year and again in the last year without having any other observations in between. The second table - <em>Distribution of the number of gaps by individual</em> - tells you how many gaps there are per individual. For 984 women there are no gaps - although some of these women may have been observed only once - and, out of the 4,711 women, 13 had a total of 8 gaps!</p>
-<p>Notice that there are some years (74, 76, 79, 81, 84 and 86) for which we do not have data. Perhaps there was no data collected in those years, and so this fact may be “inflating” the actual number of gaps. With the <code>cont</code> option we can correct this by considering all time periods in the panel as consecutive. If we do this we see that the number of gaps is substantially reduced</p>
+<p>Notice that there are some years (74, 76, 79, 81, 84 and 86) for which we do not have data. Perhaps there was no data collected in those particular years, and so this fact may be “inflating” the actual number of gaps. With the <code>cont</code> option we can correct this by considering all time periods in the panel as consecutive. If we do this we see that the number of gaps is substantially reduced</p>
 <pre class='stata'>. panelstat idcode year, gaps nosum cont
 
+Using gtools for faster results
 *****************************************************
 Distribution of the size of the time gaps
 *****************************************************
@@ -348,12 +355,15 @@ Distribution of the number of gaps by individual
 </pre>
 <p>If you want you can create variables that capture the number of gaps per panel unit or the size of the largest gap for the panel unit. You do this by adding the option <code>keepngaps(varname)</code> or <code>keepmaxgaps(varname)</code> where <em>varname</em> are names of new variables. For example,</p>
 <pre class='stata'>. panelstat idcode year, keepngaps(ngap) keepmaxgap(maxgap) nosum cont
+
+Using gtools for faster results
 </pre>
 <p>As a result the variables <em>ngap</em> and <em>maxgap</em> are added to the dataset. Note that the values for these variables will be different if you do not specify the <code>cont</code> option.</p>
 <h2 id="the-runs-option">The <em>runs</em> option</h2>
-<p>A <em>run</em> is a set of consecutive time periods for which a panel unit is observed. If a panel unit has a run of size 3, this means that this panel unit was observed for three consecutive time periods. Of course, a panel unit may have several <em>runs</em> (which meant it also had gaps). Next, we run <code>panelstat</code> with the <code>runs</code> (as well as the <code>cont</code>) option</p>
+<p>A <em>run</em> is a set of consecutive time periods for which a panel unit is observed. If a panel unit has a run of size 3, this means that this panel unit was observed for three consecutive time periods. Of course, a panel unit may have several <em>runs</em> (which means it also has gaps). Next, we run <code>panelstat</code> with the <code>runs</code> (as well as the <code>cont</code>) option</p>
 <pre class='stata'>. panelstat idcode year, runs nosum cont
 
+Using gtools for faster results
 *****************************************************
 Distribution of complete runs by size
 *****************************************************
@@ -381,7 +391,7 @@ Distribution of complete runs by size
 </pre>
 <p>We have 3,001 runs of size 1 (some of these are <em>singletons</em>) while we have 86 women that are observed for 15 consecutive years (ignoring years for which we do not have any data).</p>
 <h2 id="the-vars-option">The <em>vars</em> option</h2>
-<p>The <code>vars</code> option produces a table with information for all numeric variables in your dataset indicating how many panel units fall in each of the following categories</p>
+<p>The <code>vars</code> option produces a table with information for all variables in your dataset indicating how many panel units fall in each of the following categories</p>
 <ul>
 <li>singleton observation with nonmissing value of the variable</li>
 <li>singleton observation with missing value for the variable</li>
@@ -395,6 +405,7 @@ Distribution of complete runs by size
 <p>Running this option in our dataset we obtain</p>
 <pre class='stata'>.   panelstat idcode year, vars nosum cont
 
+Using gtools for faster results
 
 Distribution of panel units by type of observation for all variables
 
@@ -402,34 +413,35 @@ Distribution of panel units by type of observation for all variables
   ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
   │  variable   s_nonmiss   s_missing   allmissing    onevalue   timeinv_nm   timeinv_wm   timevar_nm   timevar_wm │
   ├────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │    idcode         547           0            0           8         4164            0            0            0 │
-  │      year         547           0            0           8            0            0         4164            0 │
-  │  birth_yr         547           0            0           8         4164            0            0            0 │
-  │       age         546           1            0          13            3            0         4138           18 │
-  │      race         547           0            0           8         4164            0            0            0 │
+  │       age         546           1            0           5            3            0         4138           18 │
+  │  birth_yr         547           0            0           0         4164            0            0            0 │
+  │    c_city         547           0            0           0         2894            5         1262            3 │
+  │  collgrad         547           0            0           0         4164            0            0            0 │
+  │     grade         545           2            0           0         4164            0            0            0 │
   ├────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │       msp         547           0            0          10         2112            4         2036           10 │
-  │   nev_mar         547           0            0          10         2895            5         1253            9 │
-  │     grade         545           2            0           8         4164            0            0            0 │
-  │  collgrad         547           0            0           8         4164            0            0            0 │
-  │  not_smsa         547           0            0           8         3422            7          734            1 │
+  │     hours         546           1            0           4          706            0         3392           62 │
+  │    idcode         547           0            0           0         4164            0            0            0 │
+  │  ind_code         532          15            1          12         1454            0         2404          293 │
+  │   ln_wage         547           0            0           0           13            0         4151            0 │
+  │    maxgap         547           0            0           0         4164            0            0            0 │
   ├────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │    c_city         547           0            0           8         2894            5         1262            3 │
-  │     south         547           0            0           8         3616            6          540            2 │
-  │  ind_code         532          15            1          20         1454            0         2404          293 │
-  │  occ_code         536          11            1          13         1414            0         2649           95 │
-  │     union         255         292          269         417          527         1536          221         1202 │
+  │       msp         547           0            0           2         2112            4         2036           10 │
+  │   nev_mar         547           0            0           2         2895            5         1253            9 │
+  │      ngap         547           0            0           0         4164            0            0            0 │
+  │  not_smsa         547           0            0           0         3422            7          734            1 │
+  │  occ_code         536          11            1           5         1414            0         2649           95 │
   ├────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │    wks_ue         499          48           18         225          569          793         1026         1541 │
-  │   ttl_exp         547           0            0           8           22            0         4142            0 │
-  │    tenure         535          12            0          25           23            0         3757          367 │
-  │     hours         546           1            0          12          706            0         3392           62 │
-  │  wks_work         523          24            1          46           26            0         3510          589 │
+  │      race         547           0            0           0         4164            0            0            0 │
+  │     south         547           0            0           0         3616            6          540            2 │
+  │    tenure         535          12            0          17           23            0         3757          367 │
+  │   ttl_exp         547           0            0           0           22            0         4142            0 │
+  │     union         255         292          269         409          527         1536          221         1202 │
   ├────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │   ln_wage         547           0            0           8           13            0         4151            0 │
-  │    maxgap         547           0            0           8         4164            0            0            0 │
-  │      ngap         547           0            0           8         4164            0            0            0 │
+  │    wks_ue         499          48           18         217          569          793         1026         1541 │
+  │  wks_work         523          24            1          38           26            0         3510          589 │
+  │      year         547           0            0           0            0            0         4164            0 │
   └────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+string variables have an _st tag suffix
 s_nonmiss - singleton observation with nonmissing value of the variable
 s_missing - singleton observation with missing value for the variable
 allmissing - non-singleton with all missing values of the variable
@@ -444,6 +456,7 @@ timevar_wm - non-singleton with time-variant values and missing values for the v
 <p>Finally, we discuss the <code>demog</code> option. This option characterizes the flows of the panel units that occur between consecutive time periods.</p>
 <pre class='stata'>. panelstat idcode year, demog nosum
 
+Using gtools for faster results
 *****************************************************
 Time changes - incumbents, entrants and exits
 *****************************************************
@@ -496,36 +509,38 @@ exit=last+reexit
 <p>This option produces descriptive statistics over time for a list of variables. It is quite simple to use. To obtain year by year statistics for the variable <em>grade</em> do</p>
 <pre class='stata'>. panelstat idcode year, nosum statovert(grade)
 
+Using gtools for faster results
 
 Descriptive statistics of grade over time
 
-  ┌──────────────────────────────────────────────────────────────────────┐
-  │ time   total   valid   missing      mean        sd   p25   p50   p75 │
-  ├──────────────────────────────────────────────────────────────────────┤
-  │   68    1375    1375         0   11.7847   1.89504    12    12    12 │
-  │   69    1232    1232         0   11.8117   1.85027    12    12    12 │
-  │   70    1686    1686         0   11.8909   1.95588    12    12    12 │
-  │   71    1851    1851         0   11.9773   1.91001    12    12    12 │
-  │   72    1693    1693         0   12.0815   1.95619    12    12    12 │
-  ├──────────────────────────────────────────────────────────────────────┤
-  │   73    1981    1981         0   12.2024   1.98884    12    12    12 │
-  │   75    2141    2141         0   12.3349   2.20353    12    12    13 │
-  │   77    2171    2171         0   12.5615   2.42971    12    12    14 │
-  │   78    1964    1964         0   12.7032   2.44511    12    12    14 │
-  │   80    1847    1847         0   12.7991   2.44423    12    12    14 │
-  ├──────────────────────────────────────────────────────────────────────┤
-  │   82    2085    2085         0   12.8043   2.47387    12    12    14 │
-  │   83    1987    1987         0   12.9461   2.51593    12    12    15 │
-  │   85    2085    2085         0   13.0432   2.47832    12    12    15 │
-  │   87    2164    2164         0   13.1072   2.45129    12    12    15 │
-  │   88    2272    2270         2   13.0969   2.51577    12    12    15 │
-  └──────────────────────────────────────────────────────────────────────┘
+  ┌──────────────────────────────────────────────────────────────────────────────┐
+  │ time   total   valid   missing   zeros      mean        sd   p25   p50   p75 │
+  ├──────────────────────────────────────────────────────────────────────────────┤
+  │   68    1375    1375         0       3   11.7847   1.89504    12    12    12 │
+  │   69    1232    1232         0       2   11.8117   1.85027    12    12    12 │
+  │   70    1686    1686         0       3   11.8909   1.95588    12    12    12 │
+  │   71    1851    1851         0       0   11.9773   1.91001    12    12    12 │
+  │   72    1693    1693         0       1   12.0815   1.95619    12    12    12 │
+  ├──────────────────────────────────────────────────────────────────────────────┤
+  │   73    1981    1981         0       0   12.2024   1.98884    12    12    12 │
+  │   75    2141    2141         0       1   12.3349   2.20353    12    12    13 │
+  │   77    2171    2171         0       2   12.5615   2.42971    12    12    14 │
+  │   78    1964    1964         0       1   12.7032   2.44511    12    12    14 │
+  │   80    1847    1847         0       2   12.7991   2.44423    12    12    14 │
+  ├──────────────────────────────────────────────────────────────────────────────┤
+  │   82    2085    2085         0       1   12.8043   2.47387    12    12    14 │
+  │   83    1987    1987         0       3   12.9461   2.51593    12    12    15 │
+  │   85    2085    2085         0       0   13.0432   2.47832    12    12    15 │
+  │   87    2164    2164         0       0   13.1072   2.45129    12    12    15 │
+  │   88    2272    2270         2       2   13.0969   2.51577    12    12    15 │
+  └──────────────────────────────────────────────────────────────────────────────┘
 </pre>
 <p>We could have listed several variables in the argument of <code>statovert</code>, in which case <code>panelstat</code> would create a table for each variable. <code>statovert</code> also supports the suboption <code>detail</code> which, as suggested by the name, provides additional descriptives on the variables (the 1, 5, 95 and 99th quantile of the variable(s)).</p>
 <h2 id="the-wiv-and-wtv-options">The <code>wiv</code> and <code>wtv</code> options</h2>
 <p>The <code>wiv</code> option provides statistics for a list of selected variables alongside the panel unit dimension. Using this option on the variables <em>race</em> and <em>union</em></p>
 <pre class='stata'>. panelstat idcode year, nosum wiv(race union)
 
+Using gtools for faster results
 *****************************************************
 
 *****************************************************
@@ -597,6 +612,7 @@ Distribution of all observations for union
 <p>This is an option to be used with categorical variables. It simply tabulates the frequency of each category over time. Say, we wanted to understand how the variable union had changed over time. To avoid working with a wide table we restrict the analysis to the period 1968-1977.</p>
 <pre class='stata'>. panelstat idcode year if year&lt;78, nosum tabovert(union)
 
+Using gtools for faster results
 
 Tabulation of union over time
 
@@ -613,6 +629,7 @@ Tabulation of union over time
 <p>This is also an option to be used only with categorical variables. It can be seen as an extension of the previous option. This option tries to provide some idea about the movements over time of the panel units across the categories of a given variable. Thus, if we run the option on the <em>union</em> variable we obtain</p>
 <pre class='stata'>. panelstat idcode year, nosum demoby(union)
 
+Using gtools for faster results
 *****************************************************
 Decomposition of changes across union over time 
 *****************************************************
@@ -676,6 +693,7 @@ rmover - number of movers at t that are returning to a category of union
 <p>The option <code>flows</code> decomposes the change in the stock of each variable between consecutive periods. Thus, for each time period, it identifies the changes that result from panel units that already exist (incumbent), and those that enter and exit. To illustrate the use of the command we consider the variable <em>hours</em> which contains the amount of hours worked by each woman.</p>
 <pre class='stata'>. panelstat idcode year, nosum flows(hours)
 
+Using gtools for faster results
 *****************************************************
 Time flows for variable hours
 *****************************************************
@@ -723,6 +741,7 @@ hours[t]=hours[t-1]+chg, chg=c_inc+c_entry+c_exit+c_inc1+c_inc2, c_inc=c_exp+c_c
 <p>These options report on changes over time for the specified variable. The options are particularly suited for continuous variables. As an example we will use the <code>rel</code> option with the variable <em>hours</em></p>
 <pre class='stata'>. panelstat idcode year, nosum rel(hours) cont
 
+Using gtools for faster results
 
 *****************************************************
 Relative changes over time for hours (threshold set to 100)
@@ -744,6 +763,7 @@ Note: Relative change is calculated with respect to the average of x_{t} and x_{
 <p>The output classifies all relative changes from two consecutive periods for the same panel unit and tabulates the results. It distinguishes between no change, positive and negative change, and abnormal positive, and abnormal negative changes. Abnormal changes are those that exceed a specified threshold value for a relative change (by default 100). You can change the threshold value using the suboption <code>val</code>. For example, if we try</p>
 <pre class='stata'>. panelstat idcode year, nosum rel(hours, val(50)) cont
 
+Using gtools for faster results
 
 *****************************************************
 Relative changes over time for hours (threshold set to 50)
@@ -770,6 +790,7 @@ Note: Relative change is calculated with respect to the average of x_{t} and x_{
 <p>This is another option intended for categorical variables. Basically, for a given variable, it tabulates all combinations of values at two different time periods. The <code>cont</code> option is ignored if you specify the <code>fromto</code> option because you have to explicitly identify the time periods. Thus, if I wanted to find out the changes in variable <em>union</em> from 87 to 88 I would do</p>
 <pre class='stata'>. panelstat idcode year, nosum fromto(union, from(87) to(88) )
 
+Using gtools for faster results
 
 Change of union from 87 to 88
 
@@ -785,6 +806,7 @@ Change of union from 87 to 88
 <p>The results show that from 1987 to 1988, 80 women became unionized while 75 left the union. 1072 remained unionized while 304 remained unionized. If we add the suboption <code>missing</code> then the missing observations of <em>union</em> are also accounted for:</p>
 <pre class='stata'>. panelstat idcode year, nosum fromto(union, from(87) to(88) missing )
 
+Using gtools for faster results
 
 Change of union from 87 to 88
 
@@ -815,6 +837,7 @@ Change of union from 87 to 88
 <p>This is another option intended to look at the change within panel unit of the values of a specific variable. It considers three time periods say <span class="math inline"><em>x</em><sub><em>t</em></sub></span>, <span class="math inline"><em>x</em><sub><em>t</em> + 1</sub></span>, and <span class="math inline"><em>x</em><sub><em>t</em> + 2</sub></span>. It checks whether the value of <span class="math inline"><em>x</em><sub><em>t</em></sub></span> and <span class="math inline"><em>x</em><sub><em>t</em> + 2</sub></span> are identical but <span class="math inline"><em>x</em><sub><em>t</em> + 1</sub></span> differs. If we try</p>
 <pre class='stata'>. panelstat idcode year, nosum return(union, from(71) middle(72) to(73) )
 
+Using gtools for faster results
 
 Return of union from 71 to 73
 
@@ -831,6 +854,7 @@ Return of union from 71 to 73
 <p>to obtain the same result. But remember that the arguments for the <code>from</code>, <code>middle</code> and <code>to</code> suboptions must be valid time values. The suboption <code>save</code> will save the table of results to a Stata file. You can also use the <code>keep</code> suboption to add a variable to the dataset that identifies the flagged observations. In this case the variable would be named <span class="math inline">_<em>r</em><em>e</em><em>t</em>_<em>u</em><em>n</em><em>i</em><em>o</em><em>n</em>_71_73</span>. The <code>return</code> option can also be used with continuous variables. In that case you need to specify the <code>within</code> suboption. With this suboption the command will look for cases where <span class="math inline"><em>x</em><sub><em>t</em> + 1</sub></span> is outside the interval <span class="math inline">[<em>x</em><sub><em>t</em></sub> * (1 − <em>a</em>%), <em>x</em><sub><em>t</em></sub> * (1 + <em>a</em>%)]</span> where <span class="math inline"><em>a</em></span> is the value used in the argument of the <code>within</code> suboption. To illustrate let us check for abnormal changes in wages for 72.</p>
 <pre class='stata'>. panelstat idcode year, nosum return(ln_wage, from(71) within(50))
 
+Using gtools for faster results
 
 Return of ln_wage from 71 to 73
 
@@ -865,6 +889,7 @@ Return of ln_wage from 71 to 73
 <p>Again this is an option meant to help you identify potential problems in the data. It is meant to be used with categorical variables. The idea is simple. For all units in each category of the variable in year <em>t</em> it calculates the share of those same units that came from each different category of the variable at <em>t-1</em>. We call this the <em>transition probabilities</em>. Thus, if in a given year a panel unit has a transition probability of 100% it means that all individuals that belong to the same category at year <em>t</em> also belonged to the same category at <em>t-1</em> (but the categories in <em>t</em> and <em>t-1</em> need not be the same). Likewise, a transition probability of 10% means that 10% of individuals in a given category at year <em>t</em> came from the same category where they were classified in <em>t-1</em>. The results are presented in a table that shows, for each time period, the number of panel units grouped into 4 categories of the <em>transition probabilities</em>. To exemplify, let us apply this option to the variable age</p>
 <pre class='stata'>. panelstat idcode year, nosum trans(age, keep)
 
+Using gtools for faster results
 
 *****************************************************
 Distribution of transition probabilities (t-1 to t) for classes of age
@@ -915,6 +940,7 @@ Distribution of transition probabilities (t-1 to t) for classes of age
 <p>We can use the suboptions <code>low</code> and <code>upper</code> to define the threshold levels used in the table that is displayed. If, say, we want to find out how many women, each year, had transition probabilities below 1% and above 99% we could write:</p>
 <pre class='stata'>. panelstat idcode year, nosum trans(age, low(1) upper(99))
 
+Using gtools for faster results
 
 *****************************************************
 Distribution of transition probabilities (t-1 to t) for classes of age
@@ -938,6 +964,7 @@ Distribution of transition probabilities (t-1 to t) for classes of age
 <p>The <code>quantr</code> option is also intended to help find problems in the data. However, it is intended for use with continuous data. As an example, we use this option with the <span class="math inline"><em>l</em><em>n</em>_<em>w</em><em>a</em><em>g</em><em>e</em></span> variable. For each year, we compute the 25th, 50th and 75th percentile. Next we look, for consecutive years, how individuals move between these percentiles. Thus, if we do,</p>
 <pre class='stata'>. panelstat idcode year, nosum quantr(ln_wage)
 
+Using gtools for faster results
 
 *****************************************************
 changes (t-1 to t) in the quartiles of ln_wage
@@ -971,6 +998,7 @@ Notes:
 <p>we can find the year-to-year movements across the percentiles of <span class="math inline"><em>l</em><em>n</em>_<em>w</em><em>a</em><em>g</em><em>e</em></span>. Of the 851 individuals in 1969 (those that had non missing wage values in that and the previous year) 106 moved from the first quartile in 1968 to the first quartile in 1969 (1to1 column). More relevant are probably the 16 individuals that had a wage above the 3rd quartile in 1969 but a wage below the 1st quartile in 1968 (1to3 column) If we want we can show the table in terms of shares. For this we use the suboption <code>rel</code> as in,</p>
 <pre class='stata'>. panelstat idcode year, nosum quantr(ln_wage, rel)
 
+Using gtools for faster results
 
 *****************************************************
 changes (t-1 to t) in the quartiles of ln_wage
@@ -1004,6 +1032,7 @@ Notes:
 <p>We can, if we want, redefine the cut-off percentiles used to define the quartiles. For this we use the suboptions <code>low</code> and <code>upper</code>, as in</p>
 <pre class='stata'>. panelstat idcode year, nosum quantr(ln_wage, low(10) upper(90))
 
+Using gtools for faster results
 
 *****************************************************
 changes (t-1 to t) in the quartiles of ln_wage
@@ -1055,6 +1084,6 @@ Notes:
 <pre><code>    ssc install group2hdfe</code></pre>
 <p>at the Stata prompt.</p>
 <h1 id="acknowledgements">6 Acknowledgements</h1>
-<p>I am grateful for all the comments, suggestions, and bug corrections by the BPlim staff, particularly Marta Silva and Emma Zhao. Other researchers, such as Ana Rute Cardoso, have also provided valuable suggestions.</p>
+<p>I am grateful for all the comments, suggestions, and bug corrections by the BPLIM staff, particularly Marta Silva and Emma Zhao. Other researchers, such as Ana Rute Cardoso, have also provided valuable suggestions.</p>
 </body>
 </html>
