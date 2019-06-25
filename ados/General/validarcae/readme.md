@@ -12,9 +12,7 @@ net install validarcae, from("https://github.com/BPLIM/Tools/raw/master/ados/Gen
 
 ## Files 
 
-The command uses the auxiliary file caecodes.txt to validate CAE codes. The file can be downloaded from Github using the Stata command:
-
-copy "https://github.com/BPLIM/Tools/raw/master/ados/General/validarcae/caecodes.txt" caecodes.txt
+The command uses the auxiliary file caecodes.txt to validate CAE codes. This file is installed in your adopath (PLUS) when you run the previous command in Stata.
 
 ## Author
 
