@@ -1,9 +1,9 @@
-*! 0.2 19jun2019
+*! 0.3 25jun2019
 * Programmed by Gustavo Iglésias
 
 program define validarcae
 
-syntax varlist(min=1 max=1), [rev(int 3) path(string) cfl dropzero getlevels(string) fl fr en]
+syntax varlist(min=1 max=1), [rev(int 3) cfl dropzero getlevels(string) fl fr en]
 
 
 cap drop _valid_cae_`rev'
@@ -12,46 +12,20 @@ cap label drop validlabel`rev'
 tempvar cae_str
 local namevar "`cae_str'"
 
-if "`file'" == "" {
-	capture confirm file caecodes.txt
-	if _rc {
-		di as error `"File "caecodes.txt" was not found in your current working directory. Please specify the path option or place the file caecodes.txt in your current working directory"'
-		error 198
-	}
-	else {
-		preserve
-			qui import delimited caecodes.txt, encoding(iso-8859-9) clear
-			qui keep if rev == `rev'
-			qui drop rev
-			qui rename des_pt _des_pt
-			qui rename des_en _des_en
-			qui rename cae_num _cae_num
-			qui rename cae_str `namevar'
-			tempfile temp
-			qui save "`temp'", replace // file with valid cae codes
-		restore
-	}
-}
-else {
-	capture confirm file `"`path'/caecodes.txt"'
-	if _rc {
-		di as error `"File "caecodes.txt" was not found in the path provided. Please specify the path option correctly or place the file caecodes.txt in your current working directory"'
-		error 198
-	}
-	else {
-		preserve
-			qui import delimited `"`path'/caecodes.txt"', encoding(iso-8859-9) clear
-			qui keep if rev == `rev'
-			qui drop rev
-			qui rename des_pt _des_pt
-			qui rename des_en _des_en
-			qui rename cae_num _cae_num
-			qui rename cae_str `namevar'
-			tempfile temp
-			qui save "`temp'", replace // file with valid cae codes
-		restore
-	}
-}
+preserve
+	mata: st_local("filename",findfile("caecodes.txt"))
+	qui import delimited `"`filename'"', encoding(iso-8859-9) clear
+	qui keep if rev == `rev'
+	qui drop rev
+	qui rename des_pt _des_pt
+	qui rename des_en _des_en
+	qui rename cae_num _cae_num
+	qui rename cae_str `namevar'
+	tempfile temp
+	qui save "`temp'", replace // file with valid cae codes
+restore
+
+
 
 local vartype: type `varlist'
 
