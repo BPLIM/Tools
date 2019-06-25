@@ -53,8 +53,6 @@ A tabulation of _valid_cae_# is also presented.
 
 {p 0 4}{opt rev()} allows the user to specify which CAE Revision should be used. The user may choose between 1, 2 21 and 3. If not specified, the default Revision is 3.
 
-{p 0 4}{opt path()} path to tab delimited file "caecodes.txt". This option does not need to be specified if the file is in the current working directory.
-
 {p 0 4}{opt dropzero} drops the most right zeros from the codes. A zero to the right of a code usually means that the level of aggregation is the same as
 					  in the previous level, so if we take out the zero(s), the code should still be a valid CAE.
 					  
@@ -80,10 +78,6 @@ as -99 and have the value label "Unsuccessful Conversion".
 be specified if {opt dropzero} was set for validation.
 
 {p 0 4}{opt en} should only be used when {opt getlevels} is specified. It sets English as the language for valid CAE codes' value labels. The default is Portuguese.
-
-
-
-Note: File "caecodes.txt" contains valid CAE codes according to each Revision. BPLIM provides this file.
 
 
 {title:Examples}
