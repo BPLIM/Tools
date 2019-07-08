@@ -8,6 +8,12 @@ program define validarcae
 syntax varlist(min=1 max=1), [rev(int 3) cfl dropzero getlevels(string) fl fr en]
 
 
+cap which savesome 
+if _rc {
+	di as error "This tool uses the command savesome (version 1.1.0 23feb2015) as a dependency. Please install it before running validarcae."
+	error _rc
+}
+
 cap drop _valid_cae_`rev'
 cap label drop validlabel`rev'
 
