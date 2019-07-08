@@ -1,5 +1,7 @@
-*! 0.3 25jun2019
+*! 0.4 8jul2019
 * Programmed by Gustavo Iglésias
+* Dependencies: 
+* savesome (version 1.1.0 23feb2015) 
 
 program define validarcae
 
@@ -70,6 +72,9 @@ if "`dropzero'" == "dropzero" {
 
 // revision 1 has 6 digits and always starts with a number different from 0
 if `rev' == 1 {
+	tempfile tempinvalidlength
+	qui savesome if (`strlen' < 1 | `strlen' > 6) using "`tempinvalidlength'", replace
+	qui drop if (`strlen' < 1 | `strlen' > 6)
 	forvalues i = 1/6 {
 		preserve
 			qui keep if `strlen' == `i'
@@ -89,6 +94,10 @@ if `rev' == 1 {
 	}
 	qui append using "`tempmiss'"
 	qui replace _valid_cae_`rev' = 0 if missing(_valid_cae_`rev')
+	
+	qui append using "`tempinvalidlength'"
+	qui replace _valid_cae_`rev' = 99 if missing(_valid_cae_`rev')
+	
 	label define validlabel`rev' 0 "Missing" 11 "1 dig only" 21 "2 dig only" 31 "3 dig only" 41 "4 dig only" 51 "5 dig only" 61 "6 dig only" 99 "Invalid" 
 }
 
@@ -96,6 +105,9 @@ if `rev' == 1 {
 // we add a 0 to the left of the code. For string variables this should not happen, because the zero is not lost on conversion. The same is true for variables
 // from BPLIM datasets.
 else {
+	tempfile tempinvalidlength
+	qui savesome if (`strlen' < 1 | `strlen' > 5) using "`tempinvalidlength'", replace
+	qui drop if (`strlen' < 1 | `strlen' > 6)
 	forvalues i = 1/5 {
 		preserve
 			qui keep if `strlen' == `i'
@@ -135,6 +147,9 @@ else {
 	}
 	qui append using "`tempmiss'"
 	qui replace _valid_cae_`rev' = 0 if missing(_valid_cae_`rev')
+	
+	qui append using "`tempinvalidlength'"
+	qui replace _valid_cae_`rev' = 99 if missing(_valid_cae_`rev')
 
 	qui replace _valid_cae_`rev' = 99 if inlist(_valid_cae_`rev', 14, 24, 34, 44, 52)
 
