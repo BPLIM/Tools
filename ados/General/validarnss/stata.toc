@@ -1,3 +1,0 @@
-v 3
-d BPLIM Team, BPLIM (bplim@bportugal.pt)
-p validarnss - Checks if NSS is valid
