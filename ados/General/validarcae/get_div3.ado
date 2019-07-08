@@ -2,6 +2,7 @@ program define get_div3
 
 syntax varlist, [file(string) levels(string) fl fr cfl en] namevar(string) 
 
+cap drop rev3_*
 
 preserve
 	qui use "`file'", clear
