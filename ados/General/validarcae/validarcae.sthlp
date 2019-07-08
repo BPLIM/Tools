@@ -104,6 +104,11 @@ direct, indirect, special, or consequential damages arising out of, resulting fr
 connected to the use of the item, whether or not based upon warranty, contract, tort, or otherwise.
 
 
+{title:Dependencies}
+
+{cmd:savesome} (version 1.1.0 23Feb2015) by Nicholas Cox
+
+
 {title:Author}
 
 {p}
