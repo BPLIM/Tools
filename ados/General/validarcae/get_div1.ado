@@ -2,6 +2,8 @@ program define get_div1
 
 syntax varlist, [file(string) levels(string) fr cfl en] namevar(string) 
 
+cap drop rev1_*
+
 preserve
 	qui use "`file'", clear
 	if "`en'" == "en" {
