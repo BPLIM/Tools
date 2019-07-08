@@ -157,7 +157,7 @@ foreach item in `levels' {
 		label var rev1_group "CAE Rev. 1 Group (Level 4)"
 	}
 	if "`item'" == "5" {
-		qui gen str4 `namevar' = substr(`vardiv',1,5) 
+		qui gen str5 `namevar' = substr(`vardiv',1,5) 
 		qui merge m:1 `namevar' using "`file'"
 		qui drop if _m == 2
 		qui drop _m
