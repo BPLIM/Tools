@@ -2,7 +2,6 @@ program define get_div21
 
 syntax varlist, [file(string) levels(string) fl fr cfl en] namevar(string) 
 
-cap drop rev21_*
 
 preserve
 	qui use "`file'", clear
@@ -108,6 +107,7 @@ foreach item in `levels' {
 		qui replace `namevar' = "QQ" if inlist(substr(`var',1,2), "99")
 		
 		if "`item'" == "1" {
+			cap drop rev21_section
 			qui replace `namevar' = "A" if inlist(substr(`var',1,2), "AA")
 			qui replace `namevar' = "B" if inlist(substr(`var',1,2), "BB")
 			qui replace `namevar' = "C" if inlist(substr(`var',1,2), "CA", "CB")
@@ -133,20 +133,14 @@ foreach item in `levels' {
 			qui drop _des_en
 			qui drop `namevar'
 			qui rename _cae_num rev21_section
-			//qui rename _des rev21_section_des
-			//qui gen rev21_section_conv = (_valid_cae_21 != 0 & _valid_cae_21 != 99 & `len' >= 2)
 			qui replace rev21_section = -99 if _valid_cae_21 == 0
 			qui replace rev21_section = -99 if _valid_cae_21 == 99
-			qui replace rev21_section = -99 if `len' < 2 /*
-			qui replace rev21_section_des = "" if _valid_cae_21 == 0
-			qui replace rev21_section_des = "" if _valid_cae_21 == 99
-			qui replace rev21_section_des = "" if `len' < 2
-			label define l21section 0 "Unsuccessful conversion" 1 "Successful conversion"
-			label values rev21_section_conv l21section*/
+			qui replace rev21_section = -99 if `len' < 2 
 			label values rev21_section divlabel21
 			label var rev21_section "CAE Rev. 21 Section (Level 1)"
 		}
 		else {
+			cap drop rev21_subsection
 			qui merge m:1 `namevar' using "`file'"
 			qui drop if _m == 2
 			qui drop _m
@@ -154,22 +148,16 @@ foreach item in `levels' {
 			qui drop _des_en
 			qui drop `namevar'
 			qui rename _cae_num rev21_subsection
-			//qui rename _des rev21_subsection_des
-			//qui gen rev21_subsection_conv = (_valid_cae_21 != 0 & _valid_cae_21 != 99 & `len' >= 2)
 			qui replace rev21_subsection = -99 if _valid_cae_21 == 0
 			qui replace rev21_subsection = -99 if _valid_cae_21 == 99
-			qui replace rev21_subsection = -99 if `len' < 2 /*
-			qui replace rev21_subsection_des = "" if _valid_cae_21 == 0
-			qui replace rev21_subsection_des = "" if _valid_cae_21 == 99
-			qui replace rev21_subsection_des = "" if `len' < 2
-			label define l21subsection 0 "Unsuccessful conversion" 1 "Successful conversion"
-			label values rev21_subsection_conv l21subsection	*/
+			qui replace rev21_subsection = -99 if `len' < 2 
 			label values rev21_subsection divlabel21
 			label var rev21_subsection "CAE Rev. 21 Subsection (Level 2)"
 		}
 	}
 
 	if "`item'" == "3" {
+		cap drop rev21_division
 		qui gen str2 `namevar' = substr(`vardiv',1,2) 
 		qui merge m:1 `namevar' using "`file'"
 		qui drop if _m == 2
@@ -178,20 +166,14 @@ foreach item in `levels' {
 		qui drop _des_en
 		qui drop `namevar'
 		qui rename _cae_num rev21_division
-		//qui rename _des rev21_division_des
-		//qui gen rev21_division_conv = (_valid_cae_21 != 0 & _valid_cae_21 != 99 & `len' >= 2)
 		qui replace rev21_division = -99 if _valid_cae_21 == 0
 		qui replace rev21_division = -99 if _valid_cae_21 == 99
-		qui replace rev21_division = -99 if `len' < 2 /*
-		qui replace rev21_division_des = "" if _valid_cae_21 == 0
-		qui replace rev21_division_des = "" if _valid_cae_21 == 99
-		qui replace rev21_division_des = "" if `len' < 2
-		label define l21division 0 "Unsuccessful conversion" 1 "Successful conversion"
-		label values rev21_division_conv l21division*/
+		qui replace rev21_division = -99 if `len' < 2
 		label values rev21_division divlabel21
 		label var rev21_division "CAE Rev. 21 Division (Level 3)"
 	}
 	if "`item'" == "4" {
+		cap drop rev21_group
 		qui gen str3 `namevar' = substr(`vardiv',1,3) 
 		qui merge m:1 `namevar' using "`file'"
 		qui drop if _m == 2
@@ -200,20 +182,14 @@ foreach item in `levels' {
 		qui drop _des_en
 		qui drop `namevar'
 		qui rename _cae_num rev21_group
-		//qui rename _des rev21_group_des
-		//qui gen rev21_group_conv = (_valid_cae_21 != 0 & _valid_cae_21 != 99 & `len' >= 3)
 		qui replace rev21_group = -99 if _valid_cae_21 == 0
 		qui replace rev21_group = -99 if _valid_cae_21 == 99
-		qui replace rev21_group = -99 if `len' < 3 /*
-		qui replace rev21_group_des = "" if _valid_cae_21 == 0
-		qui replace rev21_group_des = "" if _valid_cae_21 == 99
-		qui replace rev21_group_des = "" if `len' < 3
-		label define l21group 0 "Unsuccessful conversion" 1 "Successful conversion"
-		label values rev21_group_conv l21group*/
+		qui replace rev21_group = -99 if `len' < 3 
 		label values rev21_group divlabel21
 		label var rev21_group "CAE Rev. 21 Group (Level 4)"
 	}
 	if "`item'" == "5" {
+		cap drop rev21_class
 		qui gen str4 `namevar' = substr(`vardiv',1,4) 
 		qui merge m:1 `namevar' using "`file'"
 		qui drop if _m == 2
@@ -222,20 +198,14 @@ foreach item in `levels' {
 		qui drop _des_en
 		qui drop `namevar'
 		qui rename _cae_num rev21_class
-		//qui rename _des rev21_class_des
-		//qui gen rev21_class_conv = (_valid_cae_21 != 0 & _valid_cae_21 != 99 & `len' >= 4)
 		qui replace rev21_class = -99 if _valid_cae_21 == 0
 		qui replace rev21_class = -99 if _valid_cae_21 == 99
-		qui replace rev21_class = -99 if `len' < 4 /*
-		qui replace rev21_class_des = "" if _valid_cae_21 == 0
-		qui replace rev21_class_des = "" if _valid_cae_21 == 99
-		qui replace rev21_class_des = "" if `len' < 4
-		label define l21class 0 "Unsuccessful conversion" 1 "Successful conversion"
-		label values rev21_class_conv l21class*/
+		qui replace rev21_class = -99 if `len' < 4
 		label values rev21_class divlabel21
 		label var rev21_class "CAE Rev. 21 Class (Level 5)"
 	}
 	if "`item'" == "6" {
+		cap drop rev21_subclass
 		qui clonevar `namevar' = `vardiv'
 		qui merge m:1 `namevar' using "`file'"
 		qui drop if _m == 2
@@ -244,16 +214,9 @@ foreach item in `levels' {
 		qui drop _des_en
 		qui drop `namevar'
 		qui rename _cae_num rev21_subclass
-		//qui rename _des rev21_subclass_des
-		//qui gen rev21_subclass_conv = (_valid_cae_21 != 0 & _valid_cae_21 != 99 & `len' == 5)
 		qui replace rev21_subclass = -99 if _valid_cae_21 == 0
 		qui replace rev21_subclass = -99 if _valid_cae_21 == 99
-		qui replace rev21_subclass = -99 if `len' < 5 /*
-		qui replace rev21_subclass_des = "" if _valid_cae_21 == 0
-		qui replace rev21_subclass_des = "" if _valid_cae_21 == 99
-		qui replace rev21_subclass_des = "" if `len' < 5
-		label define l21subclass 0 "Unsuccessful conversion" 1 "Successful conversion"
-		label values rev21_subclass_conv l21subclass*/
+		qui replace rev21_subclass = -99 if `len' < 5
 		label values rev21_subclass divlabel21
 		label var rev21_subclass "CAE Rev. 21 Subclass (Level 6)"
 	}	
