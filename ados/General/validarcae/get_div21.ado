@@ -2,6 +2,7 @@ program define get_div21
 
 syntax varlist, [file(string) levels(string) fl fr cfl en] namevar(string) 
 
+cap drop rev21_*
 
 preserve
 	qui use "`file'", clear
