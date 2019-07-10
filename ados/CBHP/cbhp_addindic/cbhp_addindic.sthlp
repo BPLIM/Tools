@@ -64,7 +64,7 @@ R160 - Financial fixed assets / Total assets;
 
 R161 - Trade receivables / Total assets.
 
-The command is implemented for the original dataset of the harmonized panel of Central Balance Sheet Database made available by BPLIM (CBHP_A_YFRM_20062017_NOV18_CONTAS_V01.dta).
+The command is implemented for the original dataset of the Central Balance Sheet Harmonized Panel made available by BPLIM (CBHP_A_YFRM_yyyyYYYY_eeee_CONTAS_V01.dta).
 
 {title:Options}
 
@@ -87,7 +87,7 @@ Calculation of all indicators available in the harmonized panel of Central Balan
 
 Example3:
 Calculation of all indicators and save in a separate dataset
-{p 8 16}{inp:. cbhp_addindic all, save}{p_end}
+{p 8 16}{inp:. cbhp_addindic all, save({it:filename})}{p_end}
 
 
 {title:Remarks}

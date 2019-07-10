@@ -3,7 +3,6 @@
 //Program to calculate the economic and financial indicators available in the harmonized panel of Central de Balanços
 //Marta Silva
 //Version 1.2 (18 December 2018)
-//Extraction: November 2018
 
 program define cbhp_addindic
 syntax newvarlist (min=1) [if] [in] , [ ///
