@@ -194,7 +194,7 @@ local returnval3=r(val3)
 capture which gtools
 if _rc==0 {
 global ps_gtools "g"
-di "Using gtools for faster results"
+*di "Using gtools for faster results"
 }
 if "$ps_gtools"=="" {
 di "You may want to install user-written GTOOLS for faster results"

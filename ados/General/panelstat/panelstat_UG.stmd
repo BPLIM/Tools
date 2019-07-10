@@ -2,8 +2,8 @@
 ---
 title: A user guide for *panelstat*
 author: Paulo Guimaraes, BPlim
-date:  17jun2019
-version: 3.5
+date:  10jul2019
+version: 3.5.01
 ---
 
 
@@ -28,7 +28,7 @@ To illustrate the usage of `panelstat` we start by loading Stata's *nlswork* fil
 of young women aged 14 to 26 years in 1968, and which were observed for several years.
 
 ```s
-    sysuse nlswork.dta, clear
+    webuse nlswork.dta, clear
 ```
 
 The unit identifier for this panel is *idcode* -- a unique identifier for each participant in the study. The time variable is *year*.
@@ -125,8 +125,8 @@ then these years will be ignored in all subsequent calculations. This will make 
 
 ## The *forcestata* option
 
-Working with large panels can be extremely slow. Fortunately, there user-written command
-[`gtools`](http://gtools.readthedocs.io/en/latest/index.html) written by Mauricio Caceres is much faster than official *Stata* commands.
+Working with large panels can be extremely slow. Fortunately, the user-written command
+[`gtools`](http://gtools.readthedocs.io/en/latest/index.html) by Mauricio Caceres is much faster than *Stata* official commands.
 To install an updated version do
 ```
 ssc install gtools
@@ -147,7 +147,7 @@ for the panel we will use the `nosum` option.
 We start with the `pattern` option
 
 ```s
-    use nlswork, clear
+    webuse nlswork, clear
     panelstat idcode year, pattern nosum
 ```
 The table that was produced shows the 10 most common patterns in the data. Thus, the most common situation are
