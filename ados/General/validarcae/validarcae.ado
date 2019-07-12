@@ -1,11 +1,11 @@
-*! 0.4 8jul2019
+*! 0.5 12jul2019
 * Programmed by Gustavo Iglésias
 * Dependencies: 
-* savesome (version 1.1.0 23feb2015) 
+* savesome (version 1.1.0 23feb2015)
 
 program define validarcae
 
-syntax varlist(min=1 max=1), [rev(int 3) cfl dropzero getlevels(string) fl fr en]
+syntax varlist(min=1 max=1), [rev(int 3) fromlabel dropzero keep getlevels(string)]
 
 
 cap which savesome 
@@ -14,11 +14,10 @@ if _rc {
 	error _rc
 }
 
+cap drop _cae_str
 cap drop _valid_cae_`rev'
 cap label drop validlabel`rev'
 
-tempvar cae_str
-local namevar "`cae_str'"
 
 preserve
 	mata: st_local("filename",findfile("caecodes.txt"))
@@ -28,7 +27,7 @@ preserve
 	qui rename des_pt _des_pt
 	qui rename des_en _des_en
 	qui rename cae_num _cae_num
-	qui rename cae_str `namevar'
+	qui rename cae_str _cae_str
 	tempfile temp
 	qui save "`temp'", replace // file with valid cae codes
 restore
@@ -43,16 +42,34 @@ di
 di "Checking compatibility with CAE rev. `rev'"
 
 // decode variable if specified by the user
-if "`cfl'" == "cfl" {
-	qui decode `varlist', gen(`cae_str')
-	qui replace `cae_str' = word(`cae_str',1)
+if "`fromlabel'" == "fromlabel" {
+	qui decode `varlist', gen(_cae_str)
+	qui replace _cae_str = word(_cae_str,1)
+	tempvar decode_len 
+	qui gen `decode_len' = length(_cae_str)
+	if `rev' == 1 {
+		cap assert (`decode_len' == 6)
+		if _rc  {
+			di as error "Not all of your codes have the required length for CAE Rev. `rev'. Please do not specify option fromlabel."
+			cap drop _cae_str
+			error 198
+		}
+	}
+	else {
+		cap assert (`decode_len' == 5)
+		if _rc {
+			di as error "Not all of your codes have the required length for CAE Rev. `rev'. Please do not specify option fromlabel."
+			cap drop _cae_str
+			error 198	
+		}
+	}
 }
 else {
 	if substr("`vartype'",1,3) == "str" {
-		qui clonevar `cae_str' = `varlist'
+		qui clonevar _cae_str = `varlist'
 	}
 	else {
-		qui gen `cae_str' = string(`varlist')
+		qui gen _cae_str = string(`varlist')
 	}
 }
 
@@ -62,19 +79,8 @@ qui savesome if missing(`varlist') using "`tempmiss'", replace
 qui drop if missing(`varlist')
 
 tempvar strlen
-qui gen `strlen' = length(`cae_str')
+qui gen `strlen' = length(_cae_str)
 
-// if dropzero is speciied, zeros to the right will be dropped from the codes
-if "`dropzero'" == "dropzero" {
-	cap assert !(substr(`cae_str',`strlen',1) == "0") // while any observation has a zero in the last char
-	while _rc {
-		qui replace `cae_str' = substr(`cae_str',1,`strlen'-1) if substr(`cae_str',`strlen',1) == "0"
-		qui replace `strlen' = length(`cae_str')
-		cap assert !(substr(`cae_str',`strlen',1) == "0")
-	}
-	qui replace `cae_str' = "0" if missing(`cae_str') 
-	qui replace `strlen' = length(`cae_str')
-}
 
 // revision 1 has 6 digits and always starts with a number different from 0
 if `rev' == 1 {
@@ -84,12 +90,11 @@ if `rev' == 1 {
 	forvalues i = 1/6 {
 		preserve
 			qui keep if `strlen' == `i'
-			qui merge m:1 `cae_str' using "`temp'"
+			qui merge m:1 _cae_str using "`temp'"
 			qui drop if _merge == 2
 			qui gen int _valid_cae_`rev' = `i'1 if _merge == 3
 			qui replace _valid_cae_`rev' = 99 if _merge == 1
 			qui drop _merge
-			qui drop `cae_str'
 			tempfile temp`i'
 			qui save "`temp`i''", replace
 		restore
@@ -98,6 +103,21 @@ if `rev' == 1 {
 	forvalues i = 1/6 {
 		qui append using "`temp`i''"
 	}
+	
+	if "`dropzero'" == "dropzero" {
+		cap assert _valid_cae_`rev' != 99 
+		if _rc {
+			tempfile zerodropfile
+			qui savesome if (_valid_cae_`rev' == 99 & substr(_cae_str,-1,1) == "0" & `strlen' > 1) using `"`zerodropfile'"', replace
+			qui drop if (_valid_cae_`rev' == 99 & substr(_cae_str,-1,1) == "0" & `strlen' > 1)
+			preserve
+				data_dropzero1, file1(`zerodropfile') file2(`temp') rev(`rev')
+			restore
+			qui append using `"`zerodropfile'"'
+		}
+	}
+	
+	
 	qui append using "`tempmiss'"
 	qui replace _valid_cae_`rev' = 0 if missing(_valid_cae_`rev')
 	
@@ -118,29 +138,28 @@ else {
 		preserve
 			qui keep if `strlen' == `i'
 			if `i' == 5 {
-				qui merge m:1 `cae_str' using "`temp'"
+				qui merge m:1 _cae_str using "`temp'"
 				qui drop if _merge == 2
 				qui gen int _valid_cae_`rev' = `i'1 if _merge == 3
-				qui replace _valid_cae_`rev' = `i'2 if _merge == 1
+				qui replace _valid_cae_`rev' = 99 if _merge == 1
 				qui drop _merge
-				qui drop `cae_str'
 				tempfile temp`i'
 				qui save "`temp`i''", replace
 			}
 			else {
-				qui merge m:1 `cae_str' using "`temp'"						// merge on the original code
+				qui merge m:1 _cae_str using "`temp'"						// merge on the original code
 				qui drop if _merge == 2
 				qui rename _merge _m1
-				qui replace `cae_str' = "0" + `cae_str'
-				qui merge m:1 `cae_str' using "`temp'"						// merge on the code preceeded by a 0
+				qui replace _cae_str = "0" + _cae_str
+				qui merge m:1 _cae_str using "`temp'"						// merge on the code preceeded by a 0
 				qui drop if _merge == 2
 				qui rename _merge _m2
 				qui gen int _valid_cae_`rev' = `i'1 if (_m1 == 3 & _m2 == 1) // valid at i digits only
 				qui replace _valid_cae_`rev' = `i'2 if (_m1 == 1 & _m2 == 3) // valid at i + 1 digits (0 + i digits)
 				qui replace _valid_cae_`rev' = `i'3 if (_m1 == 3 & _m2 == 3) // valid at i digits only or i + 1 digits (0 + i digits)
-				qui replace _valid_cae_`rev' = `i'4 if (_m1 == 1 & _m2 == 1) // invalid
+				qui replace _valid_cae_`rev' = 99 if (_m1 == 1 & _m2 == 1) // invalid
 				qui drop _m*
-				qui drop `cae_str'
+				qui replace _cae_str = substr(_cae_str,2,.)
 				tempfile temp`i'
 				qui save "`temp`i''", replace
 			}
@@ -151,13 +170,27 @@ else {
 	forvalues i = 1/5 {
 		qui append using "`temp`i''"
 	}
+	
+	
+	if "`dropzero'" == "dropzero" {
+		cap assert _valid_cae_`rev' != 99 
+		if _rc {
+			tempfile zerodropfile
+			qui savesome if (_valid_cae_`rev' == 99 & substr(_cae_str,-1,1) == "0" & `strlen' > 1) using `"`zerodropfile'"', replace
+			qui drop if (_valid_cae_`rev' == 99 & substr(_cae_str,-1,1) == "0" & `strlen' > 1)
+			preserve
+				data_dropzero2, file1(`zerodropfile') file2(`temp') rev(`rev')
+			restore
+			qui append using `"`zerodropfile'"'
+		}
+	}
+	
 	qui append using "`tempmiss'"
 	qui replace _valid_cae_`rev' = 0 if missing(_valid_cae_`rev')
 	
 	qui append using "`tempinvalidlength'"
 	qui replace _valid_cae_`rev' = 99 if missing(_valid_cae_`rev')
 
-	qui replace _valid_cae_`rev' = 99 if inlist(_valid_cae_`rev', 14, 24, 34, 44, 52)
 
 	label define validlabel`rev' 0 "Missing" 11 "1 dig only" 12 "2 dig (0 + 1 dig)" 13 "1 dig only or 2 dig (0 + 1 dig)" ///
 							21 "2 dig only" 22 "3 dig (0 + 2 dig)" 23 "2 dig only or 3 dig (0 + 2 dig)" ///
@@ -175,12 +208,16 @@ cap drop rev
 cap drop _des_pt
 cap drop _des_en
 cap drop _cae_num
-cap drop `cae_str'
+
 
 
 if "`getlevels'" != "" {
-	foreach item in `getlevels' {
-		local levelscount: word count `getlevels'
+	getlevelsparser, getlevels(`getlevels')
+	local levels = "`r(levels)'"
+	local en = "`r(en)'"
+	local force = "`r(force)'"
+	foreach item in `levels' {
+		local levelscount: word count `levels'
 		if `rev' == 3 {
 			if `levelscount' > 5 {
 				di as error "CAE Rev. 3 only admits 5 levels"
@@ -204,19 +241,205 @@ if "`getlevels'" != "" {
 	}
 
 	if `rev' == 1 {
-		get_div1 `varlist', file(`temp') levels(`getlevels') `fr' `cfl' namevar(`namevar') `en'
+		get_div1 `varlist', file(`temp') levels(`levels') `keep' `en'
 	}
 	else if `rev' == 2 {
-		get_div2 `varlist', file(`temp') levels(`getlevels') `fl' `fr' `cfl' namevar(`namevar') `en'
+		get_div2 `varlist', file(`temp') levels(`levels') `keep' `en' `force'
 	}
 	else if `rev' == 21 {
-		get_div21 `varlist', file(`temp') levels(`getlevels') `fl' `fr' `cfl' namevar(`namevar') `en'
+		get_div21 `varlist', file(`temp') levels(`levels') `keep' `en' `force'
 	}
 	else {
-		get_div3 `varlist', file(`temp') levels(`getlevels') `fl' `fr' `cfl' namevar(`namevar') `en'
+		get_div3 `varlist', file(`temp') levels(`levels') `keep' `en' `force'
+	}
+}
+else {
+	if "`keep'" != "keep" {
+		cap drop _cae_str
 	}
 }
 
 qui compress _valid_cae_`rev'
 
+
 end
+
+
+
+program define data_dropzero2
+
+
+syntax, file1(string) file2(string) [rev(int 3)]
+
+qui use `"`file1'"', clear
+
+quietly count
+local j = 1
+cap drop _zerosdropped
+qui gen byte _zerosdropped = 0
+while r(N) {
+	qui drop _valid_cae_`rev'
+	tempvar len`j'
+	qui gen `len`j'' = length(_cae_str)
+	qui replace _cae_str = substr(_cae_str,1,`len`j'' - 1)
+	qui replace `len`j'' = length(_cae_str)
+	qui sum `len`j''
+	local maxlen = r(max)
+	qui replace _zerodropped = _zerosdropped + 1
+	forvalues i = 1/`maxlen' {
+		preserve
+			qui keep if `len`j'' == `i'
+			if `i' == 5 {
+				qui merge m:1 _cae_str using `"`file2'"'
+				qui drop if _merge == 2
+				qui gen int _valid_cae_`rev' = `i'1 if _merge == 3
+				qui replace _valid_cae_`rev' = 99 if _merge == 1
+				qui drop _merge
+				tempfile tempzero`i'
+				qui save "`tempzero`i''", replace
+			}
+			else {
+				qui merge m:1 _cae_str using `"`file2'"'						// merge on the original code
+				qui drop if _merge == 2
+				qui rename _merge _m1
+				qui replace _cae_str = "0" + _cae_str
+				qui merge m:1 _cae_str using `"`file2'"'						// merge on the code preceeded by a 0
+				qui drop if _merge == 2
+				qui rename _merge _m2
+				qui gen int _valid_cae_`rev' = `i'1 if (_m1 == 3 & _m2 == 1) // valid at i digits only
+				qui replace _valid_cae_`rev' = `i'2 if (_m1 == 1 & _m2 == 3) // valid at i + 1 digits (0 + i digits)
+				qui replace _valid_cae_`rev' = `i'3 if (_m1 == 3 & _m2 == 3) // valid at i digits only or i + 1 digits (0 + i digits)
+				qui replace _valid_cae_`rev' = 99 if (_m1 == 1 & _m2 == 1) // invalid
+				qui drop _m*
+				qui replace _cae_str = substr(_cae_str,2,.)
+				tempfile tempzero`i'
+				qui save "`tempzero`i''", replace
+			}
+		restore
+	}
+	
+	clear
+	forvalues i = 1/`maxlen' {
+		qui append using "`tempzero`i''"
+	}
+	tempfile datazero`j'
+	qui savesome if (_valid_cae_`rev' != 99 | substr(_cae_str,-1,1) != "0" | `len`j'' == 1) using `"`datazero`j''"', replace
+	qui drop if (_valid_cae_`rev' != 99 | substr(_cae_str,-1,1) != "0" | `len`j'' == 1)
+	quietly count
+	local j = `j' + 1
+}
+
+local j = `j' - 1
+clear
+forvalues k = 1/`j' {
+	qui append using `"`datazero`k''"'
+}
+
+forvalues k = 1/`j' {
+	qui drop `len`k''
+}
+
+qui save `"`file1'"', replace
+
+
+end
+
+
+
+program define data_dropzero1
+
+
+syntax, file1(string) file2(string) [rev(int 3)]
+
+qui use `"`file1'"', clear
+
+quietly count
+local j = 1
+cap drop _zerosdropped
+qui gen byte _zerodropped = 0
+while r(N) {
+	qui drop _valid_cae_`rev'
+	tempvar len`j'
+	qui gen `len`j'' = length(_cae_str)
+	qui replace _cae_str = substr(_cae_str,1,`len`j'' - 1)
+	qui replace `len`j'' = length(_cae_str)
+	qui sum `len`j''
+	local maxlen = r(max)
+	qui replace _zerodropped = _zerosdropped + 1
+	forvalues i = 1/`maxlen' {
+		preserve
+			qui keep if `len`j'' == `i'
+			qui merge m:1 _cae_str using `"`file2'"'
+			qui drop if _merge == 2
+			qui gen int _valid_cae_`rev' = `i'1 if _merge == 3
+			qui replace _valid_cae_`rev' = 99 if _merge == 1
+			qui drop _merge
+			tempfile tempzero`i'
+			qui save "`tempzero`i''", replace
+		restore
+	}
+	clear
+	forvalues i = 1/`maxlen' {
+		qui append using "`tempzero`i''"
+	}
+	tempfile datazero`j'
+	qui savesome if (_valid_cae_`rev' != 99 | substr(_cae_str,-1,1) != "0" | `len`j'' == 1) using `"`datazero`j''"', replace
+	qui drop if (_valid_cae_`rev' != 99 | substr(_cae_str,-1,1) != "0" | `len`j'' == 1)
+	quietly count
+	local j = `j' + 1
+}
+
+local j = `j' - 1
+clear
+forvalues k = 1/`j' {
+	qui append using `"`datazero`k''"'
+}
+
+forvalues k = 1/`j' {
+	qui drop `len`k''
+}
+
+qui save `"`file1'"', replace
+	
+	
+end
+
+
+
+program define getlevelsparser, rclass
+
+
+syntax, getlevels(string)
+
+local pos = strpos(`"`getlevels'"',",")
+if `pos' == 0 {
+	return local levels = `"`getlevels'"'
+	return local force = ""
+	return local en = ""
+}
+else {
+	local first = substr(`"`getlevels'"',1,`pos'-1)
+	return local levels = `"`first'"'
+	local second = substr(`"`getlevels'"',`pos'+1,.)
+	if strpos(`"`second'"',"en") {
+		return local en = "en"
+	}
+	else {
+		return local en = ""
+	}
+	if strpos(`"`second'"',"force") {
+		return local force = "force"
+	}
+	else {
+		return local force = ""
+	}
+}
+
+end
+
+
+
+
+
+
+
