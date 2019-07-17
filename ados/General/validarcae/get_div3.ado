@@ -47,8 +47,10 @@ forvalues j= 2/5 {
 tempvar len
 qui gen `len' = length(_cae_str)
 
+cap confirm variable _zerosdropped
+local zero_dropped = _rc
 
-qui replace _cae_str = "0" + _cae_str if inlist(_valid_cae_3, 12, 22, 32, 42)
+qui replace _cae_str = "0" + _cae_str if inlist(_valid_cae_3, 2, 20, 200, 2000)
 
 /*
 if "`fl'" == "fl" {
@@ -95,8 +97,9 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev3_section
 		qui replace rev3_section = -99 if _valid_cae_3 == 0
-		qui replace rev3_section = -99 if _valid_cae_3 == 99
-		if ("`force'" != "force") qui replace rev3_section = -98 if inlist(_valid_cae_3, 13, 23, 33, 43)
+		qui replace rev3_section = -99 if _valid_cae_3 == 200000
+		if ("`force'" != "force") qui replace rev3_section = -98 if inlist(_valid_cae_3, 30, 300, 3000)
+		if (`zero_dropped' == 0) qui replace rev3_section = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
 		qui replace rev3_section = -99 if `len' < 2
 		label values rev3_section divlabel32
 		label var rev3_section "CAE Rev. 3 Section (Level 1)"
@@ -114,8 +117,9 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev3_division
 		qui replace rev3_division = -99 if _valid_cae_3 == 0
-		qui replace rev3_division = -99 if _valid_cae_3 == 99
-		if ("`force'" != "force") qui replace rev3_division = -98 if inlist(_valid_cae_3, 13, 23, 33, 43)
+		qui replace rev3_division = -99 if _valid_cae_3 == 200000
+		if ("`force'" != "force") qui replace rev3_division = -98 if inlist(_valid_cae_3, 30, 300, 3000)
+		if (`zero_dropped' == 0) qui replace rev3_division = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
 		qui replace rev3_division = -99 if `len' < 2 
 		label values rev3_division divlabel32
 		label var rev3_division "CAE Rev. 3 Division (Level 2)"
@@ -133,8 +137,9 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev3_group
 		qui replace rev3_group = -99 if _valid_cae_3 == 0
-		qui replace rev3_group = -99 if _valid_cae_3 == 99
-		if ("`force'" != "force") qui replace rev3_group = -98 if inlist(_valid_cae_3, 13, 23, 33, 43)
+		qui replace rev3_group = -99 if _valid_cae_3 == 200000
+		if ("`force'" != "force") qui replace rev3_group = -98 if inlist(_valid_cae_3, 30, 300, 3000)
+		if (`zero_dropped' == 0) qui replace rev3_group = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
 		qui replace rev3_group = -99 if `len' < 3 
 		label values rev3_group divlabel33
 		label var rev3_group "CAE Rev. 3 Group (Level 3)"
@@ -152,8 +157,9 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev3_class
 		qui replace rev3_class = -99 if _valid_cae_3 == 0
-		qui replace rev3_class = -99 if _valid_cae_3 == 99
-		if ("`force'" != "force") qui replace rev3_class = -98 if inlist(_valid_cae_3, 13, 23, 33, 43)
+		qui replace rev3_class = -99 if _valid_cae_3 == 200000
+		if ("`force'" != "force") qui replace rev3_class = -98 if inlist(_valid_cae_3, 30, 300, 3000)
+		if (`zero_dropped' == 0) qui replace rev3_class = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
 		qui replace rev3_class = -99 if `len' < 4 
 		label values rev3_class divlabel34
 		label var rev3_class "CAE Rev. 3 Class (Level 4)"
@@ -167,8 +173,9 @@ foreach item in `levels' {
 		qui drop _des_en
 		qui rename _cae_num rev3_subclass
 		qui replace rev3_subclass = -99 if _valid_cae_3 == 0
-		qui replace rev3_subclass = -99 if _valid_cae_3 == 99
-		if ("`force'" != "force") qui replace rev3_subclass = -98 if inlist(_valid_cae_3, 13, 23, 33, 43)
+		qui replace rev3_subclass = -99 if _valid_cae_3 == 200000
+		if ("`force'" != "force") qui replace rev3_subclass = -98 if inlist(_valid_cae_3, 30, 300, 3000)
+		if (`zero_dropped' == 0) qui replace rev3_subclass = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
 		qui replace rev3_subclass = -99 if `len' < 5 
 		label values rev3_subclass divlabel35
 		label var rev3_subclass "CAE Rev. 3 Subclass (Level 5)"

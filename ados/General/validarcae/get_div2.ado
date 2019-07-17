@@ -47,8 +47,11 @@ forvalues j= 2/5 {
 tempvar len
 qui gen `len' = length(_cae_str)
 
+cap confirm variable _zerosdropped
+local zero_dropped = _rc
 
-qui replace _cae_str = "0" + _cae_str if inlist(_valid_cae_2, 12, 22, 32, 42)
+
+qui replace _cae_str = "0" + _cae_str if inlist(_valid_cae_2, 2, 20, 200, 2000)
 
 /*
 if "`fl'" == "fl" {
@@ -101,8 +104,9 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev2_section
 		qui replace rev2_section = -99 if _valid_cae_2 == 0
-		qui replace rev2_section = -99 if _valid_cae_2 == 99
-		if ("`force'" != "force") qui replace rev2_section = -98 if inlist(_valid_cae_2, 13, 23, 33, 43)
+		qui replace rev2_section = -99 if _valid_cae_2 == 200000
+		if ("`force'" != "force") qui replace rev2_section = -98 if inlist(_valid_cae_2, 30, 300, 3000)
+		if (`zero_dropped' == 0) qui replace rev2_section = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
 		qui replace rev2_section = -99 if `len' < 2 
 		label values rev2_section divlabel22
 		label var rev2_section "CAE Rev. 2 Section (Level 1)"
@@ -150,8 +154,9 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev2_subsection
 		qui replace rev2_subsection = -99 if _valid_cae_2 == 0
-		qui replace rev2_subsection = -99 if _valid_cae_2 == 99
-		if ("`force'" != "force") qui replace rev2_subsection = -98 if inlist(_valid_cae_2, 13, 23, 33, 43)
+		qui replace rev2_subsection = -99 if _valid_cae_2 == 200000
+		if ("`force'" != "force") qui replace rev2_subsection = -98 if inlist(_valid_cae_2, 30, 300, 3000)
+		if (`zero_dropped' == 0) qui replace rev2_subsection = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
 		qui replace rev2_subsection = -99 if `len' < 2 
 		label values rev2_subsection divlabel22
 		label var rev2_subsection "CAE Rev. 2 Subsection (Level 2)"
@@ -170,8 +175,9 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev2_division
 		qui replace rev2_division = -99 if _valid_cae_2 == 0
-		qui replace rev2_division = -99 if _valid_cae_2 == 99
-		if ("`force'" != "force") qui replace rev2_division = -98 if inlist(_valid_cae_2, 13, 23, 33, 43)
+		qui replace rev2_division = -99 if _valid_cae_2 == 200000
+		if ("`force'" != "force") qui replace rev2_division = -98 if inlist(_valid_cae_2, 30, 300, 3000)
+		if (`zero_dropped' == 0) qui replace rev2_division = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
 		qui replace rev2_division = -99 if `len' < 2 
 		label values rev2_division divlabel22
 		label var rev2_division "CAE Rev. 2 Division (Level 3)"
@@ -189,8 +195,9 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev2_group
 		qui replace rev2_group = -99 if _valid_cae_2 == 0
-		qui replace rev2_group = -99 if _valid_cae_2 == 99
-		if ("`force'" != "force") qui replace rev2_group = -98 if inlist(_valid_cae_2, 13, 23, 33, 43)
+		qui replace rev2_group = -99 if _valid_cae_2 == 200000
+		if ("`force'" != "force") qui replace rev2_group = -98 if inlist(_valid_cae_2, 30, 300, 3000)
+		if (`zero_dropped' == 0) qui replace rev2_group = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
 		qui replace rev2_group = -99 if `len' < 3 
 		label values rev2_group divlabel23
 		label var rev2_group "CAE Rev. 2 Group (Level 4)"
@@ -208,8 +215,9 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev2_class
 		qui replace rev2_class = -99 if _valid_cae_2 == 0
-		qui replace rev2_class = -99 if _valid_cae_2 == 99
-		if ("`force'" != "force") qui replace rev2_class = -98 if inlist(_valid_cae_2, 13, 23, 33, 43)
+		qui replace rev2_class = -99 if _valid_cae_2 == 200000
+		if ("`force'" != "force") qui replace rev2_class = -98 if inlist(_valid_cae_2, 30, 300, 3000)
+		if (`zero_dropped' == 0) qui replace rev2_class = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
 		qui replace rev2_class = -99 if `len' < 4
 		label values rev2_class divlabel24
 		label var rev2_class "CAE Rev. 2 Class (Level 5)"
@@ -223,8 +231,9 @@ foreach item in `levels' {
 		qui drop _des_en
 		qui rename _cae_num rev2_subclass
 		qui replace rev2_subclass = -99 if _valid_cae_2 == 0
-		qui replace rev2_subclass = -99 if _valid_cae_2 == 99
-		if ("`force'" != "force") qui replace rev2_subclass = -98 if inlist(_valid_cae_2, 13, 23, 33, 43)
+		qui replace rev2_subclass = -99 if _valid_cae_2 == 200000
+		if ("`force'" != "force") qui replace rev2_subclass = -98 if inlist(_valid_cae_2, 30, 300, 3000)
+		if (`zero_dropped' == 0) qui replace rev2_subclass = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
 		qui replace rev2_subclass = -99 if `len' < 5
 		label values rev2_subclass divlabel25
 		label var rev2_subclass "CAE Rev. 2 Subclass (Level 6)"

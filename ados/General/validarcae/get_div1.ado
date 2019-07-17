@@ -21,10 +21,12 @@ forvalues j= 1/6 {
 		quietly count 
 		local total = r(N)
 		if "`en'" == "en" {
-			label define divlabel1`j' -99 "Unsuccessful conversion", add modify 
+			label define divlabel1`j' -99 "Unsuccessful conversion", add modify
+			label define divlabel21`j' -98 "Ambiguous validation, not able to convert", add modify 
 		}
 		else {
-			label define divlabel1`j' -99 "Conversão indisponível", add modify 		
+			label define divlabel1`j' -99 "Conversão indisponível", add modify
+			label define divlabel21`j' -98 "Validação ambígua, código não convertido", add modify
 		}
 		forvalues i = 1/`total' {
 			local value = _cae_num[`i']
@@ -36,6 +38,9 @@ forvalues j= 1/6 {
 	qui do lixo.do
 	qui rm lixo.do
 }
+
+cap confirm variable _zerosdropped
+local zero_dropped = _rc
 
 tempvar len
 qui gen `len' = length(_cae_str)
@@ -56,7 +61,8 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev1_division
 		qui replace rev1_division = -99 if _valid_cae_1 == 0
-		qui replace rev1_division = -99 if _valid_cae_1 == 99
+		qui replace rev1_division = -99 if _valid_cae_1 == 200000
+		if (`zero_dropped' == 0) qui replace rev1_division = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',1,10,100,1000,10000))
 		qui replace rev1_division = -99 if `len' < 1
 		label var rev1_division "CAE Rev. 1 Division (Level 1)"
 		label values rev1_division divlabel11
@@ -74,7 +80,8 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev1_subdivision
 		qui replace rev1_subdivision = -99 if _valid_cae_1 == 0
-		qui replace rev1_subdivision = -99 if _valid_cae_1 == 99
+		qui replace rev1_subdivision = -99 if _valid_cae_1 == 200000
+		if (`zero_dropped' == 0) qui replace rev1_subdivision = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',1,10,100,1000,10000))
 		qui replace rev1_subdivision = -99 if `len' < 2 
 		label var rev1_subdivision "CAE Rev. 1 Subdivision (Level 2)"
 		label values rev1_subdivision divlabel12
@@ -92,7 +99,8 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev1_class
 		qui replace rev1_class = -99 if _valid_cae_1 == 0
-		qui replace rev1_class = -99 if _valid_cae_1 == 99
+		qui replace rev1_class = -99 if _valid_cae_1 == 200000
+		if (`zero_dropped' == 0) qui replace rev1_class = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',1,10,100,1000,10000))
 		qui replace rev1_class = -99 if `len' < 3
 		label var rev1_class "CAE Rev. 1 Class (Level 3)"
 		label values rev1_class divlabel13
@@ -110,7 +118,8 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev1_group
 		qui replace rev1_group = -99 if _valid_cae_1 == 0
-		qui replace rev1_group = -99 if _valid_cae_1 == 99
+		qui replace rev1_group = -99 if _valid_cae_1 == 200000
+		if (`zero_dropped' == 0) qui replace rev1_group = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',1,10,100,1000,10000))
 		qui replace rev1_group = -99 if `len' < 4 
 		label values rev1_group divlabel14
 		label var rev1_group "CAE Rev. 1 Group (Level 4)"
@@ -128,7 +137,8 @@ foreach item in `levels' {
 		qui rename _cae_str_original _cae_str
 		qui rename _cae_num rev1_subgroup
 		qui replace rev1_subgroup = -99 if _valid_cae_1 == 0
-		qui replace rev1_subgroup = -99 if _valid_cae_1 == 99
+		qui replace rev1_subgroup = -99 if _valid_cae_1 == 200000
+		if (`zero_dropped' == 0) qui replace rev1_subgroup = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',1,10,100,1000,10000))
 		qui replace rev1_subgroup = -99 if `len' < 5
 		label var rev1_subgroup "CAE Rev. 1 Subgroup (Level 5)"
 		label values rev1_subgroup divlabel15
@@ -142,7 +152,8 @@ foreach item in `levels' {
 		qui drop _des_en
 		qui rename _cae_num rev1_split
 		qui replace rev1_split = -99 if _valid_cae_1 == 0
-		qui replace rev1_split = -99 if _valid_cae_1 == 99
+		qui replace rev1_split = -99 if _valid_cae_1 == 200000
+		if (`zero_dropped' == 0) qui replace rev1_split = -98 if (!missing(_zerosdropped) & !inlist(_valid_cae_`rev',1,10,100,1000,10000))
 		qui replace rev1_split = -99 if `len' < 6 
 		label values rev1_split divlabel16
 		label var rev1_split "CAE Rev. 1 Split (Level 6)"

@@ -32,19 +32,31 @@ The command produces the variable _valid_cae_# with valid and invalid codes for 
 
 Codes from revision 1 have 6 digits (at the highest level of disaggregation) and always start with a number greater than 0, so the possible values for _valid_cae_# are:
 
-- 0 : missing {it:var};
-- i1: valid at i digits;					(i = 1, 2, 3, 4, 5, 6)
-- 99: invalid.
+- 0     :   missing {it:var};
+- 1     :   valid at 1 digit;
+- 10    :   valid at 2 digits;
+- 100   :   valid at 3 digits;
+- 1000  :   valid at 4 digits;
+- 10000 :   valid at 5 digits;
+- 100000:   valid at 6 digits;
+- 200000:   invalid.
 
 Codes from revisions 2, 21 and 3 have 5 digits (at the highest level of disaggregation) and may start with a zero. It may happen that a 0 was lost when converting from string to number, 
 so we want to check if codes with a length smaller than 5 can still be valid if we add a 0 to the left. Therefore, _valid_cae_# can take on the following values:
 
-- 0 : missing {it:var};
-- i1: valid at i digits only;					(i = 1, 2, 3, 4)
-- i2: valid at i + 1 digits (0 + i digits);			(i = 1, 2, 3, 4)
-- i3: valid at i digits only or i + 1 digits (0 + i digits);	(i = 1, 2, 3, 4)
-- 51: valid at 5 digits;
-- 99: invalid.
+- 0     :   missing {it:var};
+- 2     :   valid at 2 digits (0 + 1 digit);
+- 10    :   valid at 2 digits only;
+- 20    :   valid at 3 digits (0 + 2 digits);
+- 30    :   valid at 2 digits only or 3 digits (0 + 2 digits);
+- 100   :   valid at 3 digits only;
+- 200   :   valid at 4 digits (0 + 3 digits);
+- 300   :   valid at 3 digits only or 4 digits (0 + 3 digits);
+- 1000  :   valid at 4 digits only;
+- 2000  :   valid at 5 digits (0 + 4 digits);
+- 3000  :   valid at 4 digits only or 5 digits (0 + 4 digits);
+- 10000 :   valid at 5 digits;
+- 200000:   invalid.
 
 A tabulation of _valid_cae_# is also presented.
 
@@ -54,12 +66,12 @@ A tabulation of _valid_cae_# is also presented.
 {p 0 4}{opt rev()} allows the user to specify which CAE Revision should be used. The user may choose between 1, 2, 21 or 3. If not specified, the default Revision is 3.
 
 {p 0 4}{opt dropzero} performs a recursive validation of invalid codes by dropping the most right zero from the codes. The process stops when one of the following conditions
-					  is met for every observation: (i) the code is now valid; (ii) the code's length is qual to 1; (iii) the last digit of the code is different from 0. This 
-					  option produces the variable _zerosdropped, which contains, for each observation, the number of zeros that had to be dropped until one of the aforementioned 
-					  conditions was met.
+					  is met for every observation: (i) the code's length is qual to 1; (ii) the last digit of the code is different from 0. This option produces the 
+					  variable _zerosdropped, which contains, for each observation, the number of zeros that had to be dropped until one of the aforementioned 
+					  conditions was met. The validation codes for these observations are a combination (sum) of the codes presented above, because the code is validated
+					  every time a zero is dropped.
 										  
-{p 0 4}{opt fromlabel} uses the first word of the value label associated with each code for validation. This option will only work if every retrieved code has the appropriate length
-				       for each Revision (5 for Revisions 2, 21 and 3 and 6 for Revision 1).
+{p 0 4}{opt fromlabel} uses the first word of the value label associated with each code for validation.
 
 {p 0 4}{opt getlevels}({it:numlist}[, {opt en} {opt force}]) returns (a) variable(s) with validated codes according to different types of aggregation specified by the user. The levels for each Classification,
 as well as their names, might be different, and the variables returned reflect those differences. Below we present the levels for each classification and their names:
@@ -73,17 +85,19 @@ as well as their names, might be different, and the variables returned reflect t
 The user may select all the levels (1 2 3 4 5 (6)), which will create 5 or 6 new variables, depending on the Revision. These newly created variables are numerical and have value
 labels associated with each code. You can always get the real code (string) from the value label, using {help decode} and {help word}, by extracting the first word of the value label.
 Observations for which the code is invalid, missing observations and observations with a length smaller than the length required for conversion to a certain group will be coded
-as -99 and have the value label "Unsuccessful Conversion". Codes with an ambiguous validation, i.e., where _valid_cae_# is equal to 13, 23, 33 or 43, will not be converted.
+as -99 and have the value label "Unsuccessful Conversion". Codes with an ambiguous validation, i.e., where _valid_cae_# (for CAE Rev. 2, 21 and 3) is equal to 30, 300, or 3000, 
+will not be converted. The same applies for codes with an ambiguous validation using option {opt dropzero}.
 
 {p 4 8}{opt en} sets English as the language for valid CAE codes' value labels. The default is Portuguese.
 
-{p 4 8}{opt force} forces the conversion on observations with an ambiguous validation. This option is only recommended if the user managed to solve theambiguities for codes 
-				   where _valid_cae_# is equal to 13, 23, 33 or 43. If this is not the case, the newly created codes where such an ambiguity exists might be wrong.  
+{p 4 8}{opt force} forces the conversion on observations with an ambiguous validation. This option is only recommended if the user managed to solve the ambiguities for codes 
+				   where _valid_cae_# is equal to 30, 300, or 3000. If this is not the case, the newly created codes where such an ambiguity exists might be wrong. Also, keep 
+				   in mind that option {opt force} does not work on codes where _valid_cae_# is equal to 30, 300, or 3000 only because option {opt dropzero} was specified.
 
 
 {p 0 4}{opt keep} creates a variable named _cae_str, which is basically a string version of the variable provided by the user. However, codes may be different from those provided 
-				  by the user, depending on two factors: (i) option {opt dropzero} was specified, effectively changing _cae_str; (ii) a 0 was added to the left of codes where
-				  _valid_cae_# is equal to 12, 22, 32 or 42.
+				  by the user, depending on two factors: (i) option {opt dropzero} was specified, effectively changing _cae_str for codes where there are no ambiguities; (ii) a 0 
+				  was added to the left of codes where _valid_cae_# is equal to 2, 20, 200 or 2000.
 				  
 				  
 				  
