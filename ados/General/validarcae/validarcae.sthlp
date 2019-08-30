@@ -71,7 +71,8 @@ A tabulation of _valid_cae_# is also presented.
 					  conditions was met. The validation codes for these observations are a combination (sum) of the codes presented above, because the code is validated
 					  every time a zero is dropped.
 										  
-{p 0 4}{opt fromlabel} uses the first word of the value label associated with each code for validation.
+{p 0 4}{opt fromlabel} uses the first word of the value label associated with each code for validation. This assumes that the first word of the value label is the code. 
+IMPORTANT: always specify this option if you are using BPLIM's datasets.
 
 {p 0 4}{opt getlevels}({it:numlist}[, {opt en} {opt force}]) returns (a) variable(s) with validated codes according to different types of aggregation specified by the user. The levels for each Classification,
 as well as their names, might be different, and the variables returned reflect those differences. Below we present the levels for each classification and their names:
