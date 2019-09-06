@@ -1,17 +1,32 @@
-*! 0.6 17jul2019
+*! 0.6 06set2019
 * Programmed by Gustavo Iglésias
 * Dependencies: 
 * savesome (version 1.1.0 23feb2015)
 
 program define validarcae
 
-syntax varlist(min=1 max=1), [rev(int 3) fromlabel dropzero keep getlevels(string)]
+syntax varlist(min=1 max=1) [if], [rev(int 3) fromlabel dropzero keep getlevels(string)]
 
 
 cap which savesome 
 if _rc {
 	di as error "This tool uses the command savesome (version 1.1.0 23feb2015) as a dependency. Please install it before running validarcae."
 	error _rc
+}
+
+tempvar sortvar
+qui gen `sortvar' = _n
+
+if ("`if'" != "") {
+	// create local with condition (without if)
+	local if_w "if"
+	local cond: list if - if_w
+	local cond = trim("`cond'")
+	
+	// save obs (not if)
+	tempfile tempifnot
+	qui savesome if !(`cond') using "`tempifnot'", replace
+	qui drop if !(`cond')
 }
 
 cap drop _cae_str
@@ -261,6 +276,13 @@ else {
 		cap drop _cae_str
 	}
 }
+
+if ("`if'" != "") {
+	qui append using "`tempifnot'"
+}
+
+qui sort `sortvar'
+cap drop `sortvar'
 
 qui compress _valid_cae_`rev'
 
