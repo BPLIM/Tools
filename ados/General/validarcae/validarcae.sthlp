@@ -11,7 +11,7 @@ validarcae - validates the Portuguese Classification of Economic Activities (CAE
 {title:Syntax}
 
 {p 8 15}
-{cmd:validarcae} {it:var}, [{it:options}]
+{cmd:validarcae} {it:var} [{help if}], [{it:options}]
 
 {p}
 
