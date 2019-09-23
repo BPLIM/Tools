@@ -1,4 +1,4 @@
-*! 0.6 06set2019
+*! 0.6 23set2019
 * Programmed by Gustavo Iglésias
 * Dependencies: 
 * savesome (version 1.1.0 23feb2015)
@@ -36,7 +36,7 @@ cap label drop validlabel`rev'
 
 preserve
 	mata: st_local("filename",findfile("caecodes.txt"))
-	qui import delimited `"`filename'"', encoding(iso-8859-9) clear
+	qui import delimited `"`filename'"', encoding(UTF-8) clear
 	qui keep if rev == `rev'
 	qui drop rev
 	qui rename des_pt _des_pt
@@ -89,6 +89,7 @@ qui drop if missing(`varlist')
 tempvar strlen
 qui gen `strlen' = length(_cae_str)
 
+tempvar _merge _m1 _m2
 
 // revision 1 has 6 digits and always starts with a number different from 0
 if `rev' == 1 {
@@ -98,11 +99,11 @@ if `rev' == 1 {
 	forvalues i = 1/6 {
 		preserve
 			qui keep if `strlen' == `i'
-			qui merge m:1 _cae_str using "`temp'"
-			qui drop if _merge == 2
-			qui gen long _valid_cae_`rev' = 10 ^ (`i' - 1) if _merge == 3
-			qui replace _valid_cae_`rev' = 200000 if _merge == 1
-			qui drop _merge
+			qui merge m:1 _cae_str using "`temp'", gen(`_merge')
+			qui drop if `_merge' == 2
+			qui gen long _valid_cae_`rev' = 10 ^ (`i' - 1) if `_merge' == 3
+			qui replace _valid_cae_`rev' = 200000 if `_merge' == 1
+			qui drop `_merge'
 			tempfile temp`i'
 			qui save "`temp`i''", replace
 		restore
@@ -151,27 +152,27 @@ else {
 		preserve
 			qui keep if `strlen' == `i'
 			if `i' == 5 {
-				qui merge m:1 _cae_str using "`temp'"
-				qui drop if _merge == 2
-				qui gen long _valid_cae_`rev' = 10000 if _merge == 3
-				qui replace _valid_cae_`rev' = 200000 if _merge == 1
-				qui drop _merge
+				qui merge m:1 _cae_str using "`temp'", gen(`_merge')
+				qui drop if `_merge' == 2
+				qui gen long _valid_cae_`rev' = 10000 if `_merge' == 3
+				qui replace _valid_cae_`rev' = 200000 if `_merge' == 1
+				qui drop `_merge'
 				tempfile temp`i'
 				qui save "`temp`i''", replace
 			}
 			else {
-				qui merge m:1 _cae_str using "`temp'"						// merge on the original code
-				qui drop if _merge == 2
-				qui rename _merge _m1
+				qui merge m:1 _cae_str using "`temp'", gen(`_merge')						// merge on the original code
+				qui drop if `_merge'== 2
+				qui rename `_merge' `_m1'
 				qui replace _cae_str = "0" + _cae_str
-				qui merge m:1 _cae_str using "`temp'"						// merge on the code preceeded by a 0
-				qui drop if _merge == 2
-				qui rename _merge _m2
-				qui gen long _valid_cae_`rev' = 1 * (10 ^ (`i' - 1)) if (_m1 == 3 & _m2 == 1) // valid at i digits only
-				qui replace _valid_cae_`rev' = 2 * (10 ^ (`i' - 1)) if (_m1 == 1 & _m2 == 3) // valid at i + 1 digits (0 + i digits)
-				qui replace _valid_cae_`rev' = 3 * (10 ^ (`i' - 1)) if (_m1 == 3 & _m2 == 3) // valid at i digits only or i + 1 digits (0 + i digits)
-				qui replace _valid_cae_`rev' = 200000 if (_m1 == 1 & _m2 == 1) // invalid
-				qui drop _m*
+				qui merge m:1 _cae_str using "`temp'", gen(`_merge')						// merge on the code preceeded by a 0
+				qui drop if `_merge' == 2
+				qui rename `_merge' `_m2'
+				qui gen long _valid_cae_`rev' = 1 * (10 ^ (`i' - 1)) if (`_m1' == 3 & `_m2' == 1) // valid at i digits only
+				qui replace _valid_cae_`rev' = 2 * (10 ^ (`i' - 1)) if (`_m1' == 1 & `_m2' == 3) // valid at i + 1 digits (0 + i digits)
+				qui replace _valid_cae_`rev' = 3 * (10 ^ (`i' - 1)) if (`_m1' == 3 & `_m2' == 3) // valid at i digits only or i + 1 digits (0 + i digits)
+				qui replace _valid_cae_`rev' = 200000 if (`_m1' == 1 & `_m2' == 1) // invalid
+				qui drop `_m1' `_m2'
 				qui replace _cae_str = substr(_cae_str,2,.)
 				tempfile temp`i'
 				qui save "`temp`i''", replace
@@ -300,6 +301,8 @@ qui use `"`file1'"', clear
 
 qui clonevar _cae_str_original = _cae_str
 
+tempvar _merge _m1 _m2
+
 quietly count
 local j = 1
 cap drop _zerosdropped
@@ -315,18 +318,18 @@ while r(N) {
 	forvalues i = 1/`maxlen' {
 		preserve
 			qui keep if `len`j'' == `i'
-			qui merge m:1 _cae_str using `"`file2'"'						// merge on the original code
-			qui drop if _merge == 2
-			qui rename _merge _m1
+			qui merge m:1 _cae_str using `"`file2'"', gen(`_merge')						// merge on the original code
+			qui drop if `_merge' == 2
+			qui rename `_merge' `_m1'
 			qui replace _cae_str = "0" + _cae_str
-			qui merge m:1 _cae_str using `"`file2'"'						// merge on the code preceeded by a 0
-			qui drop if _merge == 2
-			qui rename _merge _m2
-			qui gen long _valid_cae_`rev'_`j' = 1 * (10 ^ (`i' - 1)) if (_m1 == 3 & _m2 == 1) // valid at i digits only
-			qui replace _valid_cae_`rev'_`j' = 2 * (10 ^ (`i' - 1)) if (_m1 == 1 & _m2 == 3) // valid at i + 1 digits (0 + i digits)
-			qui replace _valid_cae_`rev'_`j' = 3 * (10 ^ (`i' - 1)) if (_m1 == 3 & _m2 == 3) // valid at i digits only or i + 1 digits (0 + i digits)
-			qui replace _valid_cae_`rev'_`j' = 200000 if (_m1 == 1 & _m2 == 1) // invalid
-			qui drop _m*
+			qui merge m:1 _cae_str using `"`file2'"', gen(`_merge')						// merge on the code preceeded by a 0
+			qui drop if `_merge' == 2
+			qui rename `_merge' `_m2'
+			qui gen long _valid_cae_`rev'_`j' = 1 * (10 ^ (`i' - 1)) if (`_m1' == 3 & `_m2' == 1) // valid at i digits only
+			qui replace _valid_cae_`rev'_`j' = 2 * (10 ^ (`i' - 1)) if (`_m1' == 1 & `_m2' == 3) // valid at i + 1 digits (0 + i digits)
+			qui replace _valid_cae_`rev'_`j' = 3 * (10 ^ (`i' - 1)) if (`_m1' == 3 & `_m2' == 3) // valid at i digits only or i + 1 digits (0 + i digits)
+			qui replace _valid_cae_`rev'_`j' = 200000 if (`_m1' == 1 & `_m2' == 1) // invalid
+			qui drop `_m1' `_m2'
 			qui replace _cae_str = substr(_cae_str,2,.)
 			tempfile tempzero`i'
 			qui save "`tempzero`i''", replace
@@ -389,6 +392,8 @@ qui use `"`file1'"', clear
 
 qui clonevar _cae_str_original = _cae_str
 
+tempvar _merge
+
 quietly count
 local j = 1
 cap drop _zerodropped
@@ -404,11 +409,11 @@ while r(N) {
 	forvalues i = 1/`maxlen' {
 		preserve
 			qui keep if `len`j'' == `i'
-			qui merge m:1 _cae_str using `"`file2'"'
-			qui drop if _merge == 2
-			qui gen long _valid_cae_`rev'_`j' = 10 ^ (`i' - 1) if _merge == 3
-			qui replace _valid_cae_`rev'_`j' = 200000 if _merge == 1
-			qui drop _merge
+			qui merge m:1 _cae_str using `"`file2'"', gen(`_merge')
+			qui drop if `_merge' == 2
+			qui gen long _valid_cae_`rev'_`j' = 10 ^ (`i' - 1) if `_merge' == 3
+			qui replace _valid_cae_`rev'_`j' = 200000 if `_merge' == 1
+			qui drop `_merge'
 			tempfile tempzero`i'
 			qui save "`tempzero`i''", replace
 		restore
