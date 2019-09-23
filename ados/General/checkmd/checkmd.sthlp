@@ -36,16 +36,17 @@ it won't produce the html files, presenting solely the table mpz (see below) in 
 
 {p 0 4} {cmd: linesize(#)} equivalent to set linesize #. The default value is 255.
 
-{p 0 4} {cmd: internal} specifies a person's type of access when viewing these reports. If internal is missing, the list of inconsistencies won't be displayed and the data 
-with inconsistent values will not be saved.
+{p 0 4} {cmd: listinc} lists inconsistencies in the html file.
 
-{p 0 4} {cmd: save_obs(#)} number of inconsistencies to be saved. The default value is 50. This option is only allowed when option internal is active. Set # = 0 to keep all inconsistent
+{p 0 4} {cmd: save_obs(#)} is the number of inconsistencies to be saved. Set # = 0 to keep all inconsistent observations.
 observations.
 
 {p 0 4} {cmd: mpz(varlist)} creates a table for varlist with missing values, positive values, zeros and observations for which value labels are missing. If absent, the table will contain all 
  variables in the dataset. Set the argument to "nompz" to suppress this output. 
 
 {p 0 4} {cmd: inc_only} hmtl files will only display checks with inconsistent values.
+
+{p 0 4} {cmd: addvars(varlist)} adds varlist to the dataset with inconsistencies (if {cmd: save_obs} was specified).
 
 {p 0 4} {cmd: tvar(var)} timevar.
 
@@ -155,10 +156,10 @@ connected to the use of the item, whether or not based upon warranty, contract, 
 {title:Author}
 
 {p}
-Gustavo Iglésias, BPlim, Banco de Portugal, Portugal.
+BPLIM, Banco de Portugal, Portugal.
 
 {p}
-Email: {browse "mailto:gustavo.p.iglesias@gmail.com":gustavo.p.iglesias@gmail.com}
+Email: {browse "mailto:bplim@bportugal.pt":bplim@bportugal.pt}
 
 I appreciate your feedback. Comments are welcome!
 
