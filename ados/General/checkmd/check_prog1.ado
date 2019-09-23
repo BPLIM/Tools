@@ -3,7 +3,7 @@
 program define check_prog1, rclass
 
 
-syntax, check(string) id(string) title(string) [miss] [delta(real 0)]  [list_val(int 0)] [save_obs(int 50)] [verbose] [tvar(string)]
+syntax, check(string) id(string) title(string) [miss] [delta(real 0)]  [list_val(int 0)] [save_obs(int 50)] [verbose] [tvar(string)] [addvars(string)]
 
 
 // check = condition to be verified in csv file (cond)
@@ -309,7 +309,7 @@ if _rc==0 {
 					matrix X = A
 					return matrix X = A
 				}
-				if `inc'>0 & ${internal}==1 {
+				if `inc'>0 & ${listinc}==1 {
 					if `list_val' != 0 {
 						gsort -`abs_diff'
 					}
@@ -348,14 +348,15 @@ if _rc==0 {
 						
 						quietly save "${out_path}/temp_file", replace
 					restore
-					
+				}
+				if `inc'>0 & `save_obs' >= 0 {
 					preserve
 						if `list_val' != 0 {
 							gsort -`abs_diff'
-							keep ${id} `tvar' `vars' _diff `dummy'
+							keep ${id} `tvar' `vars' `addvars' _diff `dummy'
 						}
 						else {
-							keep ${id} `tvar' `vars' `dummy'
+							keep ${id} `tvar' `vars' `addvars' `dummy'
 							sort `dummy'
 						}
 						quietly gen nn = _n
