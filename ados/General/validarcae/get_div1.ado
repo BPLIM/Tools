@@ -45,6 +45,8 @@ local zero_dropped = _rc
 tempvar len
 qui gen `len' = length(_cae_str)
 
+tempvar _merge
+
 
 foreach item in `levels' {
 		
@@ -52,9 +54,9 @@ foreach item in `levels' {
 		qui clonevar _cae_str_original = _cae_str
 		cap drop rev1_division
 		qui replace _cae_str = substr(_cae_str,1,1) 
-		qui merge m:1 _cae_str using "`file'"
-		qui drop if _m == 2
-		qui drop _m
+		qui merge m:1 _cae_str using "`file'", gen(`_merge')
+		qui drop if `_merge' == 2
+		qui drop `_merge'
 		qui drop _des_pt
 		qui drop _des_en
 		qui drop _cae_str
@@ -71,9 +73,9 @@ foreach item in `levels' {
 		qui clonevar _cae_str_original = _cae_str
 		cap drop rev1_subdivision
 		qui replace _cae_str = substr(_cae_str,1,2)
-		qui merge m:1 _cae_str using "`file'"
-		qui drop if _m == 2
-		qui drop _m
+		qui merge m:1 _cae_str using "`file'", gen(`_merge')
+		qui drop if `_merge' == 2
+		qui drop `_merge'
 		qui drop _des_pt
 		qui drop _des_en
 		qui drop _cae_str
@@ -90,9 +92,9 @@ foreach item in `levels' {
 		qui clonevar _cae_str_original = _cae_str
 		cap drop rev1_class
 		qui replace _cae_str = substr(_cae_str,1,3) 
-		qui merge m:1 _cae_str using "`file'"
-		qui drop if _m == 2
-		qui drop _m
+		qui merge m:1 _cae_str using "`file'", gen(`_merge')
+		qui drop if `_merge' == 2
+		qui drop `_merge'
 		qui drop _des_pt
 		qui drop _des_en
 		qui drop _cae_str
@@ -109,9 +111,9 @@ foreach item in `levels' {
 		qui clonevar _cae_str_original = _cae_str
 		cap drop rev1_group
 		qui replace _cae_str = substr(_cae_str,1,4) 
-		qui merge m:1 _cae_str using "`file'"
-		qui drop if _m == 2
-		qui drop _m
+		qui merge m:1 _cae_str using "`file'", gen(`_merge')
+		qui drop if `_merge' == 2
+		qui drop `_merge'
 		qui drop _des_pt
 		qui drop _des_en
 		qui drop _cae_str
@@ -128,9 +130,9 @@ foreach item in `levels' {
 		qui clonevar _cae_str_original = _cae_str
 		cap drop rev1_subgroup
 		qui replace _cae_str = substr(_cae_str,1,5) 
-		qui merge m:1 _cae_str using "`file'"
-		qui drop if _m == 2
-		qui drop _m
+		qui merge m:1 _cae_str using "`file'", gen(`_merge')
+		qui drop if `_merge' == 2
+		qui drop `_merge'
 		qui drop _des_pt
 		qui drop _des_en
 		qui drop _cae_str
@@ -145,9 +147,9 @@ foreach item in `levels' {
 	}
 	if "`item'" == "6" {
 		cap drop rev1_split
-		qui merge m:1 _cae_str using "`file'"
-		qui drop if _m == 2
-		qui drop _m
+		qui merge m:1 _cae_str using "`file'", gen(`_merge')
+		qui drop if `_merge' == 2
+		qui drop `_merge'
 		qui drop _des_pt
 		qui drop _des_en
 		qui rename _cae_num rev1_split
