@@ -1,4 +1,4 @@
-*! version 1.0 14Dec2018
+*! version 1.1 23Sep2019
 * Programmed by Gustavo Iglésias
 * Dependencies:
 * markstat (version 2.2.0 7may2018)
@@ -6,9 +6,26 @@
 
 program define checkmd
 
-syntax [if] [, csv_file(string) out_path(string) id(string) linesize(int 255) internal save_obs(int 50) mpz(string) inc_only merge(string) keepmd tvar(string) verbose]
+syntax [if] [, csv_file(string) out_path(string) id(string) linesize(int 255) ///
+			   listinc save_obs(int -1) mpz(string) inc_only merge(string)    /// 
+			   keepmd addvars(string) tvar(string) verbose]
 
 version 15
+
+foreach var in `addvars' {
+	confirm variable `var'
+}
+
+local commands "gtools markstat matprint"
+foreach com in `commands' {
+	cap which `com'
+	if _rc {
+		di as error "This tool uses `com' as a dependency."
+		error 1
+	}
+}
+
+local cwd: pwd
 
 preserve
 
@@ -19,15 +36,21 @@ preserve
 		quietly keep `if'
 	}
 	
-	checkmd_call, csv_file(`csv_file') out_path(`out_path') id(`id') linesize(`linesize') `internal' save_obs(`save_obs') mpz(`mpz') `inc_only' merge(`merge') `keepmd' tvar(`tvar') `verbose'
+	checkmd_call, csv_file(`csv_file') out_path(`out_path') id(`id') linesize(`linesize') ///
+				  `listinc' save_obs(`save_obs') mpz(`mpz') `inc_only' merge(`merge')     ///
+				  `keepmd' addvars(`addvars') tvar(`tvar') `verbose'
 
 restore
+
+qui cd "`cwd'"
 
 end
 
 program define checkmd_call
 
-syntax [, csv_file(string) out_path(string) id(string) linesize(int 255) internal save_obs(int 50) mpz(string) inc_only merge(string) keepmd tvar(string) verbose]
+syntax [, csv_file(string) out_path(string) id(string) linesize(int 255) /// 
+		  listinc save_obs(int -1) mpz(string) inc_only merge(string)    /// 
+		  keepmd addvars(string) tvar(string) verbose]
 
 // Options csv_file tell the program to perform checks as specified by the document
 // Option id: when the user doesn´t specify an id, one is created inside the program (_n)
@@ -50,28 +73,6 @@ if "`verbose'" == "verbose" {
 ******************************************************************************************
 
 
-
-// Checking if option internal is specified when the user chose option save_obs
-
-************************************* verbose ********************************************
-if "`verbose'" == "verbose" {
-	di ""
-	di "Checking if option internal is specified when the user chose option save_obs"
-}
-******************************************************************************************
-
-if "`save_obs'" != "" & "`internal'" != "internal" {
-	di as error "Option save_obs requires option internal to be active as well"
-	error 1
-}
-else {
-************************************* verbose ********************************************
-	if "`verbose'" == "verbose" {
-		di ""
-		di "No errors to report"
-	}
-******************************************************************************************
-}
 
 
 capture quietly label language en
@@ -370,11 +371,11 @@ if "`csv_file'" != "" {
 	}
 	******************************************************************************************
 	
-	if "`internal'" == "internal" {
-		global internal = 1
+	if "`listinc'" == "listinc" {
+		global listinc = 1
 	}
 	else {
-		global internal = 0
+		global listinc = 0
 	}
 
 
@@ -463,7 +464,9 @@ if "`csv_file'" != "" {
 	}
 	******************************************************************************************	
 
-	file_write, csv_file("`csv_file'") check_count(`check_count') gen_count(`gen_count') linesize(`linesize') save_obs(`save_obs') mpz(`mpz') `inc_only' `keepmd' tvar(`tvar') `verbose'
+	file_write, csv_file("`csv_file'") check_count(`check_count') gen_count(`gen_count') /// 
+				linesize(`linesize') save_obs(`save_obs') mpz(`mpz') `inc_only' `keepmd' /// 
+				addvars(`addvars') tvar(`tvar') `verbose'
 
 }
 else {
@@ -479,7 +482,11 @@ else {
 	file_write, mpz(`mpz') `verbose' tvar(`tvar')
 }
 
-
+clear
+cap erase "${out_path}/Reports/report_${dta_file}/${c_date}/summary.dta"
+cap erase "${out_path}/temp_file.dta"
+cap rm "${out_path}/Reports/report_${dta_file}/${c_date}/summary.dta"
+cap rm "${out_path}/temp_file.dta"
 macro drop _all
 
 ************************************* verbose ********************************************
