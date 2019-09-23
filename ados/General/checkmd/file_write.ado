@@ -7,7 +7,7 @@
 
 program define file_write
 
-syntax [, csv_file(string) mpz(string) check_count(int 0) gen_count(int 0) linesize(int 150) save_obs(int 50) tvar(string) inc_only keepmd verbose] 
+syntax [, csv_file(string) mpz(string) check_count(int 0) gen_count(int 0) linesize(int 150) save_obs(int -1) addvars(string) tvar(string) inc_only keepmd verbose] 
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
@@ -204,7 +204,7 @@ if "`csv_file'" != "" {
 
 	forvalues i = 1/`check_count' {
 		file write myfile "!!!s/" _n
-		file write myfile "	local check_`i' = §check_prog1, § + §id(!id_`i'?) § + !§check(!cond_`i'?) §? + §!option_`i'? § + §delta(!delta_`i'?) § + !§title(!title_`i'?) §? +  §list_val(!list_val_`i'?) § + §save_obs(`save_obs')§ + § tvar(`tvar')§ + § `verbose'§" _n
+		file write myfile "	local check_`i' = §check_prog1, § + §id(!id_`i'?) § + !§check(!cond_`i'?) §? + §!option_`i'? § + §delta(!delta_`i'?) § + !§title(!title_`i'?) §? +  §list_val(!list_val_`i'?) § + §save_obs(`save_obs')§ + § addvars(`addvars')§ + § tvar(`tvar')§ + § `verbose'§" _n
 		//file write myfile "	di !§!check_`i'?§?" _n
 		file write myfile "	!check_`i'?" _n
 		file write myfile "	capture local error_`i' = !r(error)?" _n
@@ -324,7 +324,7 @@ if "`csv_file'" != "" {
 		file write myfile "	!cap? di" _n
 		file write myfile "	!cap? matprint X_`i', decimals(0,2,2)" _n 
 		file write myfile "	!cap? di" _n
-		file write myfile "	if ${internal} == 1 & !list_valn_`i'? > 0 {" _n
+		file write myfile "	if ${listinc} == 1 & !list_valn_`i'? > 0 {" _n
 		file write myfile "	preserve" _n
 		file write myfile "	di §List of the !count_list_`i'? largest inconsistent values§" _n
 		file write myfile "	quietly use §${out_path}/temp_file.dta§, clear" _n
@@ -338,7 +338,7 @@ if "`csv_file'" != "" {
 		file write myfile "	else if !inc_`i'? == !tot_`i'? {" _n
 		file write myfile "	di §All observations are inconsistent§" _n
 		file write myfile "	di" _n
-		file write myfile "	if ${internal} == 1 & !list_val_`i'? > 0 {" _n
+		file write myfile "	if ${listinc} == 1 & !list_val_`i'? > 0 {" _n
 		file write myfile "	preserve" _n
 		file write myfile "	di §List of the !count_list_`i'? largest inconsistent values§" _n
 		file write myfile "	quietly use §${out_path}/temp_file.dta§, clear" _n
@@ -578,7 +578,7 @@ if "`csv_file'" != "" {
 	rm write_sum.stmd
 	rm write_sum1.stmd
 	rm write_sum2.stmd
-	capture rm "${out_path}/Reports/report_${dta_file}/${c_date}/summary"
+	
 
 	************************************* verbose ********************************************
 	if "`verbose'" == "verbose" {
