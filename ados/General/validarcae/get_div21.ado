@@ -59,6 +59,8 @@ if "`fl'" == "fl" {
 
 qui replace `len' = length(_cae_str)
 
+tempvar _merge
+
 foreach item in `levels' {
 	if "`item'" == "1" {
 		cap drop rev21_section
@@ -94,9 +96,9 @@ foreach item in `levels' {
 		qui replace _cae_str = "O" if inlist(substr(_cae_str,1,2), "90", "91", "92", "93")
 		qui replace _cae_str = "P" if inlist(substr(_cae_str,1,2), "95", "96", "97")
 		qui replace _cae_str = "Q" if inlist(substr(_cae_str,1,2), "99")
-		qui merge m:1 _cae_str using "`file'"
-		qui drop if _m == 2
-		qui drop _m
+		qui merge m:1 _cae_str using "`file'", gen(`_merge')
+		qui drop if `_merge' == 2
+		qui drop `_merge'
 		qui drop _des_pt
 		qui drop _des_en
 		qui drop _cae_str
@@ -144,9 +146,9 @@ foreach item in `levels' {
 		qui replace _cae_str = "OO" if inlist(substr(_cae_str,1,2), "90", "91", "92", "93")
 		qui replace _cae_str = "PP" if inlist(substr(_cae_str,1,2), "95", "96", "97")
 		qui replace _cae_str = "QQ" if inlist(substr(_cae_str,1,2), "99")
-		qui merge m:1 _cae_str using "`file'"
-		qui drop if _m == 2
-		qui drop _m
+		qui merge m:1 _cae_str using "`file'", gen(`_merge')
+		qui drop if `_merge' == 2
+		qui drop `_merge'
 		qui drop _des_pt
 		qui drop _des_en
 		qui drop _cae_str
@@ -165,9 +167,9 @@ foreach item in `levels' {
 		cap drop rev21_division
 		qui clonevar _cae_str_original = _cae_str
 		qui replace _cae_str = substr(_cae_str,1,2) 
-		qui merge m:1 _cae_str using "`file'"
-		qui drop if _m == 2
-		qui drop _m
+		qui merge m:1 _cae_str using "`file'", gen(`_merge')
+		qui drop if `_merge' == 2
+		qui drop `_merge'
 		qui drop _des_pt
 		qui drop _des_en
 		qui drop _cae_str
@@ -185,9 +187,9 @@ foreach item in `levels' {
 		cap drop rev21_group
 		qui clonevar _cae_str_original = _cae_str
 		qui replace _cae_str = substr(_cae_str,1,3) 
-		qui merge m:1 _cae_str using "`file'"
-		qui drop if _m == 2
-		qui drop _m
+		qui merge m:1 _cae_str using "`file'", gen(`_merge')
+		qui drop if `_merge' == 2
+		qui drop `_merge'
 		qui drop _des_pt
 		qui drop _des_en
 		qui drop _cae_str
@@ -205,9 +207,9 @@ foreach item in `levels' {
 		cap drop rev21_class
 		qui clonevar _cae_str_original = _cae_str
 		qui replace _cae_str = substr(_cae_str,1,4) 
-		qui merge m:1 _cae_str using "`file'"
-		qui drop if _m == 2
-		qui drop _m
+		qui merge m:1 _cae_str using "`file'", gen(`_merge')
+		qui drop if `_merge' == 2
+		qui drop `_merge'		
 		qui drop _des_pt
 		qui drop _des_en
 		qui drop _cae_str
@@ -223,9 +225,9 @@ foreach item in `levels' {
 	}
 	if "`item'" == "6" {
 		cap drop rev21_subclass
-		qui merge m:1 _cae_str using "`file'"
-		qui drop if _m == 2
-		qui drop _m
+		qui merge m:1 _cae_str using "`file'", gen(`_merge')
+		qui drop if `_merge' == 2
+		qui drop `_merge'
 		qui drop _des_pt
 		qui drop _des_en
 		qui rename _cae_num rev21_subclass
