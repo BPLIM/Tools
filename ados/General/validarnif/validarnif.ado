@@ -1,7 +1,7 @@
 *! version 1.0 27Jun2016
 * Programmed by Paulo Guimarães
 
-program define validarnif_v2
+program define validarnif
 * Programmed by Paulo Guimarães
 * version 1.0, 27jun2016 
 * Validates the nipc
