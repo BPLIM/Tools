@@ -103,7 +103,7 @@ connected to the use of the item, whether or not based upon warranty, contract, 
 {title:Author}
 
 {p}
-Marta Silva, BPLIM, Banco de Portugal, Portugal.
+BPLIM, Banco de Portugal, Portugal.
 
 {p}
 Email: {browse "mailto:bplim@bportugal.pt":bplim@bportugal.pt}
