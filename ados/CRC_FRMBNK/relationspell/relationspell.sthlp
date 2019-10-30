@@ -82,10 +82,10 @@ connected to the use of the item, whether or not based upon warranty, contract, 
 {title:Author}
 
 {p}
-Sujiao (Emma) Zhao, BPlim, Banco de Portugal, Portugal.
+BPLIM team, Banco de Portugal, Portugal.
 
 {p}
-Email: {browse "mailto:szhao@bportugal.pt":szhao@bportugal.pt}
+Email: {browse "mailto:bplim@bportugal.pt":bplim@bportugal.pt}
 
 I appreciate your feedback. Comments are welcome!
 
