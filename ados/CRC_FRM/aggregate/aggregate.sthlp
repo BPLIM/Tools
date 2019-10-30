@@ -84,7 +84,7 @@ connected to the use of the item, whether or not based upon warranty, contract, 
 {title:Author}
 
 {p}
-BPLIM, Banco de Portugal, Portugal.
+BPLIM team, Banco de Portugal, Portugal.
 
 {p}
 Email: {browse "mailto:bplim@bportugal.pt":bplim@bportugal.pt}
