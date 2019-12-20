@@ -1,9 +1,9 @@
+*! version 1.0 10sep2019 Luís Fonseca, https://github.com/luispfonseca
 *! -checkinvariant- Check if a variable is invariant within a group
-*! Luís Fonseca, https://github.com/luispfonseca
 
 program define checkinvariant, rclass
 
-syntax varlist, by(varlist) [ALLOWMISSing fill DROPINVARiant DROPVARiant KEEPINVARiant KEEPVARiant VERBose]
+syntax [varlist], [by(varlist) ALLOWMISSing fill DROPINVARiant DROPVARiant KEEPINVARiant KEEPVARiant VERBose]
 
 if "`allowmissing'" == "" & "`fill'" != "" {
 	di as error "The fill option can only be called with the allowmissing option."
@@ -22,6 +22,15 @@ local keepcondition "`keepvariant'`keepinvariant'"
 if "`dropcondition'" != "" & "`keepcondition'" != "" {
 	di as error "Choose only one condition between keep and drop."
 	error 198
+}
+
+* if no varlist is passed, assume all variables are passed
+if "`varlist'" == "" {
+	local varlist _all
+}
+* display " within by_variables" only if by is not empty
+if "`by'" != "" {
+	local within_string " within "
 }
 
 * ensure no duplicates in the varlist to loop over
@@ -58,7 +67,7 @@ foreach var in `varlist' {
 
 	if c(rc) == 0 {
 		if "`verbose'" != "" {
-			di as result "Invariant within `by': `var'"
+			di as result "Invariant`within_string'`by': `var'"
 		}
 		local invariantvarlist `invariantvarlist' `var'
 		if "`fill'" != "" & "`allowmissing'" != "" {
@@ -80,7 +89,7 @@ foreach var in `varlist' {
 	}
 	else {
 		if "`verbose'" != "" {
-			di as result "  Variant within `by': `var'"
+			di as result "  Variant`within_string'`by': `var'"
 		}
 		local   variantvarlist   `variantvarlist' `var'
 	}
@@ -89,22 +98,16 @@ foreach var in `varlist' {
 qui hashsort `originalsort'
 
 if "`invariantvarlist'" != "" {
-	di as result "Invariant within `by':"
-	foreach var in `invariantvarlist' {
-		di as result "`var'"
-	}
+	di as result "Invariant`within_string'`by':"
+	di as result "`invariantvarlist'"
 }
 if "`variantvarlist'" != "" {
-	di as result "Variant within `by':"
-	foreach var in `variantvarlist' {
-		di as result "`var'"
-	}
+	di as result "Variant`within_string'`by':"
+	di as result "`variantvarlist'"
 }
 if "`filledvarlist'" != "" {
 	di as result "Variables whose missing values were replaced by unique non-missing value:"
-	foreach var in `filledvarlist' {
-		di as result "`var'"
-	}
+	di as result "`filledvarlist'"
 }
 
 return local varlist = "`varlist'"
@@ -122,34 +125,29 @@ if "`fill'" != "" & "`allowmissing'" != "" {
 
 if "`dropinvariant'" != "" {
 	if "`invariantvarlist'" != "" {
-		di as result "Dropping invariant variables:"
-		di as result "`invariantvarlist'"
+		di as result "Dropping invariant variables"
 		local todrop `invariantvarlist'
 	}
 	if "`filledvarlist'" != "" {
-		di as result "Dropping filled variables:"
-		di as result "`filledvarlist'"
+		di as result "Dropping filled variables"
 		local todrop `todrop' `filledvarlist'
 	}
 	cap drop `todrop'
 }
 if "`dropvariant'" != "" {
 	if "`variantvarlist'" != "" {
-		di as result "Dropping variant variables:"
-		di as result "`variantvarlist'"
+		di as result "Dropping variant variables"
 		drop `variantvarlist'
 	}
 }
 
 if "`keepinvariant'" != "" {
 	if "`invariantvarlist'" != "" {
-		di as result "Keeping invariant variables:"
-		di as result "`invariantvarlist'"
+		di as result "Keeping invariant variables"
 		local tokeep `invariantvarlist'
 	}
 	if "`filledvarlist'" != "" {
-		di as result "Keeping filled variables:"
-		di as result "`filledvarlist'"
+		di as result "Keeping filled variables"
 		local tokeep `tokeep' `filledvarlist'
 	}
 	local tokeep `by' `tokeep'
@@ -157,8 +155,7 @@ if "`keepinvariant'" != "" {
 }
 if "`keepvariant'" != "" {
 	if "`variantvarlist'" != "" {
-		di as result "Keeping variant variables:"
-		di as result "`variantvarlist'"
+		di as result "Keeping variant variables"
 		local tokeep `variantvarlist'
 	}
 	local tokeep `by' `tokeep'
