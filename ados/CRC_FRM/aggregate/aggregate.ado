@@ -81,7 +81,9 @@ if ("`year'" =="year" | "`quarter'" =="quarter") & ("`end'"=="end" | "`avg'"=="a
 	quietly replace obs = 3368366 if year==2014
 	quietly replace obs = 3403726 if year==2015
 	quietly replace obs = 3456285 if year==2016
-
+	quietly replace obs = 3471813 if year==2017
+	quietly replace obs = 2367061 if year==2018
+	
 	quietly gen id=1 if valor_global != obs
 	egen checksum=sum(id)
 	local checkobs=checksum
