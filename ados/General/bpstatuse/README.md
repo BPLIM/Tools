@@ -7,7 +7,7 @@ statistical series from Banco de Portugal BPstat Database. The package includes 
 
 `bpstatuse` is not available in SSC. To install run the following in Stata:
 
-net install bpstatuse, from("https://github.com/BPLIM/Tools/raw/master/ados/General/bpstat/")
+net install bpstatuse, from("https://github.com/BPLIM/Tools/raw/master/ados/General/bpstatuse/")
 
 ## Dependencies
 
