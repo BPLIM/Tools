@@ -1,4 +1,4 @@
-# BPSTATUSE: Import series from BPStat Databases
+# BPSTATUSE: Import series from BPstat Databases
 
 `bpstatuse` is a [Stata](http://www.stata.com/) package that allows users to import over 140,000
 statistical series from Banco de Portugal BPstat Database. The package includes two ado-files: `bpstatuse`, the command line version, and `bpstatdlg`, the menu-driven approach that launches a dialog box for the user to select the series.
