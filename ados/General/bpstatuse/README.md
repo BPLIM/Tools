@@ -15,13 +15,13 @@ This package uses Python embedded code which is only available in Stata 16. Furt
 
 - ### Third party packages required in Python:
 
- - pandas
- - requests
- - ttkthemes (only for `bpstatdlg`)
+  - pandas
+  - requests
+  - ttkthemes (only for `bpstatdlg`)
 
 - ### Installation of the required packages:
 
- - Using Python's **pip** installer (from the Terminal/Command Prompt):
+  - Using Python's **pip** installer (from the Terminal/Command Prompt):
 
     > *pip install requests*
     >
@@ -30,7 +30,7 @@ This package uses Python embedded code which is only available in Stata 16. Furt
     > *pip install ttkthermes*
     >
 
-  - If you have the Anaconda distribution, you may also use the Anaconda Prompt, typing:
+   - If you have the Anaconda distribution, you may also use the Anaconda Prompt, typing:
 
        > *conda install -c anaconda requests* [1]
        >
