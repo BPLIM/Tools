@@ -1,3 +1,0 @@
-v 3
-d BPLIM Team, BPLIM (bplim@bportugal.pt)
-p bpstatuse - Import series from BPSTAT Databases
