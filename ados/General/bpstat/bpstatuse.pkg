@@ -1,0 +1,15 @@
+v 3
+
+d BPSTATUSE: Import series from BPStat Databases
+d
+d Author: BPLIM Team. Banco de Portugal
+d Contact: bplim@bportugal.pt
+d
+d
+d Distribution-Date: 20200228
+d
+f bpstatuse.ado
+f bpstatuse.sthlp
+f bpstatdlg.ado
+f bpstatdlg.sthlp
+F BPSTAT_INFO.zip
