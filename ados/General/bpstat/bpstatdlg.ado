@@ -323,7 +323,7 @@ def download_window(window, variables):
     master - parent window
     """
     sub_window = tk.Toplevel(window)
-    sub_window.title('BPStat')
+    sub_window.title('BPstat')
     geom = get_geometry(height=HEIGHT, width=WIDTH, relx=0.4, rely=0.45, relwidth=0.2, relheight=0.125)
     sub_window.geometry(geom)
     lbl = ttk.Label(sub_window, text='Importing data', font='times 14 bold')
@@ -488,7 +488,7 @@ def series_radio_freq(domain_label, series_info):
     @series_info: list of tuples with information about the series
     """
     series_window = tk.Toplevel(ROOT)
-    series_window.title('BPStat Series')
+    series_window.title('BPstat Series')
     geom = get_geometry(height=HEIGHT, width=WIDTH, relx=0.2, rely=0.2, relwidth=0.6, relheight=0.6)
     series_window.geometry(geom)
     # create list of unique domains and corresponding label
@@ -552,7 +552,7 @@ def domain_listbox(df):
     ROOT = tk_t.ThemedTk()
     ROOT.get_themes()
     ROOT.set_theme('radiance')  # to use this theme, we have to use ttk
-    ROOT.title('BPStat')
+    ROOT.title('BPstat')
     # create list of unique domains and corresponding label
     domains = df.drop_duplicates(subset='domain_id')
     domains_id = domains['domain_id'].to_list()
@@ -619,7 +619,7 @@ def select_lang():
     global HEIGHT, WIDTH
     # Language window
     lang = tk_t.ThemedTk()
-    lang.title('BPStat')
+    lang.title('BPstat')
     lang.get_themes()
     lang.set_theme('radiance')  # to use this theme, we have to use ttk
     # Radio button
