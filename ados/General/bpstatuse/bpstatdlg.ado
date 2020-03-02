@@ -324,7 +324,7 @@ def download_window(window, variables):
     """
     sub_window = tk.Toplevel(window)
     sub_window.title('BPstat')
-    geom = get_geometry(height=HEIGHT, width=WIDTH, relx=0.4, rely=0.45, relwidth=0.2, relheight=0.125)
+    geom = get_geometry(height=HEIGHT, width=WIDTH, relx=0.4, rely=0.45, relwidth=0.3, relheight=0.15)
     sub_window.geometry(geom)
     lbl = ttk.Label(sub_window, text='Importing data', font='times 14 bold')
     lbl.place(relx=0.3, rely=0.2, relwidth=0.4)
@@ -426,7 +426,7 @@ def series_listbox(window, var, info):
     scrolly = ttk.Scrollbar(window, orient=tk.VERTICAL, command=listBox.yview)
     scrolly.place(relx=0.95, rely=0.22, relwidth=0.025, relheight=0.6)
     scrollx = ttk.Scrollbar(window, orient=tk.HORIZONTAL, command=listBox.xview)
-    scrollx.place(relx=0.05, rely=0.8, relwidth=0.9, relheight=0.025)
+    scrollx.place(relx=0.05, rely=0.8, relwidth=0.9, relheight=0.035)
     listBox.config(yscrollcommand=scrolly.set)
     listBox.config(xscrollcommand=scrollx.set)
 
@@ -461,7 +461,7 @@ def series_radio_mode(window, freq_var, info_list):
                                  command=lambda win=window,
                                                 var=mode_var,
                                                 info=filtered_info: series_listbox(win, var, info))
-    buttonlong.place(relx=0.16, rely=0.87, relwidth=0.12)
+    buttonlong.place(relx=0.16, rely=0.87, relwidth=0.15)
     # Default button - Labels
     buttonshort.invoke()
 
@@ -489,7 +489,7 @@ def series_radio_freq(domain_label, series_info):
     """
     series_window = tk.Toplevel(ROOT)
     series_window.title('BPstat Series')
-    geom = get_geometry(height=HEIGHT, width=WIDTH, relx=0.2, rely=0.2, relwidth=0.6, relheight=0.6)
+    geom = get_geometry(height=HEIGHT, width=WIDTH, relx=0.2, rely=0.2, relwidth=0.65, relheight=0.65)
     series_window.geometry(geom)
     # create list of unique domains and corresponding label
     info = list(series_info)
@@ -578,11 +578,11 @@ def domain_listbox(df):
     scrolly = ttk.Scrollbar(ROOT, orient=tk.VERTICAL, command=listBox.yview)
     scrolly.place(relx=0.95, rely=0.15, relwidth=0.025, relheight=0.7)
     scrollx = ttk.Scrollbar(ROOT, orient=tk.HORIZONTAL, command=listBox.xview)
-    scrollx.place(relx=0.05, rely=0.85, relwidth=0.9, relheight=0.025)
+    scrollx.place(relx=0.05, rely=0.85, relwidth=0.9, relheight=0.035)
     listBox.config(yscrollcommand=scrolly.set)
     listBox.config(xscrollcommand=scrollx.set)
     # run app
-    geom = get_geometry(height=HEIGHT, width=WIDTH, relx=0.2, rely=0.2, relwidth=0.6, relheight=0.6)
+    geom = get_geometry(height=HEIGHT, width=WIDTH, relx=0.2, rely=0.2, relwidth=0.6, relheight=0.65)
     ROOT.geometry(geom)
     ROOT.mainloop()
 
@@ -625,9 +625,9 @@ def select_lang():
     # Radio button
     language = tk.StringVar(lang)
     radio1 = ttk.Radiobutton(lang, text='PT', value='PT', var=language)
-    radio1.place(relx=0.2, rely=0.2, relwidth=0.15)
+    radio1.place(relx=0.2, rely=0.2, relwidth=0.2)
     radio2 = ttk.Radiobutton(lang, text='EN', value='EN', var=language)
-    radio2.place(relx=0.65, rely=0.2, relwidth=0.15)
+    radio2.place(relx=0.6, rely=0.2, relwidth=0.2)
     radio2.invoke()
     # Buttons to continue
     langbutton = ttk.Button(lang,
@@ -639,7 +639,7 @@ def select_lang():
     # set geometry in relative terms
     HEIGHT = lang.winfo_screenheight()
     WIDTH = lang.winfo_screenwidth()
-    geom = get_geometry(height=HEIGHT, width=WIDTH, relx=0.4, rely=0.45, relwidth=0.2, relheight=0.125)
+    geom = get_geometry(height=HEIGHT, width=WIDTH, relx=0.4, rely=0.45, relwidth=0.25, relheight=0.125)
     lang.geometry(geom)
     lang.mainloop()
 
