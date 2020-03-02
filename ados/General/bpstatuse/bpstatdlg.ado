@@ -328,6 +328,7 @@ def download_window(window, variables):
     sub_window.geometry(geom)
     lbl = ttk.Label(sub_window, text='Importing data', font='times 14 bold')
     lbl.place(relx=0.3, rely=0.2, relwidth=0.4)
+    lbl.configure(anchor="center")
     progbar = ttk.Progressbar(sub_window, orient=tk.HORIZONTAL, length=200, mode='indeterminate')
     progbar.place(relx=0.1, rely=0.6, relwidth=0.8)
     progbar.start(15)
