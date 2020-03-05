@@ -59,7 +59,7 @@ This command will only work in Stata version 16 as it requires Python integratio
 - pandas
 - ttkthemes
 
-For help on the installation of the required packages in Python, please check the {browse "https://github.com/BPLIM/Tools/tree/master/ados/General/validarcae": Github repository} for the ado.
+For help on the installation of the required packages in Python, please check the {browse "https://github.com/BPLIM/Tools/tree/master/ados/General/bpstatuse": Github repository} for the ado.
 
 
 {title:Author}
