@@ -26,7 +26,7 @@ different frequencies. Users are only allowed to import series from the same dom
 	 - F indicates the frequency of the series (A=Annual, B=Biannual, Q=Quarterly, M=Monthly and D=Daily); 
 	 - ######## is the unique BPstat numerical code of the series. 
 
-Take as an example the variable named D009M12468894. It belongs to data domain 9 (Cash issuance), has a monthly frequency, and the BPstat numerical code 12468894. 
+Take as an example the variable named D009M12468894. It belongs to data domain 9 (Cash issuance), has a monthly frequency (M), and the BPstat numerical code 12468894. 
 This command uses the ancillary file BPSTAT_INFO.zip which contains the BPSTAT_INFO.csv file. The user may extract this latter file to access additional information, but should, under no circumstance, delete the zip file. 
 Additional information about the statistical series may be obtained by launching {help bpstatdlg} or directly from {browse "https://bpstat.bportugal.pt/": BPstat webpage}
 {cmd:bpstatuse} requires a connection to the internet and imports to a new {help frame}.  
