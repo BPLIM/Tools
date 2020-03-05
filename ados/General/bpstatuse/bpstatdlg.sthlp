@@ -18,7 +18,8 @@ bpstatdlg - imports statistical series from Banco de Portugal BPstat's database 
 {title:Description}
 
 {p}
-{cmd:bpstatdlg} launches a dialog box that allows users to import over 140,000 statistical series from Banco de Portugal BPstat's databases. This command is a menu-driven option for {help bpstatuse}. Please refer to {help bpstatuse} for additional information.
+{cmd:bpstatdlg} launches a dialog box that allows users to import over 140,000 statistical series from Banco de Portugal BPstat's databases. This command is a menu-driven option for {help bpstatuse}. 
+Please refer to {help bpstatuse} for additional information.
 
 {title:Options}
 
