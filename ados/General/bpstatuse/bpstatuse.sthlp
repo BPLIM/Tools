@@ -52,13 +52,13 @@ Import series D009M12468894.
 
 
 Example 2:
-Import series D009M12468894 into frame BPData. Labels are set to English.
+Import series D009M12468894 into frame BPdata. Labels are set to English.
 
 {p 8 16}{inp:. bpstatuse, vars(D009M12468894) frame(BPdata) en}{p_end}
 
 
 Example 3:
-Import series D009A12469115, D009A12469040, and D009A12469012 into frame BPData, replacing the one in memory.
+Import series D009A12469115, D009A12469040, and D009A12469012 into frame BPdata, replacing the one in memory.
 
 {p 8 16}{inp:. bpstatuse, vars(D009A12469115 D009A12469040 D009A12469012) frame(BPdata) replace}{p_end}
 
@@ -80,7 +80,7 @@ This command will only work in Stata version 16, as it requires Python integrati
 - requests
 - pandas
 
-For help on the intallation of the required packages in Python, please check the {browse "https://github.com/BPLIM/Tools/tree/master/ados/General/validarcae": Github repository} for the ado.
+For help on the intallation of the required packages in Python, please check the {browse "https://github.com/BPLIM/Tools/tree/master/ados/General/bpstatuse": Github repository} for the ado.
 
 
 {title:Author}
