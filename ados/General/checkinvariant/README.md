@@ -6,7 +6,9 @@ This command checks whether a given variable is constant or varies within the un
 
 To install run the following in Stata:
 
+```
 net install checkinvariant, from("https://github.com/BPLIM/Tools/raw/master/ados/General/checkinvariant")
+```
 
 ## Author
 

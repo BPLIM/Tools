@@ -1,2 +1,1 @@
 p checkinvariant	Check if a variable is invariant within a group
-p propagate			Fill missing values with the unique non-missing value within a group

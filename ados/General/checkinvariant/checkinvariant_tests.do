@@ -1,6 +1,8 @@
 cap program drop checkinvariant
 qui do checkinvariant.ado
 
+** NEED TO WRITE TESTS ON EMPTY ARGUMENTS FOR VARLIST and by() **
+
 set varabbrev off
 
 clear

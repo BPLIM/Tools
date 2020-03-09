@@ -1,4 +1,8 @@
+v 1.0
 d 'CHECKINVARIANT': checkinvariant
 d
+d Distribution-Date:   20190910
+d License: MIT
+
 F checkinvariant.ado
 F checkinvariant.sthlp
