@@ -295,7 +295,7 @@ qui sort `sortvar'
 cap drop `sortvar'
 
 qui compress _valid_cae_`rev'
-
+cap compress _cae_str
 
 end
 
