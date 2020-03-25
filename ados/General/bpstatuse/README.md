@@ -27,7 +27,7 @@ This package uses Python embedded code which is only available in Stata 16. Furt
     >
     > *pip install pandas*
     >
-    > *pip install ttkthermes*
+    > *pip install ttkthemes*
     >
 
    - If you have the Anaconda distribution, you may also use the Anaconda Prompt, typing:
