@@ -18,10 +18,8 @@ d Distribution-Date: 20190605
 d
 f checkmd.ado
 f checkmd.sthlp
-f check_prog1.ado
-f ext_inf.ado
-f file_write.ado
-f matmpz.ado
-f readmstr.ado
-f str_clean.ado
-f valid_data.ado
+f checkmd_check.ado
+f checkmd_extinf.ado
+f checkmd_fwrite.ado
+f checkmd_mpz.ado
+f checkmd_vdata.ado

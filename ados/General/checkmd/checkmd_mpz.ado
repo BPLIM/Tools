@@ -1,16 +1,16 @@
-// This program creates a matrix of missing values, positive values and zeros for variables in a dataset
-// If varlist is empty, the matrix willl contain all variables in the dataset. 
-// To produce no matrix at all, simply write nompz as input in option varlist
+* This program creates a matrix of missing values, positive values and zeros for variables in a dataset
+* If varlist is empty, the matrix willl contain all variables in the dataset. 
+* To produce no matrix at all, simply write nompz as input in option varlist
 
 
-program define matmpz, rclass
+program define checkmd_mpz, rclass
 
 syntax, [varlist(string) verbose]
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
 	di ""
-	di "------------------------ begin matmpz.ado ----------------------------"
+	di "------------------------ begin checkmd_mpz.ado ----------------------------"
 }
 ******************************************************************************************
 
@@ -32,7 +32,7 @@ else {
 		}
 		******************************************************************************************
 		if _rc != 0 {
-			di as error "[Error: program matmpz] One or more variables have not been found on the dataset"
+			di as error "[Error: program checkmd_mpz] One or more variables have not been found on the dataset"
 		}
 	}
 	
@@ -49,7 +49,6 @@ else {
 	local check_label = "`r(varlist)'" 
 	local check_label_count: word count `check_label'
 
-	
 	************************************* verbose ********************************************
 	if "`verbose'" == "verbose" {
 		di ""
@@ -57,22 +56,16 @@ else {
 	}
 	******************************************************************************************
 
-
-
 	foreach var in `variables' {
 
 		// variable missing
-		
 		quietly count if missing(`var')
 		local miss_`var' = r(N)
 		if "`verbose'" == "verbose" {
 			di ""
 			di "missing: `var' -> `miss_`var''"
 		}
-		
 		// variable > 0
-		
-		
 		capture count if `var'> 0 & !missing(`var')
 		if _rc == 0 {
 			local positive_`var' = r(N)
@@ -83,9 +76,7 @@ else {
 		if "`verbose'" == "verbose" {
 			di "positive: `var' -> `positive_`var''"
 		}
-		
 		// varible = 0
-		
 		capture count if `var' == 0 
 		if _rc == 0 {
 			local zero_`var' = r(N)
@@ -96,10 +87,7 @@ else {
 		if "`verbose'" == "verbose" {
 			di "zeros: `var' -> `zero_`var''"
 		}
-		
-				
 		// value label missing
-		
 		if `check_label_count' == 1 {
 			if regexm("`check_label'","`var'") == 1 {
 				tempvar decvar
@@ -125,9 +113,7 @@ else {
 		if "`verbose'" == "verbose" {
 			di "missing value label: `var' -> `misslab_`var''"
 		}
-		
 		// local type for rownames
-		
 		local type`var': type `var'
 		local rowname`var' = "`var'[`type`var'']"
 		local rownames = "`rownames'" + " `rowname`var''"
@@ -140,9 +126,7 @@ else {
 		
 	}
 
-
 	local var_count: word count `variables'
-	//di "var_count: `var_count'"
 	
 	************************************* verbose ********************************************
 	if "`verbose'" == "verbose" {
@@ -152,9 +136,7 @@ else {
 	************************************* verbose ********************************************	
 	
 	mat A = J(`var_count',4,0)
-
 	local i = 1
-
 	foreach var in `variables' {
 		matrix A[`i',1] = `miss_`var''
 		matrix A[`i',2] = `positive_`var''
@@ -169,7 +151,6 @@ else {
 		local i = `i' + 1
 	}
 
-
 	matrix rownames A = `rownames'
 	matrix colnames A = Missing Positive Zeros "Value label missing"
 	matrix mpz = A
@@ -178,7 +159,6 @@ else {
 	quietly count
 	return local obs = r(N)
 	local obs = r(N)
-		
 		
 	************************************* verbose ********************************************
 	if "`verbose'" == "verbose" {
@@ -196,7 +176,7 @@ else {
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
 	di ""
-	di "------------------------ end matmpz.ado ------------------------------"
+	di "------------------------ end checkmd_mpz.ado ------------------------------"
 }
 ******************************************************************************************
 

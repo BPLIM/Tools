@@ -1,20 +1,17 @@
-// This program validates the information provided by an csv file used to feed the ado checkmd
+* This program validates the information provided by an csv file used to feed the ado checkmd
 
-
-
-program define valid_data, rclass
+program define checkmd_vdata, rclass
 
 syntax, file1(string) [verbose]
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
 	di ""
-	di "------------------------ begin valid_data.ado ----------------------------"
+	di "------------------------ begin checkmd_vdata.ado ----------------------------"
 }
 ******************************************************************************************
 
-
-// Importing csv file
+* Importing csv file
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
@@ -24,15 +21,12 @@ if "`verbose'" == "verbose" {
 ******************************************************************************************
 
 quietly import delimited "`file1'", delimiter(",") varnames(1) stringcols(_all) clear
-//import excel using "`file1'", firstrow allstring clear 
 
 quietly count
 local tot = r(N)
 local data_error = 0
 
-
-
-// Checking if any attribute(var) is missing from the csv file
+* Checking if any attribute(var) is missing from the csv file
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
@@ -41,7 +35,7 @@ if "`verbose'" == "verbose" {
 }
 ******************************************************************************************
 
-local variables "check_id active check_title cond delta option list_val"
+local variables "check_id active check_title cond delta misstozero list_val ignoremiss ignore"
 foreach item in `variables' {
 	capture confirm variable `item'
 	if _rc != 0 {
@@ -54,9 +48,7 @@ if "`verbose'" == "verbose" & `data_error' == 0 {
 	di "No error to report"
 }
 
-
-
-// Checking if attribute active has values different from 0, 1 or 2
+* Checking if attribute active has values different from 0, 1 or 2
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
@@ -69,8 +61,9 @@ local eactive = 0
 forvalues i=1/`tot' {
 	local row = `i' + 1
 	if active[`i'] != "0" & active[`i'] != "1" & active[`i'] != "2" {
-		di as error "[Error: csv file] Only 3 values are allowed for attribute active: 0 for inactive checks," _n /*
-				 */ "1 for active checks and 2 for generating variables. Please note that content under attribute" _n "active is mandatory (row `row')"
+		di as error "[Error: csv file] Only 3 values are allowed for attribute active: 0 for inactive checks," ///
+				    " 1 for active checks and 2 for generating variables. Please note that content under " ///
+					"active is mandatory (row `row')"
 		local data_error = 1
 		local eactive = 1
 	}
@@ -80,9 +73,7 @@ if "`verbose'" == "verbose" & `eactive' == 0 {
 	di "No error to report"
 }
 
-
-
-// Checking if there are missing values in mandatory fields (in lines with checks)
+* Checking if there are missing values in mandatory fields (in lines with checks)
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
@@ -93,7 +84,7 @@ if "`verbose'" == "verbose" {
 
 local echecks = 0
 foreach var of varlist check_id check_title cond {
-	forvalues i=1/`tot' {
+	forvalues i = 1/`tot' {
 		local row = `i' + 1
 		if missing(`var'[`i']) & active[`i'] == "1" {
 			di as error "[Error: csv file] Content under `var' is mandatory for checks (row `row')"
@@ -107,9 +98,7 @@ if "`verbose'" == "verbose" & `echecks' == 0 {
 	di "No error to report"
 }
 
-
-
-// Checking if there are missing values in mandatory fields (in lines used to generate variables)
+* Checking if there are missing values in mandatory fields (in lines used to generate variables)
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
@@ -120,7 +109,7 @@ if "`verbose'" == "verbose" {
 
 local evargen = 0
 foreach var of varlist cond {
-	forvalues i=1/`tot' {
+	forvalues i = 1/`tot' {
 		local row = `i' + 1
 		if missing(`var'[`i']) & active[`i'] == "2" {
 			di as error "[Error: csv file] Content under `var' is mandatory for generating variables (row `row')"
@@ -134,9 +123,7 @@ if "`verbose'" == "verbose" & `evargen' == 0 {
 	di "No error to report"
 }
 
-
-
-// Checking if delta has any observation with value 0
+* Checking if delta has any observation with value 0
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
@@ -149,7 +136,7 @@ local edelta1 = 0
 forvalues i =1/`tot' {
 	local row = `i' + 1
 	if delta[`i'] == "0" {
-		di as error "[Error: csv file] There is no need to provide any value for attribute delta in checks where delta = 0 (row `row')"
+		di as error "[Error: csv file] Please do not provide any value for attribute delta for checks where delta = 0 (row `row')"
 		local data_error = 1
 		local edelta1 = 1
 	}
@@ -159,8 +146,7 @@ if "`verbose'" == "verbose" & `edelta1' == 0 {
 	di "No error to report"
 }
 
-
-// Checking if delta has observations with non-numerical values
+* Checking if delta has observations with non-numerical values
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
@@ -193,33 +179,7 @@ if "`verbose'" == "verbose" & `edelta2' == 0 {
 	di "No error to report"
 }
 
-
-// Checking if attribute option is specified correctly
-
-************************************* verbose ********************************************
-if "`verbose'" == "verbose" {
-	di ""
-	di "Checking if attribute option is specified correctly"
-}
-******************************************************************************************
-
-local emiss = 0
-forvalues i=1/`tot' {
-	local row = `i' + 1
-	if option[`i'] != "miss" & option[`i'] != "" & active[`i'] == "1" {
-		di as error "[Error: csv file] If you want option to be active, you must specify miss (row `row')"
-		local data_error = 1
-		local emiss = 1
-	}
-}
-if "`verbose'" == "verbose" & `emiss' == 0 {
-	di ""
-	di "No error to report"
-}
-
-
-
-// Checking if list_val has observations with non-numerical values when not missing
+* Checking if list_val has observations with non-numerical values when not missing
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
@@ -230,7 +190,7 @@ if "`verbose'" == "verbose" {
 
 local elist_val=0
 local num_space "123456789.0 "
-forvalues i=1/`tot' {
+forvalues i = 1/`tot' {
 	local row = `i' + 1
 	local error_list = 0
 	local list_val = list_val[`i']
@@ -252,7 +212,6 @@ if "`verbose'" == "verbose" & `elist_val' == 0 {
 	di "No error to report"
 }
 
-
 return local data_error = `data_error' 
 
 ************************************* verbose ********************************************
@@ -264,12 +223,10 @@ if "`verbose'" == "verbose" {
 }
 ******************************************************************************************
 
-
-
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
 	di ""
-	di "------------------------ end valid_data.ado ------------------------------"
+	di "------------------------ end checkmd_vdata.ado ------------------------------"
 }
 ******************************************************************************************
 

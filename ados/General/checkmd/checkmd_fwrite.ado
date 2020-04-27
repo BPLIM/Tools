@@ -1,18 +1,22 @@
-// Program file_write
-// This program generates two html documents: one (html file 1) presents information on some logical condition tested by the program check_prog1, displaying a tabulation 
-// of observations that verify that condition and a list of values with the most significant inconsistent values; the other (html file 2) provides a summary of inconsistencies for 
-// each check performed in a dataset
-// All the options are provided by the program check_consistency
-// If option csv_file is empty, the output will be the matrix mpz (if "nompz" is not specified)
+* Program checkmd_fwrite
 
-program define file_write
+/* This program generates two html documents: one (html file 1) presents information on 
+some logical condition tested by the program checkmd_check, displaying a tabulation 
+of observations that verify that condition and a list of values with the most significant 
+inconsistent values; the other (html file 2) provides a summary of inconsistencies for 
+each check performed in a dataset. All the options are provided by the program checkmd
+If option csv_file is empty, the output will be the matrix mpz (if "nompz" is not specified) */
 
-syntax [, csv_file(string) mpz(string) check_count(int 0) gen_count(int 0) linesize(int 150) save_obs(int -1) addvars(string) tvar(string) inc_only keepmd verbose] 
+program define checkmd_fwrite
+
+syntax [, csv_file(string) mpz(string) check_count(int 0) ///
+		  gen_count(int 0) linesize(int 150) save_obs(int -1) ///
+		  addvars(string) tvar(string) inc_only keepmd verbose] 
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
 	di ""
-	di "------------------------ begin file_write.ado ----------------------------"
+	di "------------------------ begin checkmd_fwrite.ado ----------------------------"
 }
 ******************************************************************************************
 
@@ -59,7 +63,6 @@ if "`csv_file'" != "" {
 	}
 	******************************************************************************************
 	
-	
 	file open  myfile using "write.stmd", write text replace
 	
 	file write myfile "<meta charset=§utf-8§/>" _n
@@ -67,13 +70,7 @@ if "`csv_file'" != "" {
 	file write myfile "# <span style=§color:black§>**Checks**</span>" _n
 	file write myfile _n
 	file write myfile _n
-	if ${merge_is_active} == 1 {
-		file write myfile "### Dataset 1: ${dta_file1}" _n
-		file write myfile "### Dataset 2: ${dta_file2}" _n
-	}
-	else {
-		file write myfile "### Dataset: ${dta_file}" _n
-	}
+	file write myfile "### Dataset: ${dta_file}" _n
 	file write myfile _n
 	if "${if_condition}" ~= "" {
 		file write myfile "### [Condition: !s §${if_condition}§!]" _n
@@ -91,14 +88,12 @@ if "`csv_file'" != "" {
 	file write myfile _n
 	file write myfile _n
 
-
-
 	if "`mpz'" != "nompz" {
-		file write myfile "matmpz, varlist(`mpz')`verbose'"  _n
+		file write myfile "checkmd_mpz, varlist(`mpz')`verbose'"  _n
 		************************************* verbose ********************************************
 		if "`verbose'" == "verbose" {
 			di ""
-			di "Program matmpz"
+			di "Program checkmd_mpz"
 		}
 		******************************************************************************************
 		file write myfile "!!!" _n
@@ -128,17 +123,17 @@ if "`csv_file'" != "" {
 	file write myfile "global id §${id}§" _n
 	file write myfile "}" _n
 
-	// Running ext_inf to get information provided by the csv file regarding checks and code used to variables 
+	// Running checkmd_extinf to get information provided by the csv file regarding checks and code used to variables 
 	
 	************************************* verbose ********************************************
 	if "`verbose'" == "verbose" {
 		di ""
-		di "Program ext_inf"
+		di "Program checkmd_extinf"
 	}
 	******************************************************************************************
 
 	file write myfile "preserve" _n
-	file write myfile "ext_inf, file(§`csv_file'§) `verbose'" _n
+	file write myfile "checkmd_extinf, file(§`csv_file'§) `verbose'" _n
 	file write myfile _n
 	file write myfile _n
 
@@ -156,7 +151,9 @@ if "`csv_file'" != "" {
 		file write myfile "capture local id_`i' = §!r(id_`i')?§" _n
 		file write myfile "local title_`i' = §!r(title_`i')?§" _n
 		file write myfile "local cond_`i' = !§!r(cond_`i')?§?" _n
-		file write myfile "capture local option_`i' = §!r(option_`i')?§" _n
+		file write myfile "capture local misstozero_`i' = §!r(misstozero_`i')?§" _n
+		file write myfile "capture local ignoremiss_`i' = §!r(ignoremiss_`i')?§" _n
+		file write myfile "capture local ignorerow_`i' = !§!r(ignorerow_`i')?§?" _n
 		file write myfile "capture local delta_`i' = real(§!r(delta_`i')?§)" _n
 		file write myfile "capture local list_val_`i' = real(§!r(list_val_`i')?§)" _n
 		file write myfile _n
@@ -172,7 +169,7 @@ if "`csv_file'" != "" {
 	}
 	******************************************************************************************
 
-	forvalue i=1/`gen_count' {
+	forvalue i = 1/`gen_count' {
 		file write myfile "local gen_`i' = §!r(gen_`i')?§" _n
 		file write myfile _n
 	}
@@ -180,20 +177,19 @@ if "`csv_file'" != "" {
 	file write myfile "restore" _n	
 	file write myfile _n
 
-	forvalue i=1/`gen_count' {
+	forvalue i = 1/`gen_count' {
 		file write myfile "!gen_`i'?" _n
 		file write myfile _n
 	}
 
-
 	file write myfile "!!!" _n
 
-	// Running the program check_prog1 for each check
+	// Running the program checkmd_check for each check
 
 	************************************* verbose ********************************************
 	if "`verbose'" == "verbose" {
 		di ""
-		di "Running the program check_prog1 for each check"
+		di "Running the program checkmd_check for each check"
 	}
 	******************************************************************************************
 	
@@ -204,52 +200,31 @@ if "`csv_file'" != "" {
 
 	forvalues i = 1/`check_count' {
 		file write myfile "!!!s/" _n
-		file write myfile "	local check_`i' = §check_prog1, § + §id(!id_`i'?) § + !§check(!cond_`i'?) §? + §!option_`i'? § + §delta(!delta_`i'?) § + !§title(!title_`i'?) §? +  §list_val(!list_val_`i'?) § + §save_obs(`save_obs')§ + § addvars(`addvars')§ + § tvar(`tvar')§ + § `verbose'§" _n
-		//file write myfile "	di !§!check_`i'?§?" _n
+		file write myfile "	local check_`i' = §checkmd_check, § + §id(!id_`i'?) § +"
+		file write myfile " !§check(!cond_`i'?) §? + §!misstozero_`i'? § + §delta(!delta_`i'?) § +"
+		file write myfile " !§title(!title_`i'?) §? +  §list_val(!list_val_`i'?) § +"
+		file write myfile " §save_obs(`save_obs')§ + § addvars(`addvars')§ + § tvar(`tvar')§ +"
+		file write myfile " § `verbose' § + §!ignoremiss_`i'? § + !§ignore(!ignorerow_`i'?) §?" _n
 		file write myfile "	!check_`i'?" _n
 		file write myfile "	capture local error_`i' = !r(error)?" _n
-		//file write myfile "di in red §error_`i': !error_`i'?§" _n
 		file write myfile "	capture local gen_error_`i' = !r(gen_error)?" _n	
-		//file write myfile "di in red §gen_error_`i': !gen_error_`i'?§" _n
 		file write myfile "	capture local asrt_`i' = !r(asrt)?" _n	
-		//file write myfile "di in red §asrt_`i': !asrt_`i'?§" _n
-		/*file write myfile "if _rc > 0 {" _n
-		file write myfile "	local gen_error_`i' = 0" _n
-		file write myfile "}" _n*/	
 		file write myfile "	capture local tot_`i' = !r(tot)?" _n
-		//file write myfile "di in red §tot_`i': !tot_`i'?§" _n
 		file write myfile "	capture local inc_`i' = !r(inc)?" _n
-		//file write myfile "di in red §inc_`i': !inc_`i'?§" _n
 		if "`tvar'" ~= "" {
 		file write myfile "	quietly foreach item in `tvar_levels' {" _n
-		//file write myfile "	di in red §HERE: tot_`i'_!item?: !r(tot_!item?)?§" _n
 		file write myfile "	quietly local tot_`i'_!item? = r(tot_!item?)" _n
-		//file write myfile "	di in red §ITEM tot: !tot_`i'_!item??" _n
 		file write myfile "	if !asrt_`i'? == 0 {" _n
 		file write myfile "	quietly capture local inc_`i'_!item? = 0" _n
-		//file write myfile "		di in red §ITEM inc: !inc_`i'_!item??" _n
 		file write myfile "	}" _n
 		file write myfile "	else if !asrt_`i'? == 9 {" _n
 		file write myfile "	quietly capture local inc_`i'_!item? = !r(inc_!item?)?" _n
-		//file write myfile "		di in red §ITEM inc: !inc_`i'_!item??" _n
 		file write myfile "	}" _n
 		file write myfile "	else if !asrt_`i'? == 111 {" _n
 		file write myfile "	quietly capture local inc_`i'_!item? = ." _n
-		//file write myfile "		di in red §ITEM inc: !inc_`i'_!item??" _n
 		file write myfile "	}" _n
 		file write myfile "	}" _n
 		}
-		/*file write myfile "if _rc > 0 {" _n
-		file write myfile "	local inc_`i' = -1" _n
-		file write myfile "}" _n		
-		file write myfile "if §`tvar'§ ~= §§ {" _n
-		file write myfile "ret li" _n
-		file write myfile "quietly glevelsof(`tvar'), local(levels)" _n
-		file write myfile "quietly foreach item in !levels? {" _n
-		file write myfile "di in red §HERE: !item?§" _n
-		file write myfile "di in red §ITEM tot: !tot_`i'_!item??" _n
-		file write myfile "}" _n
-		file write myfile "}" _n*/
 		file write myfile "	capture local list_valn_`i' = !r(list_valn)?" _n
 		file write myfile "	if _rc > 0 {" _n
 		file write myfile "	quietly local list_valn_`i' = 0" _n
@@ -258,7 +233,6 @@ if "`csv_file'" != "" {
 		file write myfile "	if _rc > 0 {" _n
 		file write myfile "	quietly local count_list_`i' = 0" _n
 		file write myfile "	}" _n	
-		//file write myfile "capture local labels = !§!r(labels)?§?" _n
 		file write myfile "	capture matrix X_`i' = r(X)" _n		
 		file write myfile "	if !error_`i'? == 1 | !gen_error_`i'? == 1 {" _n
 		file write myfile "	quietly local title_red_`i' = §`i'. !title_`i'?§" _n
@@ -313,11 +287,18 @@ if "`csv_file'" != "" {
 		file write myfile "	else {" _n
 		file write myfile "	!cap? di !§Condition: !cond_`i'?§?" _n
 		file write myfile _n
-		//file write myfile "	!cap? di §!labels?§" _n
 		file write myfile "	di" _n
 		file write myfile "	di" _n
 		file write myfile "	if !asrt_`i'? == 0 {" _n
 		file write myfile "	!cap? di §No inconsistencies found§" _n
+		file write myfile "	if §!ignoremiss_`i'?§ == §ignoremissing§ {" _n
+		file write myfile "	!cap? di" _n
+		file write myfile "	!cap? di §Note: rows with missing values ignored§" _n
+		file write myfile "	}" _n
+		file write myfile "	if !§!ignorerow_`i'?§? ~= §§ {" _n
+		file write myfile "	!cap? di" _n
+		file write myfile "	!cap? di !§Note: rows ignored where !ignorerow_`i'?§?" _n
+		file write myfile "	}" _n
 		file write myfile "	}" _n
 		file write myfile "	else if !inc_`i'? > 0  & !inc_`i'? < !tot_`i'? {" _n
 		file write myfile "	!cap? di §Tabulation:§" _n
@@ -326,13 +307,21 @@ if "`csv_file'" != "" {
 		file write myfile "	!cap? di" _n
 		file write myfile "	if ${listinc} == 1 & !list_valn_`i'? > 0 {" _n
 		file write myfile "	preserve" _n
+		file write myfile "	di" _n
 		file write myfile "	di §List of the !count_list_`i'? largest inconsistent values§" _n
 		file write myfile "	quietly use §${out_path}/temp_file.dta§, clear" _n
 		file write myfile "	di" _n
-		file write myfile "	list, abbreviate(15)" _n
+		file write myfile "	list, abbreviate(15) noobs" _n
 		file write myfile "	di" _n
 		file write myfile "	restore" _n
 		file write myfile "	capture rm §${out_path}/temp_file.dta§" _n
+		file write myfile "	}" _n
+		file write myfile "	if §!ignoremiss_`i'?§ == §ignoremissing§ {" _n
+		file write myfile "	!cap? di §Note: rows with missing values ignored§" _n
+		file write myfile "	}" _n
+		file write myfile "	if !§!ignorerow_`i'?§? ~= §§ {" _n
+		file write myfile "	!cap? di" _n
+		file write myfile "	!cap? di !§Note: rows ignored where !ignorerow_`i'?§?" _n
 		file write myfile "	}" _n
 		file write myfile "	}" _n
 		file write myfile "	else if !inc_`i'? == !tot_`i'? {" _n
@@ -343,10 +332,17 @@ if "`csv_file'" != "" {
 		file write myfile "	di §List of the !count_list_`i'? largest inconsistent values§" _n
 		file write myfile "	quietly use §${out_path}/temp_file.dta§, clear" _n
 		file write myfile "	di" _n
-		file write myfile "	list, abbreviate(15)" _n
+		file write myfile "	list, abbreviate(15) noobs" _n
 		file write myfile "	di" _n
 		file write myfile "	restore" _n
 		file write myfile "	capture rm §${out_path}/temp_file.dta§" _n
+		file write myfile "	}" _n
+		file write myfile "	if §!ignoremiss_`i'?§ == §ignoremissing§ {" _n
+		file write myfile "	!cap? di §Note: rows with missing values ignored§" _n
+		file write myfile "	}" _n
+		file write myfile "	if !§!ignorerow_`i'?§? ~= §§ {" _n
+		file write myfile "	!cap? di" _n
+		file write myfile "	!cap? di !§Note: rows ignored where !ignorerow_`i'?§?" _n
 		file write myfile "	}" _n
 		file write myfile "	}" _n	
 		file write myfile "	}" _n
@@ -530,26 +526,19 @@ if "`csv_file'" != "" {
 	file write myfile "#### Time: `c_time'"_n
 	file write myfile _n
 	file write myfile _n
-
-
-
-	file write myfile _n	
-
-		
+	file write myfile _n		
 	file write myfile "!!!s/" _n
 	file write myfile "	quietly use §${out_path}/Reports/report_${dta_file}/${c_date}/summary§, clear" _n
 	file write myfile "	set linesize `linesize'" _n
 	file write myfile "	quietly sort Check_id `tvar'" _n
 	file write myfile "	quietly order Check_id `tvar' Check_title" _n
 	if "`tvar'" ~= "" {
-	file write myfile "	list, string(130) abbreviate(15) separator(`tvar_levels_count')" _n
+		file write myfile "	list, string(130) abbreviate(15) separator(`tvar_levels_count')" _n
 	}
 	else {
-	file write myfile "	list, string(130) abbreviate(15)" _n
+		file write myfile "	list, string(130) abbreviate(15)" _n
 	}
-
 	file write myfile "!!!" _n
-
 	file close myfile
 	
 
@@ -579,7 +568,6 @@ if "`csv_file'" != "" {
 	rm write_sum1.stmd
 	rm write_sum2.stmd
 	
-
 	************************************* verbose ********************************************
 	if "`verbose'" == "verbose" {
 		di ""
@@ -599,24 +587,23 @@ else {
 		************************************* verbose ********************************************
 		if "`verbose'" == "verbose" {
 			di ""
-			di "Program matmpz"
+			di "Program checkmd_mpz"
 			di ""
 		}
 		******************************************************************************************
-		matmpz, varlist(`mpz')
+		checkmd_mpz, varlist(`mpz')
 		di as text "** Missing values, positive values, zeros and missing value labels**"
 		di ""
 		matprint r(mpz), decimals(0,0,0)
 		di
 		di "N: `r(obs)'"
 	}
-	
 }
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
 	di ""
-	di "------------------------ end file_write.ado ------------------------------"
+	di "------------------------ end checkmd_fwrite.ado ------------------------------"
 }
 ******************************************************************************************
 

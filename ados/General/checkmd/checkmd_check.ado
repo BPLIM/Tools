@@ -1,41 +1,45 @@
-// This program checks if some logical condition is verified inside a particular dataset
+* Part of package checkmd
+* Checks if some logical condition is verified inside a particular dataset
 
-program define check_prog1, rclass
-
-
-syntax, check(string) id(string) title(string) [miss] [delta(real 0)]  [list_val(int 0)] [save_obs(int 50)] [verbose] [tvar(string)] [addvars(string)]
+program define checkmd_check, rclass
 
 
-// check = condition to be verified in csv file (cond)
-// id = check_id
-// if option miss is specified, the missing values of variables inside check will be turned into zeros
-// delta lets the user choose a margin of error for the check
-// title for labeling data with inconsistencies
-// option list_val specifies the number on inconsistencies displayed in the html document
-// save_obs is the number of inconsistent observations that will be saved to a dataset
-// The program returns 6 locals: r(tot)			-> number of observations
-//								 r(inc) 		-> number of observations that meet the condition
-//								 r(error),		-> some variable was not found in the dataset 
-// 								 r(list_val)	-> tells file_write.do if we want to list the values with differences or not
-//								 r(gen_error)	-> 1 if generating dummy resulted in error
-//								 r(labels)		-> labels for the variables
-// and 1 matrix:
-//                               r(X)		-> matrix with frequencies
-
+syntax, check(string) id(string) title(string) ///
+		[miss delta(real 0) list_val(int 0) save_obs(int 50) ///
+		verbose tvar(string) addvars(string) ignoremissing ///
+		ignore(string)]
+		
+/**********************************************************************************************************
+check -> condition to be verified in csv file (cond)
+id -> check id (specified by the user)
+title -> title of the check (condition)
+miss -> specifies that missing values of variables inside the check will be set as zeros
+delta -> margin of error
+list_val -> specifies the number on inconsistencies displayed in the html document
+save_obs -> the number of inconsistent observations that will be saved in the inconsistencies dataset
+verbose -> displays additional information about the state of the program 
+tvar -> time variable 
+addvars -> adds specified variables to the inconsistencies dataset 
+ignoremissing -> ignores observations where one of the variables is missing
+The program returns 5 locals: r(tot)		-> number of observations
+							  r(inc) 		-> number of inconsistent observations
+							  r(error),		-> some variable was not found in the dataset 
+							  r(list_val)	-> list differences or not
+							  r(gen_error)	-> error when generating dummy variable (check)
+and 1 matrix:
+                              r(X)		    -> matrix with frequencies (consistent and inconsistent values)
+***********************************************************************************************************/
 
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
 	di ""
-	di "------------------------ begin check_prog1.ado ------------------------------"
+	di "------------------------ begin checkmd_check.ado ------------------------------"
 }
 ******************************************************************************************
 
-
-
-
-// Extracting the variables from the string argument in order to check if all variables are available in the dataset. If so, r(error) will be 0 and 1 otherwise
-
+/* Extracting the variables from the string argument in order to check if all variables 
+are available in the dataset. If so, r(error) will be 0 and 1 otherwise*/
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
@@ -50,37 +54,30 @@ local vars `r(str_var)'
 if "`tvar'" != "" {
 	confirm variable `tvar'
 }
+if trim(`"`ignore'"') != "" {
+    str_clean, str_arg(`ignore') `verbose'
+	local ignorevars `r(str_var)'
+	cap confirm variable `ignorevars'
+	if _rc {
+	    di as error `"Could not find all variables in condition "`ignore'""'
+		error 1
+	}
+}
 capture confirm variable `vars'
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
 	di ""
-	di "Confirming if the variables specified under cond in the csv file are in the dataset. If so, local error will be 0"
+	di "Confirming if the variables specified under cond in the csv file are in the " /// 
+	   "dataset. If so, local error will be 0"
 }
 ******************************************************************************************
 
-// labels for `vars'
-
-/*
-foreach item in `vars' {
-	local label: variable label `item'
-	if length("`label'")>0 {
-		local labels  "`labels'" _n "`item': `label'"
-	}
-}
-
-return local labels = `"`labels'"'
-
-*/
-
-
-
 if _rc==0 {
+	
 	return local error = 0
 	local error = 0
-
 	tempvar dummy 
-
 
 	// Turning missing values to zeros if specified by option miss 
 	
@@ -96,10 +93,20 @@ if _rc==0 {
 			quietly replace `item' = 0 if missing(`item')
 		}
 	}
+	if "`ignoremissing'" == "ignoremissing" {
+	    tempvar rowmiss dummiss
+		qui egen `rowmiss' = rowmiss(`vars')
+		qui gen `dummiss' = (`rowmiss' > 0)
+	}
+	if trim(`"`ignore'"') != "" {
+	    tempvar ignoredummy
+		cap gen `ignoredummy' = (`ignore')
+		if _rc {
+			di as error `"Error generating condition "`ignore'""'
+			error 1
+		}
+	}
 
-	
-	// Returning local r(tot)
-	
 	************************************* verbose ********************************************
 	if "`verbose'" == "verbose" {
 		di ""
@@ -119,13 +126,14 @@ if _rc==0 {
 		}
 	}
 	
-	
-	// Assert condition before generating variables. If there are no inconsistencies, it's more efficient to skip the next steps
+	* Assert condition before generating variables. If there are no inconsistencies, 
+	* it's more efficient to skip the next steps
 	
 	************************************* verbose ********************************************
 	if "`verbose'" == "verbose" {
 		di ""
-		di "Assert condition before generating variables. If there are no inconsistencies, it's more efficient to skip the next steps. This step returns local asrt"
+		di "Assert condition before generating variables. If there are no inconsistencies," ///
+		   " it's more efficient to skip the next steps. This step returns local asrt"
 	}
 	******************************************************************************************
 	
@@ -133,22 +141,32 @@ if _rc==0 {
 		local final_check = `"`check'"'
 	}
 	else {
-		if regexm("`check'","==") == 1 {
+		if regexm("`check'","==") {
 			local check_first = regexr("`check'","==","<=") + "+`delta'"
 			local check_second = regexr("`check'","==",">=") + "-`delta'"
 			local final_check = "`check_first'" + " & " + "`check_second'"
 		}
-		else if regexm("`check'",">") == 1 {
+		else if regexm("`check'",">") {
 			local final_check = "`check'" + "+`delta'"
 
 		}
-		else if regexm("`check'","<") == 1 {
+		else if regexm("`check'","<") {
 			local final_check = "`check'" + "-`delta'"
 		}
 	}
 	
-	
-	capture assert (`final_check')
+	if ("`ignoremissing'" == "ignoremissing") & trim(`"`ignore'"') != "" {
+	    capture assert (`final_check') | (`dummiss' == 1) | (`ignoredummy' == 1)
+	}
+	else if ("`ignoremissing'" == "ignoremissing") & trim(`"`ignore'"') == "" {
+	    capture assert (`final_check') | (`dummiss' == 1)
+	}
+	else if ("`ignoremissing'" == "") & trim(`"`ignore'"') != "" {
+	    capture assert (`final_check') | (`ignoredummy' == 1)
+	}
+	else {
+		capture assert (`final_check')
+	}
 	
 	if _rc == 0 {
 		return local asrt = 0
@@ -174,12 +192,13 @@ if _rc==0 {
 		************************************* verbose ********************************************
 		if "`verbose'" == "verbose" {
 			di ""
-			di "Generating the dummy variable as specified by the formula in the csv document. If there is an error when generating the variable, local gen_error = 1"
+			di "Generating the dummy variable as specified by the formula in the csv document. " ///
+			   "If there is an error when generating the variable, local gen_error = 1"
 		}
 		******************************************************************************************
 		
 		if `delta' == 0 {
-			capture quietly gen `dummy' = (`check')
+			capture gen `dummy' = (`check')
 			if _rc != 0 {
 				return local gen_error = 1
 				local gen_error = 1
@@ -190,7 +209,7 @@ if _rc==0 {
 			}
 		}
 		else {
-			if regexm("`check'","==") == 1 {
+			if regexm("`check'","==") {
 				local check_first = regexr("`check'","==","<=") + "+`delta'"
 				local check_second = regexr("`check'","==",">=") + "-`delta'"
 				local final_check = "`check_first'" + " & " + "`check_second'"
@@ -204,7 +223,7 @@ if _rc==0 {
 					local gen_error = 0
 				}
 			}
-			else if regexm("`check'",">") == 1 {
+			else if regexm("`check'",">") {
 				local final_check = "`check'" + "+`delta'"
 				capture quietly gen `dummy' = (`final_check')
 				if _rc != 0 {
@@ -216,7 +235,7 @@ if _rc==0 {
 					local gen_error = 0
 				}
 			}
-			else if regexm("`check'","<") == 1 {
+			else if regexm("`check'","<") {
 				local final_check = "`check'" + "-`delta'"
 				capture quietly gen `dummy' = (`final_check')
 				if _rc != 0 {
@@ -231,9 +250,18 @@ if _rc==0 {
 		}
 		
 		if `gen_error' == 0 {
-			label var `dummy' "Check"
+		    
+			if "`ignoremissing'" == "ignoremissing" {
+				qui replace `dummy' = 1 if `dummiss' == 1
+				drop `dummiss'
+			}
 			
-			// Returning locals r(inc) and r(list_val)
+			if trim(`"`ignore'"') != "" {
+				qui replace `dummy' = 1 if `ignoredummy' == 1
+				drop `ignoredummy'
+			}
+			
+			label var `dummy' "Check"
 			
 			************************************* verbose ********************************************
 			if "`verbose'" == "verbose" {
@@ -263,7 +291,7 @@ if _rc==0 {
 				local list_valn = 0
 			}
 
-			// Generating variable diff for option list_val
+			* Generating variable diff for option list_val
 
 			************************************* verbose ********************************************
 			if "`verbose'" == "verbose" {
@@ -290,8 +318,7 @@ if _rc==0 {
 				
 			}
 			
-			
-			// Returning matrix r(X) and saving a dataset with inconsistent values
+			* Returning matrix r(X) and saving a dataset with inconsistent values
 			
 			************************************* verbose ********************************************
 			if "`verbose'" == "verbose" {
@@ -309,9 +336,9 @@ if _rc==0 {
 					matrix X = A
 					return matrix X = A
 				}
-				if `inc'>0 & ${listinc}==1 {
+				if `inc' > 0 & ${listinc} == 1 {
 					if `list_val' != 0 {
-						gsort -`abs_diff'
+						qui hashsort - `abs_diff'
 					}
 					quietly count if `dummy' == 0
 					if r(N) < `list_val' {
@@ -332,7 +359,7 @@ if _rc==0 {
 					}
 					preserve
 						if `list_val' != 0 {
-							gsort -`abs_diff'
+							qui hashsort - `abs_diff'
 							keep ${id} `tvar' `vars' _diff `dummy'
 							order ${id} `tvar' `vars' _diff
 						}
@@ -341,18 +368,16 @@ if _rc==0 {
 							order ${id} `tvar' `vars' 
 							sort `dummy'
 						}
-				
 						quietly gen nn = _n
-						quietly keep if `dummy'==0 & nn <= `count_list'
+						quietly keep if `dummy'== 0 & nn <= `count_list'
 						quietly drop `dummy' nn
-						
 						quietly save "${out_path}/temp_file", replace
 					restore
 				}
-				if `inc'>0 & `save_obs' >= 0 {
+				if `inc' > 0 & `save_obs' >= 0 {
 					preserve
 						if `list_val' != 0 {
-							gsort -`abs_diff'
+							qui hashsort - `abs_diff'
 							keep ${id} `tvar' `vars' `addvars' _diff `dummy'
 						}
 						else {
@@ -361,10 +386,10 @@ if _rc==0 {
 						}
 						quietly gen nn = _n
 						if `save_obs' == 0 {
-							quietly keep if `dummy'==0 
+							quietly keep if `dummy' == 0 
 						}
 						else {
-							quietly keep if `dummy'==0 & nn <= `save_obs'
+							quietly keep if `dummy' == 0 & nn <= `save_obs'
 						}
 						quietly drop `dummy' nn
 						note: "`title'"
@@ -405,17 +430,157 @@ if "`verbose'" == "verbose" {
 }
 ******************************************************************************************
 
-
-
 capture drop _diff
 capture label drop difflab
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {
 	di ""
-	di "------------------------ end check_prog1.ado --------------------------------"
+	di "------------------------ end checkmd_check.ado --------------------------------"
 }
 ******************************************************************************************
 
+end
 
+
+program define str_clean, rclass
+
+* This ado cleans a string, removing characters and duplicate variables
+* Takes some string as an argument
+* Returns a local stored in r(str_var)
+
+syntax, str_arg(string) [verbose]
+
+************************************* verbose ********************************************
+if "`verbose'" == "verbose" {
+	di ""
+	di "------------------------ begin str_clean.ado ------------------------------"
+	di ""
+	di `"Initial str_arg: `str_arg'"'
+}
+******************************************************************************************
+
+* Removing specific characters from str_arg
+
+************************************* verbose ********************************************
+if "`verbose'" == "verbose" {
+	di ""
+	di "Removing specific characters from str_arg (+ - * / = > < ^ ( ) & | . , ; !)"
+}
+******************************************************************************************
+
+local str_variables = subinstr("`str_arg'","+"," ",20)
+local str_variables = subinstr("`str_variables'","-"," ",20)
+local str_variables = subinstr("`str_variables'","*"," ",20)
+local str_variables = subinstr("`str_variables'","/"," ",20)
+local str_variables = subinstr("`str_variables'","="," ",20)
+local str_variables = subinstr("`str_variables'",">"," ",20)
+local str_variables = subinstr("`str_variables'","<"," ",20)
+local str_variables = subinstr("`str_variables'","^"," ",20)
+local str_variables = subinstr("`str_variables'","("," ",20)
+local str_variables = subinstr("`str_variables'",")"," ",20)
+local str_variables = subinstr("`str_variables'","&"," ",20)
+local str_variables = subinstr("`str_variables'","|"," ",20)
+local str_variables = subinstr("`str_variables'","."," ",20)
+local str_variables = subinstr("`str_variables'",","," ",20)
+local str_variables = subinstr("`str_variables'",";"," ",20)
+local str_variables = subinstr("`str_variables'","!"," ",20)
+
+************************************* verbose ********************************************
+if "`verbose'" == "verbose" {
+	di ""
+	di "New str_arg: `str_variables'"
+}
+******************************************************************************************
+
+// Removing elements from `vars' that are not variables
+
+************************************* verbose ********************************************
+if "`verbose'" == "verbose" {
+	di ""
+	di "Removing elements from str_arg that are not variables"
+}
+******************************************************************************************
+local vars = "`str_variables'"
+local vars = stritrim("`vars'")
+local vars = strltrim("`vars'")
+local vars = strrtrim("`vars'")
+quietly ds
+foreach item in `vars' {
+	local out = 0
+	foreach var in `r(varlist)' {
+		if "`item'" == "`var'" {
+			local out = `out' + 1
+		}
+	}
+	if `out' == 0 {
+		local pos = strpos("`vars'","`item'")
+		local leni = length("`item'")
+		local lenv = length("`vars'")
+		if `pos' == 1 {
+			local vars = substr("`vars'",`leni'+1,`lenv'-`leni')
+		}
+		else {
+			local posn = strpos("`vars'"," `item'")
+			local lenin = length(" `item'")
+			local lenvn = length("`vars'")
+			local vars = substr("`vars'",1,`posn'-1) + substr("`vars'",`posn'+`lenin',`lenvn'-`lenin'-`posn'+1)
+		}
+		local vars = stritrim("`vars'")
+		local vars = strltrim("`vars'")
+		local vars = strrtrim("`vars'")
+	}
+}
+
+************************************* verbose ********************************************
+if "`verbose'" == "verbose" {
+	di ""
+	di "New str_arg: `vars'"
+}
+******************************************************************************************
+
+* Removing duplicate variables from str_arg
+
+************************************* verbose ********************************************
+if "`verbose'" == "verbose" {
+	di ""
+	di "Removing duplicate variables from str_arg"
+}
+******************************************************************************************
+
+foreach item in `vars' {
+	local words_but = regexr("`vars'","`item'","")
+	foreach nitem in `words_but' {
+		if "`item'" == "`nitem'" {
+			local vars = regexr("`vars'","`item'","")
+		}
+	}
+}
+
+************************************* verbose ********************************************
+if "`verbose'" == "verbose" {
+	di ""
+	di "New str_arg: `vars'"
+}
+******************************************************************************************
+
+local str_var = "`vars'"
+return local str_var = "`vars'"
+
+************************************* verbose ********************************************
+if "`verbose'" == "verbose" {
+	di ""
+	di "Returned locals:"
+	di ""
+	di "str_var: `str_var'"
+}
+******************************************************************************************
+
+************************************* verbose ********************************************
+if "`verbose'" == "verbose" {
+	di ""
+	di "------------------------ end str_clean.ado --------------------------------"
+}
+******************************************************************************************
+	
 end
