@@ -1,0 +1,7 @@
+check_id,active,check_title,cond,delta,misstozero,list_val,ignoremiss,ignore
+auto_1,1,Price smaller than 10000,price<10000,1,1,5,,
+auto_2,1,rep78 not missing,rep78<.,,,,,
+auto_3,1,weight over length larger than 2,(weight/length)>2,,1,5,,
+auto_4,1,price greater than mean price by foreign,price>mpbyf,1,,5,1,
+,2,generating variable mean price by foreign,"egen mpbyf=mean(price),by(foreign)",,,,,
+auto_5,1,Dodge in make,"regexm(make,""Dodge"")",,,,,
