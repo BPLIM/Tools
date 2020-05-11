@@ -41,7 +41,13 @@ This package uses Python embedded code which is only available in Stata 16. Furt
 
 [1] These packages come pre-installed with Anaconda, so you probably will not need to use these two lines.
 
+## Updating
 
+Please make sure `bpstatuse` is always up to date with the latest version available. In order to do so, run the following command in Stata:
+
+```
+ado update bpstatuse, update
+```
 
 ## Author
 
