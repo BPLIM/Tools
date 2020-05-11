@@ -43,7 +43,7 @@ This package uses Python embedded code which is only available in Stata 16. Furt
 
 ## Updating
 
-Please make sure `bpstatuse` is always up to date with the latest version available. In order to do so, run the following command in Stata:
+Please make sure `bpstatuse` is always up to date with the latest available version. In order to do so, run the following command in Stata:
 
 ```
 ado update bpstatuse, update
