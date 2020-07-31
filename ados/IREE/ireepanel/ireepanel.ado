@@ -45,7 +45,7 @@ if ("`type'"!="wide" & "`type'"!="long") | `k'>1 {
 //confirm that the data being used is the original data provided by BPLIM
 local j = 0
 foreach l of local edition {
-	quietly use "`mpath'/IREE_A_WFRM_`l'_JUL20_V01.dta"
+	quietly use "`mpath'/IREE_A_WFRM_`l'_JUL20_V01.dta", clear
 	quietly datasignature report
 	local dtsig`l'="`r(origdatasignature)'"
 	
