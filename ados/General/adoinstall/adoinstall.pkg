@@ -1,0 +1,13 @@
+v 3
+
+d ADOINSTALL: installs Stata packages in a specified path
+d
+d Author: BPLIM Team. Banco de Portugal
+d Contact: bplim@bportugal.pt
+d
+d
+d Distribution-Date: 20200806
+d
+f adoinstall.ado
+f adoinstall.sthlp
+
