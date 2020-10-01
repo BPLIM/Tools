@@ -42,8 +42,8 @@ As a result of the function it is created a zip-file 'project_Arquivo.zip' which
  
 ### Example 
 
-To archieve the project 'p000_Teste' of the external server and save it in the 'Archieve' area of the internal server, you just need to execute the following line of the code: 
-`folder_archive("/bplimext/data/p000_Teste","p000_Teste","/bplimext/data/archieve")`
+To archieve the project 'p000_Teste' of the external server and save it in the 'archieve' area of the internal server, you just need to execute the following line of the code: 
+`folder_archive("/bplimext/data/p000_Teste","p000_Teste","/bplim/data/archieve")`
 
 ### Author
 
