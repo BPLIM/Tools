@@ -10,13 +10,13 @@ To use the R-Script `folder_archive.R` you only need to open it in R or [RStudio
 
 After reading the code you can use the function `folder_archive` with three parameters:
 
-- ##### input_path
+- #### input_path
   Path of folder to archive
   
-- ##### project
+- #### project
   The name you want to assign to the project to be archived. It can be the same or different from the original name of the project.
   
-- ##### output_path
+- #### output_path
   Path to the directory where you want to save the archive.
 
 ## Output 
