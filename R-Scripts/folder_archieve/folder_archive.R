@@ -1,6 +1,6 @@
 # folder contents & archive
-# Gustavo, Rita & Miguel
-# 24 Sept 2020
+# BPLIM Team
+# 1 Oct 2020
 
 folder_archive <- function(input_path,project,output_path){
   
