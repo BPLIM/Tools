@@ -48,7 +48,7 @@ if substr("`vtype'",1,3)=="str" {
 		
 		// first digit invalid
 		qui gen `nipcs'=string(`nipc'_n,"%9.0f")
-		qui replace `dum1'=1 if inlist(substr(`nipcs',1,1),"3","4","0")&`dum1'==0
+		qui replace `dum1'=1 if inlist(substr(`nipcs',1,1),"4","0")&`dum1'==0
 		
 		// check digit invalid
 		qui gen `checkd'=0
@@ -78,7 +78,7 @@ else {
 	
 	// first digit invalid
 	qui gen `nipcs'=string(`nipc',"%9.0f")
-	qui replace `dum1'=1 if inlist(substr(`nipcs',1,1),"3","4","0")&`dum1'==0
+	qui replace `dum1'=1 if inlist(substr(`nipcs',1,1),"4","0")&`dum1'==0
 	
 	// check digit invalid
 	qui gen `checkd'=0
