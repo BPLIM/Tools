@@ -97,7 +97,7 @@ else {
 
 qui rename `dum1' _valid
 capture label drop _nipcl
-label define _nipcl 0 "Valid" 1 "first digit invalid" 2 "less than 9 digits" 3 "check digit invalid" 4 "missing variable" 5 "non-numeric type" 
+label define _nipcl 0 "0 Valid" 1 "1 first digit invalid" 2 "2 less than 9 digits" 3 "3 check digit invalid" 4 "4 missing variable" 5 "5 non-numeric type" 
 label values _valid _nipcl
 label var _valid "nipc validity"
 tab _valid
