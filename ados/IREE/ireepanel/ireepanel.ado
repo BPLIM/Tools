@@ -1,4 +1,4 @@
-*! version 0.1 31July2020
+*! version 0.2 18December2020
 * Programmed by Marta Silva
 
 program define ireepanel
@@ -19,7 +19,7 @@ if (`a'==1 & "`edition'"!="all") {
 }
 
 if ("`edition'"=="all" | "`edition'"=="") {
-    local edition="152020 162020 172020 182020 192020 202020 212020 222020 232020"
+    local edition="152020 162020 172020 182020 192020 202020 212020 222020 232020 242020"
 }
 
 *mpath: save current working directory and use it as the default
@@ -41,66 +41,78 @@ if ("`type'"!="wide" & "`type'"!="long") | `k'>1 {
     error 198
 }
 
-
 //confirm that the data being used is the original data provided by BPLIM
 local j = 0
 foreach l of local edition {
-	quietly use "`mpath'/IREE_A_WFRM_`l'_JUL20_V01.dta", clear
+  if `l'==242020 {
+    quietly use "`mpath'/IREE_A_WFRM_`l'_NOV20_V01.dta", clear
+  }
+  else {
+    quietly use "`mpath'/IREE_A_WFRM_`l'_JUL20_V01.dta", clear
+  }
 	quietly datasignature report
 	local dtsig`l'="`r(origdatasignature)'"
-	
+
 	if "`l'"=="152020" & ("`dtsig`l''"!="5010:35(40664):1987644065:286474080" | substr("`r(fulldatasignature)'",1,7)!="5010:35" | "`r(varsadded)'"!="tina" | "`r(varsdropped)'"!="nipc") {
 		local ++j
 	}
-	
+
 	if "`l'"=="162020" & ("`dtsig`l''"!="5973:37(79181):3030940395:112268710" | substr("`r(fulldatasignature)'",1,7)!="5973:37" | "`r(varsadded)'"!="tina" | "`r(varsdropped)'"!="nipc") {
 		local ++j
-	} 
-	
+	}
+
 	if "`l'"=="172020" & ("`dtsig`l''"!="5928:37(79181):2118144523:3085521122" | substr("`r(fulldatasignature)'",1,7)!="5928:37"  | "`r(varsadded)'"!="tina" | "`r(varsdropped)'"!="nipc") {
 		local ++j
 	}
-	
+
 	if "`l'"=="182020" & ("`dtsig`l''"!="5571:38(70940):11244:4036597814" | substr("`r(fulldatasignature)'",1,7)!="5571:38" | "`r(varsadded)'"!="tina" | "`r(varsdropped)'"!="nipc") {
 		local ++j
 	}
-	
+
 	if "`l'"=="192020" & ("`dtsig`l''"!="5628:44(100625):4097690455:1176138779" | substr("`r(fulldatasignature)'",1,7)!="5628:44" | "`r(varsadded)'"!="tina" | "`r(varsdropped)'"!="nipc") {
 		local ++j
 	}
-	
+
 	if "`l'"=="202020" & ("`dtsig`l''"!="5424:44(100625):3415561870:7675238" | substr("`r(fulldatasignature)'",1,7)!="5424:44" | "`r(varsadded)'"!="tina" | "`r(varsdropped)'"!="nipc") {
 		local ++j
 	}
-	
+
 	if "`l'"=="212020" & ("`dtsig`l''"!="5785:43(20702):1021151493:1507219961" | substr("`r(fulldatasignature)'",1,7)!="5785:43" | "`r(varsadded)'"!="tina" | "`r(varsdropped)'"!="nipc") {
 		local ++j
 	}
-	
+
 	if "`l'"=="222020" & ("`dtsig`l''"!="4920:35(77759):2884475362:1885851377" | substr("`r(fulldatasignature)'",1,7)!="4920:35"| "`r(varsadded)'"!="tina" | "`r(varsdropped)'"!="nipc") {
 		local ++j
 	}
-	
+
 	if "`l'"=="232020" & ("`dtsig`l''"!="4850:35(58582):914013410:622325299" | substr("`r(fulldatasignature)'",1,7)!="4850:35" | "`r(varsadded)'"!="tina" | "`r(varsdropped)'"!="nipc") {
 		local ++j
-	}	
-}
+	}
+
+  if "`l'"=="242020" & ("`dtsig`l''"!="5837:51(59779):2200677971:2181079079" | substr("`r(fulldatasignature)'",1,7)!="5837:51" | "`r(varsadded)'"!="tina" | "`r(varsdropped)'"!="nipc") {
+    local ++j
+    }
 
 if `j'>0 {
 	di as error "`j' file(s) do not correspond to the original version provided by BPLIM. Please use the original files."
 	error 198
 }
-
+}
 
 di as text _newline "Starting to append the selected files..." _newline
 
 quietly {
 *Identify variables in a given edition to replace by .a
 foreach l of local edition {
-	use "`mpath'/IREE_A_WFRM_`l'_JUL20_V01.dta", clear
-    ds
+  if `l'==242020 {
+    use "`mpath'/IREE_A_WFRM_`l'_NOV20_V01.dta", clear
+  }
+  else {
+    use "`mpath'/IREE_A_WFRM_`l'_JUL20_V01.dta", clear
+  }
+  ds
 	local var_count: word count `r(varlist)'
-	clear 
+	clear
 	set obs `var_count'
 	gen COD = ""
 	local i = 1
@@ -108,7 +120,7 @@ foreach l of local edition {
 		replace COD = "`var'" in `i'
 		local ++i
 	}
-    gen period=real(substr("`l'",1,2))
+  gen period=real(substr("`l'",1,2))
 	capture cd `dir'
 	tempfile edt`l'
 	save `edt`l'', replace
@@ -131,7 +143,12 @@ foreach v of local dta {
 	keep if period==`v'
 	levelsof COD, local(vars`v')
 	local vars_`v'=subinstr(`vars`v'',char(34),"",.)
-	use "`mpath'/IREE_A_WFRM_`v'2020_JUL20_V01.dta", clear
+  if `v'==24 {
+    use "`mpath'/IREE_A_WFRM_`v'2020_NOV20_V01.dta", clear
+  }
+  else {
+    use "`mpath'/IREE_A_WFRM_`v'2020_JUL20_V01.dta", clear
+  }
 	capture cd `dir'
 	label language pt
 	tempname temp`v'_pt
@@ -145,7 +162,12 @@ clear
 
 *append selected data
 foreach l of local edition {
-   append using "`mpath'/IREE_A_WFRM_`l'_JUL20_V01.dta"
+  if `l'<=232020 {
+    append using "`mpath'/IREE_A_WFRM_`l'_JUL20_V01.dta"
+  }
+  if `l'==242020 {
+    append using "`mpath'/IREE_A_WFRM_`l'_NOV20_V01.dta"
+  }
 }
 
 unab varlist: _all
@@ -255,6 +277,49 @@ capture label variable V10110 "Como estima que teria variado o NPS sem recurso a
 capture label variable V10120 "Estimativa para a diminuição do NPS sem recurso ao layoff simplificado"
 capture label variable V11110 "Opção que pretende seguir em Agosto face às alterações layoff simplificado"
 capture label variable V12010 "Expectativa para a evolução dos postos de trabalho até ao final do ano"
+capture label variable V1001 "Impacto das novas medidas de contenção anunciadas no volume de negócios"
+capture label variable V1002 "Impacto das variações nas encomendas/clientes no volume de negócios"
+capture label variable V1003 "Impacto das alterações na cadeia de fornecimentos no volume de negócios"
+capture label variable V1004 "Impacto das variações no pessoal ao serviço da empresa no volume de negócios"
+capture label variable V2000 "Evolução do ambiente concorrencial no mercado onde opera"
+capture label variable V3001 "Alterou ou tenciona alterar as cadeias de fornecimento"
+capture label variable V3002 "Aumentou ou tenciona aumentar os stocks de produtos necessários à atividade"
+capture label variable V3003 "Diminuiu ou tenciona diminuir os stocks de produtos necessários à atividade"
+capture label variable V3004 "Redirecionou ou tenciona redirecionar os mercados alvo"
+capture label variable V3005 "Alterou ou tenciona alterar a gama de produtos vendidos/serviços prestados"
+capture label variable V4001 "Importância do apoio à retoma progressiva/layoff simplificado para a liquidez"
+capture label variable V4002 "Importância incentivo extraordinário normalização ativid. econ. p/liquidez"
+capture label variable V4003 "Importância da moratória ao pagamento de juros e capital para a liquidez"
+capture label variable V4004 "Importância acesso a créditos c/ juros bonificados/garantias Estado p/liquidez"
+capture label variable V4005 "Importância suspensão pagamento obrigações fiscais/contributivas p/ liquidez"
+capture label variable V5001 "Expectativa para o número de postos de trabalho no final de 2020"
+capture label variable V5002 "Expectativa para o número de postos de trabalho no final de 2021"
+capture label variable V5005 "Estimativa para a redução dos postos de trabalho no final de 2020"
+capture label variable V5006 "Estimativa para a o aumento dos postos de trabalho no final de 2020"
+capture label variable V6001 "Implementação permanente do uso mais intensivo do teletrabalho"
+capture label variable V6002 "Implementação permanente de horários de trabalho mais flexíveis"
+capture label variable V6003 "Implementação permanente da reorganização das equipas de trabalho"
+capture label variable V6004 "Diminuição permanente do número de viagens de negócios"
+capture label variable V7000 "Tenciona concorrer aos fundos associados ao Plano de Recuperação e Resiliência"
+capture label variable V7001 "Aplicação dos fundos na digitalização dos processos produtivos"
+capture label variable V7002 "Aplicação dos fundos na capacitação dos trabalhadores para a digitalização"
+capture label variable V7003 "Aplicação dos fundos na redução das emissões/aumento da eficiência energética"
+capture label variable V7004 "Aplicação dos fundos em investigação e desenvolvimento"
+capture label variable V7005 "Aplicação dos fundos na capitalização da empresa e resiliência financeira"
+capture label variable V7006 "Aplicação dos fundos do Plano de Recuperação e Resiliência noutra área"
+capture label variable V8001 "Preocupação com agravamento adicional ou prolongamento das medidas contenção"
+capture label variable V8002 "Preocupação com redução de procura mesmo com controlo situação sanitária"
+capture label variable V8003 "Preocupação com o fim das medidas excecionais de apoio às empresas em 2021"
+capture label variable V8004 "Preocupação com evolução adversa da situação de liquidez/ financeira"
+capture label variable V8005 "Preocupação c/ desenvolv. internacionais desfavoráveis p/ cadeias de fornec."
+capture label variable V9000 "Tempo estimado de subsistência da empresa"
+capture label variable V9001 "Número de meses que a empresa conseguirá subsistir"
+capture label variable V10001 "Importância do layoff simplificado"
+capture label variable V10002 "Importância da moratória ao pagamento de juros/capital de créditos existentes"
+capture label variable V10003 "Importância do acesso novos créditos c/ juros bonificados ou garantias Estado"
+capture label variable V10004 "Importância da suspensão do pagamento de obrigações fiscais e contributivas"
+capture label variable V11000 "Tempo estimado para que a atividade da empresa volte ao normal"
+capture label variable V11001 "Número de meses para que a atividade da empresa volte ao normal"
 capture label variable AGDIM "Dimensão da empresa (com dados da amostra)"
 capture label variable AGCAE "Setores de atividade económica (com dados da amostra)"
 capture label variable P_EXPORT "Perfil exportador"
@@ -341,7 +406,49 @@ capture label variable V10110 "How would the number of employees have changed wi
 capture label variable V10120 "Estimate for the decrease in the NPS without the use of the simplified layoff"
 capture label variable V11110 "Option to take in August given the changes to the simplified layoff measure"
 capture label variable V12010 "Expected change in the number of jobs until the end of the year"
-
+capture label variable V1001 "Impact of the new containment measures announced on turnover"
+capture label variable V1002 "Impact of the variations in orders/customers on turnover"
+capture label variable V1003 "Impact of the changes in the supply chain on turnover"
+capture label variable V1004 "Impact of the variations in persons employed by the enterprise on turnover"
+capture label variable V2000 "Evolution of the competitive environment in the market where the firm operates"
+capture label variable V3001 "Changed or intends to change supply chains"
+capture label variable V3002 "Increased or intends to increase the stocks of products needed for the activity"
+capture label variable V3003 "Decreased or intends to decrease the stocks of products needed for the activity"
+capture label variable V3004 "Redirected or intends to redirect target markets"
+capture label variable V3005 "Changed or intends to change the range of products sold/services provided"
+capture label variable V4001 "Relevance of the support for progressive resumption/simplified layoff for liquidity"
+capture label variable V4002 "Relevance of the extraordinary incentive to normalize econ. activity for liquidity"
+capture label variable V4003 "Relevance of the moratorium on payment of interest and capital for liquidity"
+capture label variable V4004 "Relevance of new loans with low-interest or State guarantees for liquidity"
+capture label variable V4005 "Relevance of the suspension of tax and contributory obligations for liquidity"
+capture label variable V5001 "Expectation for the number of jobs in the enterprise at the end of 2020"
+capture label variable V5002 "Expectation for the number of jobs in the enterprise at the end of 2021"
+capture label variable V5005 "Estimate for the reduction of jobs in the enterprise at the end of 2020"
+capture label variable V5006 "Estimate for the increase of jobs in the enterprise at the end of 2020"
+capture label variable V6001 "Permanent implementation of the more intensive use of remote working"
+capture label variable V6002 "Permanent implementation of more flexible working hours"
+capture label variable V6003 "Permanent implementation of the reorganization of work teams"
+capture label variable V6004 "Permanent decrease in the number of business trips"
+capture label variable V7000 "Do you intend to compete for funds of the Recovery and Resilience Plan?"
+capture label variable V7001 "Intention to invest the funds in the digitization of production processes"
+capture label variable V7002 "Intention to invest the funds in the training of workers for digitization"
+capture label variable V7003 "Intention to invest the funds in reducing emissions/increasing energy efficiency"
+capture label variable V7004 "Intention to invest the funds in research and development"
+capture label variable V7005 "Intention to invest the funds in company capitalization and financial resilience"
+capture label variable V7006 "Intention to invest the funds of the Recovery and Resilience Plan in other area"
+capture label variable V8001 "Concern about the worsening/prolongation of the pandemic containment measures"
+capture label variable V8002 "Concern about the demand reduction even with the control of the health situation"
+capture label variable V8003 "Concern about the end of exceptional business support measures in 2021"
+capture label variable V8004 "Concern about the adverse evolution of the firm's liquidity/financial situation"
+capture label variable V8005 "Concern about unfavorable international developments with impact on supply chains"
+capture label variable V9000 "How long do you estimate the enterprise will be able to survive?"
+capture label variable V9001 "Number of months that the enterprise will be able to survive"
+capture label variable V10001 "Importance of the simplified layoff"
+capture label variable V10002 "Importance of the moratorium on payment of interest/capital on existing credits"
+capture label variable V10003 "Importance of the access to new loans with low-interest or State guarantees"
+capture label variable V10004 "Importance of the suspension of payment of tax and contributory obligations"
+capture label variable V11000 "How long do you expect the activity of the enterprise to return to normal? "
+capture label variable V11001 "Number of months needed for the firm's activity to return to normal"
 
 capture label language pt
 }
@@ -350,7 +457,11 @@ capture label language pt
 *Display warning message when appending weekly data with fortnightly data
 quietly sum p_infra_cod
 if (`r(min)'<19 & `r(max)'>=19) {
-	di in red _newline  "NOTICE: The reference period changes from a week to a fortnight from Edition 19 onwards" _newline 
+	di in red _newline  "NOTICE: The reference period changes from a week to a fortnight from Edition 19 to Edition 23" _newline
+}
+
+if (`r(min)'<24 & `r(max)'>=24) {
+	di in red _newline  "NOTICE: The reference period changes to a month in Edition 24" _newline
 }
 
 *save files
@@ -360,10 +471,10 @@ if "`type'"=="long" {
         quietly compress
         aorder
         order tina p_infra_cod
-		
+
 		capture cd `dir'
 		quietly save "`save'", replace
-		
+
 		di as text _newline "File `save' was saved in the `type' format. To display labels in English please type: label language en" _newline
 		tab p_infra_cod, miss
 	}
@@ -380,16 +491,16 @@ if "`type'"=="wide" {
 	local varlistf : list varlistf - exclude
 
 	greshape wide `varlistf', i(tina) keys(p_infra_cod)
-	
+
 	sort tina
-	
+
 	if "`save'"!="" {
         quietly compress
         order tina
-		
+
 		capture cd `dir'
 		quietly save "`save'", replace
-		
+
 		di as text _newline "File `save' was saved in the `type' format. To display labels in English please type: label language en" _newline
 	}
 	else {
