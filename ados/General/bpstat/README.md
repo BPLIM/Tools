@@ -46,7 +46,7 @@ This package uses Python embedded code which is only available in Stata 16. Furt
 Please make sure `bpstat` is always up to date with the latest available version. In order to do so, run the following command in Stata:
 
 ```
-ado update bpstat, update
+net install bpstat, from("https://github.com/BPLIM/Tools/raw/master/ados/General/bpstat/") replace
 ```
 
 ## Author
