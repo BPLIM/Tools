@@ -272,8 +272,8 @@ if "`getlevels'" != "" {
 		get_div3 `varlist', file(`temp') levels(`levels') `keep' `en' `force'
 	}
 	
-	if "`keep'" == "keep" & inlist(`rev', 2, 21, 3){
-		qui replace _cae_str = "0" + _cae_str if inlist(_valid_cae_`rev', 2, 20, 200, 2000)
+	if "`keep'" != "keep" {
+		cap drop _cae_str
 	}
 }
 else {
