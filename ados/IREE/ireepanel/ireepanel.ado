@@ -1,4 +1,4 @@
-*! version 0.2 18December2020
+*! version 0.3 12April2021
 * Programmed by Marta Silva
 
 program define ireepanel
@@ -8,6 +8,7 @@ EDITION(string) /// chose the editions to be added (152020,162020,...)
 TYPE(string) /// it may be long or wide
 SAVE(string)  ///name of the dataset to save
 MPATH(string) ///main path where the data is stored
+RECODEP ///option to recode p_infra_cod (yyyyww)
 ]
 
 //define options and error messages
@@ -19,7 +20,7 @@ if (`a'==1 & "`edition'"!="all") {
 }
 
 if ("`edition'"=="all" | "`edition'"=="") {
-    local edition="152020 162020 172020 182020 192020 202020 212020 222020 232020 242020"
+    local edition="152020 162020 172020 182020 192020 202020 212020 222020 232020 242020 012021"
 }
 
 *mpath: save current working directory and use it as the default
@@ -44,10 +45,13 @@ if ("`type'"!="wide" & "`type'"!="long") | `k'>1 {
 //confirm that the data being used is the original data provided by BPLIM
 local j = 0
 foreach l of local edition {
-  if `l'==242020 {
+  if "`l'"=="012021" {
+    quietly use "`mpath'/IREE_A_WFRM_`l'_APR21_V01.dta", clear
+  }
+  if "`l'"=="242020" {
     quietly use "`mpath'/IREE_A_WFRM_`l'_NOV20_V01.dta", clear
   }
-  else {
+  if ("`l'"!="012021" & "`l'"!="242020") {
     quietly use "`mpath'/IREE_A_WFRM_`l'_JUL20_V01.dta", clear
   }
 	quietly datasignature report
@@ -89,7 +93,11 @@ foreach l of local edition {
 		local ++j
 	}
 
-  if "`l'"=="242020" & ("`dtsig`l''"!="5837:51(59779):2200677971:2181079079" | substr("`r(fulldatasignature)'",1,7)!="5837:51" | "`r(varsadded)'"!="tina" | "`r(varsdropped)'"!="nipc") {
+    if "`l'"=="242020" & ("`dtsig`l''"!="5837:51(59779):2200677971:2181079079" | substr("`r(fulldatasignature)'",1,7)!="5837:51" | "`r(varsadded)'"!="tina" | "`r(varsdropped)'"!="nipc") {
+    local ++j
+    }
+
+    if "`l'"=="012021" & ("`dtsig`l''"!="5511:43(33934):534505708:2982086386" | substr("`r(fulldatasignature)'",1,7)!="5511:43" | "`r(varsadded)'"!="tina" | "`r(varsdropped)'"!="nipc") {
     local ++j
     }
 
@@ -104,13 +112,17 @@ di as text _newline "Starting to append the selected files..." _newline
 quietly {
 *Identify variables in a given edition to replace by .a
 foreach l of local edition {
-  if `l'==242020 {
-    use "`mpath'/IREE_A_WFRM_`l'_NOV20_V01.dta", clear
-  }
-  else {
-    use "`mpath'/IREE_A_WFRM_`l'_JUL20_V01.dta", clear
-  }
-  ds
+    if "`l'"=="012021" {
+        quietly use "`mpath'/IREE_A_WFRM_`l'_APR21_V01.dta", clear
+    }
+    if "`l'"=="242020" {
+        quietly use "`mpath'/IREE_A_WFRM_`l'_NOV20_V01.dta", clear
+    }
+    if ("`l'"!="012021" & "`l'"!="242020") {
+        quietly use "`mpath'/IREE_A_WFRM_`l'_JUL20_V01.dta", clear
+    }
+
+    ds
 	local var_count: word count `r(varlist)'
 	clear
 	set obs `var_count'
@@ -120,7 +132,7 @@ foreach l of local edition {
 		replace COD = "`var'" in `i'
 		local ++i
 	}
-  gen period=real(substr("`l'",1,2))
+    gen period=real(substr("`l'",1,2))
 	capture cd `dir'
 	tempfile edt`l'
 	save `edt`l'', replace
@@ -143,12 +155,16 @@ foreach v of local dta {
 	keep if period==`v'
 	levelsof COD, local(vars`v')
 	local vars_`v'=subinstr(`vars`v'',char(34),"",.)
-  if `v'==24 {
-    use "`mpath'/IREE_A_WFRM_`v'2020_NOV20_V01.dta", clear
-  }
-  else {
-    use "`mpath'/IREE_A_WFRM_`v'2020_JUL20_V01.dta", clear
-  }
+    if `v'==1 {
+        local v="01"
+        use "`mpath'/IREE_A_WFRM_`v'2021_APR21_V01.dta", clear
+    }
+    if "`v'"=="24" {
+        use "`mpath'/IREE_A_WFRM_`v'2020_NOV20_V01.dta", clear
+    }
+    if ("`v'"!="01" & "`v'"!="24") {
+        use "`mpath'/IREE_A_WFRM_`v'2020_JUL20_V01.dta", clear
+    }
 	capture cd `dir'
 	label language pt
 	tempname temp`v'_pt
@@ -162,12 +178,15 @@ clear
 
 *append selected data
 foreach l of local edition {
-  if `l'<=232020 {
-    append using "`mpath'/IREE_A_WFRM_`l'_JUL20_V01.dta"
-  }
-  if `l'==242020 {
-    append using "`mpath'/IREE_A_WFRM_`l'_NOV20_V01.dta"
-  }
+    if ("`l'"!="242020" & "`l'"!="012021") {
+        append using "`mpath'/IREE_A_WFRM_`l'_JUL20_V01.dta"
+    }
+    if "`l'"=="242020" {
+        append using "`mpath'/IREE_A_WFRM_`l'_NOV20_V01.dta"
+    }
+    if "`l'"=="012021" {
+        append using "`mpath'/IREE_A_WFRM_`l'_APR21_V01.dta"
+    }
 }
 
 unab varlist: _all
@@ -188,6 +207,9 @@ foreach l of local edition {
 
 *Apply value labels
 foreach v of local dta {
+  if `v'==1 {
+    local v="01"
+  }
     capture cd `dir'
     label language pt
 	do `temp`v'_pt'
@@ -207,7 +229,7 @@ capture label variable tina "Número de Identificação Fiscal Anonimizado"
 capture label variable BC015 "Ocorreu facto relevante"
 capture label variable BC020 "Data associada ao facto relevante"
 capture label variable V1010 "Situação que melhor descreve a empresa"
-capture label variable V2010 "Impacto do COVID-19 no volume de negócios"
+capture label variable V2010 "Impacto da COVID-19 no volume de negócios"
 capture label variable V2A10 "Diversificação/modificação da produção devido à pandemia COVID"
 capture label variable V2A20 "Alteração/reforço canais de distribuição (online, takeaway…) devido COVID"
 capture label variable V2110 "Estimativa para a redução no volume de negócios da empresa"
@@ -234,7 +256,7 @@ capture label variable V6010 "Utilização da moratória ao pagamento de juros e
 capture label variable V6020 "Utilização de novos créditos com juros bonificados ou garantias do Estado"
 capture label variable V6030 "Utilização da suspensão do pagamento de obrigações fiscais e contributivas"
 capture label variable V6040 "Utilização de outras medidas apresentadas pelo Governo devido à COVID-19"
-capture label variable V7010 "Tempo de permanência em atividade sem medidas adicionais de apoio à liquidez"
+capture label variable V7010 "Tempo de permanência em atividade sem medidas adicionais de apoio"
 capture label variable V8010 "Devido ao COVID-19, aumentou o recurso ao crédito bancário ou de outro tipo?"
 capture label variable V8110 "Condições em que empresa acedeu ao crédito de instituições financeiras"
 capture label variable V8120 "Condições em que empresa acedeu ao crédito de fornecedores"
@@ -320,6 +342,30 @@ capture label variable V10003 "Importância do acesso novos créditos c/ juros b
 capture label variable V10004 "Importância da suspensão do pagamento de obrigações fiscais e contributivas"
 capture label variable V11000 "Tempo estimado para que a atividade da empresa volte ao normal"
 capture label variable V11001 "Número de meses para que a atividade da empresa volte ao normal"
+capture label variable V3010 "Nível do volume de negócios em comparação com o do 1º confinamento"
+capture label variable V3050 "VVN acima: medidas de contenção têm menor impacto directo sobre a atividade"
+capture label variable V3060 "VVN acima: nível atual de encomendas/clientes é superior"
+capture label variable V3070 "VVN acima: perturbações na cadeia de fornecimentos são menores"
+capture label variable V3080 "VVN acima: empresa adoptou estratégias de adaptação à situação pandémica"
+capture label variable V3090 "VVN acima: impacto negativo no pessoal efetivamente a trabalhar é menor"
+capture label variable V3150 "VVN abaixo: medidas de contenção têm maior impacto directo sobre a atividade"
+capture label variable V3160 "VVN abaixo: nível atual de encomendas/clientes é menor"
+capture label variable V3170 "VVN abaixo: perturbações na cadeia de fornecimentos são maiores"
+capture label variable V3180 "VVN abaixo: a empresa reduziu a capacidade produtiva/redimensionou a atividade"
+capture label variable V3190 "VVN abaixo: impacto negativo no pessoal efetivamente a trabalhar é maior"
+capture label variable V4050 "Volume de negócios gerado via canais alternativos de contacto"
+capture label variable V4060 "% de volume de negócios via canais alternativos antes da pandemia"
+capture label variable V4070 "% de volume de negócios via canais alternativos atualmente"
+capture label variable V8050 "% de pessoas ao serviço em teletrabalho em comparação com o 1º confinamento"
+capture label variable V9040 "Importância do layoff simplificado para a liquidez"
+capture label variable V9050 "Importância Apoio à retoma progressiva/Apoio simplificado para Microempresas"
+capture label variable V9060 "Importância da moratória ao pagamento de juros e capital para a liquidez"
+capture label variable V9070 "Importância Programa Apoiar: Apoiar.pt, Apoiar restauração e Apoiar + simples"
+capture label variable V9080 "Importância do Programa Apoiar: Rendas"
+capture label variable V9090 "Importância do acesso novos créditos c/ juros bonificados ou garantias Estado"
+capture label variable V10000 "% trabalhadores que se encontram atualmente em layoff/apoio à retoma progressiva"
+capture label variable V11080 "% pessoas em layoff/apoio retoma progressiva em comparação c/ 1º confinamento"
+capture label variable V13000 "A empresa ainda se encontraria em atividade na ausência das medidas de apoio?"
 capture label variable AGDIM "Dimensão da empresa (com dados da amostra)"
 capture label variable AGCAE "Setores de atividade económica (com dados da amostra)"
 capture label variable P_EXPORT "Perfil exportador"
@@ -360,7 +406,7 @@ capture label variable V6010 "Use of the moratorium for the payment of interests
 capture label variable V6020 "Use of the access to new loans with low-interest or State guarantees"
 capture label variable V6030 "Use of the suspension of the payment of tax and contributory obligations"
 capture label variable V6040 "Use of other measures presented by the Government due to COVID-19"
-capture label variable V7010 "How long can remain in activity without additional liquidity support measures"
+capture label variable V7010 "How long can remain in activity without additional support measures"
 capture label variable V8010 "Did the firm recourse to additional credit due to the COVID-19 pandemic?"
 capture label variable V8110 "Conditions of the financial institutions credit"
 capture label variable V8120 "Conditions of the supplier credit"
@@ -449,20 +495,65 @@ capture label variable V10003 "Importance of the access to new loans with low-in
 capture label variable V10004 "Importance of the suspension of payment of tax and contributory obligations"
 capture label variable V11000 "How long do you expect the activity of the enterprise to return to normal? "
 capture label variable V11001 "Number of months needed for the firm's activity to return to normal"
+capture label variable V3010 "Level of turnover in comparison with that of the first lockdown"
+capture label variable V3050 "Turnover above: containment measures have a less direct impact on the activity"
+capture label variable V3060 "Turnover above: the current level of orders/customers is higher"
+capture label variable V3070 "Turnover above: supply chain disruptions are less"
+capture label variable V3080 "Turnover above: enterprise adopted strategies to adapt to the pandemic situation"
+capture label variable V3090 "Turnover above: negative impact on persons employed effectively working is less"
+capture label variable V3150 "Turnover below: containment measures have greater direct impact on the activity"
+capture label variable V3160 "Turnover below: current level of orders/customers is lower"
+capture label variable V3170 "Turnover below: supply chain disruptions are greater"
+capture label variable V3180 "Turnover below: enterprise reduced its production capacity/resized the activity"
+capture label variable V3190 "Turnover below: greater negative impact on persons employed effectively working"
+capture label variable V4050 "Turnover generated via alternative channels of contact with customers"
+capture label variable V4060 "% of turnover generated via alternative channels of contact before the pandemic"
+capture label variable V4070 "% of turnover currently generated via alternative channels of contact"
+capture label variable V8050 "% of persons employed in remote working compared to the 1st lockdown"
+capture label variable V9040 "Importance of the simplified layoff for liquidity"
+capture label variable V9050 "Importance of the support to progressive recovery/support for micro-enterprises"
+capture label variable V9060 "Importance of moratorium for interests/principal payment on loans for liquidity"
+capture label variable V9070 "Importance of Apoiar.pt, Support food services and Support + simple"
+capture label variable V9080 "Importance of the Support Program: Rents"
+capture label variable V9090 "Importance of the access to new loans with low-interest or State guarantees"
+capture label variable V10000 "% workers currently in layoff/support to the progressive recovery"
+capture label variable V11080 "% persons in layoff/support for progressive recovery compared to the 1st lockdown"
+capture label variable V13000 "Would the enterprise still be in activity in the absence of the support measures?"
 
 capture label language pt
+
+
+//recode the edition number
+if "`recodep'"!="" {
+    label drop p_infra_cod_PT
+    label drop p_infra_cod_EN
+    foreach l of local edition {
+        replace p_infra_cod=real(substr("`l'",3,.)+substr("`l'",1,2)) if p_infra_cod==real(substr("`l'",1,2))
+  }
+
+    label language pt
+    label define p_infra_cod_PT 202015 "202015 Semana 6 Abril 2020" 202016 "202016 Semana 13 de Abril 2020" 202017 "202017 Semana 20 de Abril 2020" ///
+    202018 "202018 Semana 27 de Abril 2020" 202019 "202019 1ª Quinzena de Maio 2020" 202020 "202020 2ª Quinzena de Maio 2020" ///
+    202021 "202021 1ª Quinzena de Junho 2020" 202022 "202022 2ª Quinzena de Junho 2020" 202023 "202023 1ª Quinzena de Julho 2020" ///
+    202024 "202024 Novembro 2020" 202101 "202101 1ª quinzena de Fevereiro 2021"
+    label values p_infra_cod p_infra_cod_PT
+
+    label language en
+    label define p_infra_cod_EN 202015 "202015 Week of April 6 2020" 202016 "202016 Week of April 13 2020" 202017 "202017 Week of April 20 2020" ///
+    202018 "202018 Week of April 27 2020" 202019 "202019 1st fortnight of May 2020" 202020 "202020 2nd fortnight of May 2020" ///
+    202021 "202021 1st fortnight of June 2020" 202022 "202022 2nd fortnight of June 2020" 202023 "202023 1st fortnight of July 2020" ///
+    202024 "202024 November 2020" 202101 "202101 1st fortnight of February 2021"
+    label values p_infra_cod p_infra_cod_EN
+    capture label language pt
+    
+    noisily di as text _newline "p_infra_cod recoded: yyyyww" _newline
+}
 }
 
 
 *Display warning message when appending weekly data with fortnightly data
-quietly sum p_infra_cod
-if (`r(min)'<19 & `r(max)'>=19) {
-	di in red _newline  "NOTICE: The reference period changes from a week to a fortnight from Edition 19 to Edition 23" _newline
-}
+di in red _newline  "NOTICE: Data comparability may be affected by the change in the reference period: the data refers to a week between Edition 152020 and Edition 182020, to a fortnight from Edition 192020 to 232020 and in Edition 012021, and to a month in Edition 242020." _newline
 
-if (`r(min)'<24 & `r(max)'>=24) {
-	di in red _newline  "NOTICE: The reference period changes to a month in Edition 24" _newline
-}
 
 *save files
 if "`type'"=="long" {
