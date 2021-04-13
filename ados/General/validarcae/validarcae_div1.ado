@@ -20,14 +20,14 @@ forvalues j= 1/6 {
 		quietly count 
 		local total = r(N)
 		if "`en'" == "en" {
-			label define divlabel1`j' -99 "Unsuccessful conversion", add modify
-			label define divlabel21`j' -98 "Ambiguous validation, not able to convert", ///
+			label define divlabel1`j' -99 "Invalid code", add modify 
+			label define divlabel1`j' -98 "Ambiguous validation, not able to convert", ///
 				add modify 
 		}
 		else {
-			label define divlabel1`j' -99 "Conversão indisponível", add modify
-			label define divlabel21`j' -98 "Validação ambígua, código não convertido", ///
-				add modify
+			label define divlabel1`j' -99 "Código inválido", add modify 
+			label define divlabel1`j' -98 "Validação ambígua, código não convertido", ///
+				add modify 		
 		}
 		forvalues i = 1/`total' {
 			local value = _cae_num[`i']

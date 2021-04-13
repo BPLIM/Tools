@@ -25,12 +25,12 @@ forvalues j= 2/5 {
 		quietly count 
 		local total = r(N)
 		if "`en'" == "en" {
-			label define divlabel3`j' -99 "Unsuccessful conversion", add modify 
+			label define divlabel3`j' -99 "Invalid code", add modify 
 			label define divlabel3`j' -98 "Ambiguous validation, not able to convert", ///
 				add modify 
 		}
 		else {
-			label define divlabel3`j' -99 "Conversão indisponível", add modify 
+			label define divlabel3`j' -99 "Código inválido", add modify 
 			label define divlabel3`j' -98 "Validação ambígua, código não convertido", ///
 				add modify 		
 		}
