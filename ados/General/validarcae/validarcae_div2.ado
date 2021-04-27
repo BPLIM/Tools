@@ -53,7 +53,19 @@ local zero_dropped = _rc
 
 
 if "`_solv'" != "_solv" {
-	qui replace _cae_str = "0" + _cae_str if inlist(_valid_cae_3, 2, 20, 200, 2000)
+	qui replace _cae_str = "0" + _cae_str if ///
+		inlist(_valid_cae_2, 2, 20, 200, 2000)
+}
+else {
+    cap confirm var _solved
+	if _rc {
+	    qui replace _cae_str = "0" + _cae_str if ///
+			inlist(_valid_cae_2, 2, 20, 200, 2000)
+	}
+	else {
+	    qui replace _cae_str = "0" + _cae_str if ///
+			inlist(_valid_cae_2, 2, 20, 200, 2000) & _solved != 1
+	}
 }
 
 /*

@@ -1,14 +1,17 @@
 * Dependencies: ustrdist
 
-program define validarcae_solve
+program define validarcae_solve, sortpreserve
 
 syntax varname [if], vardesc(string) file(string) vars(string) [th(real 0.5)]
 
 
 local ifnot = "!(" + trim(substr(trim("`if'"), 3, .)) + ")"
 
-tempvar vardec code desc code0 des des0 _merge d d0 pdis len0 len1 len dis
+tempvar vardec code desc code0 des des0 _merge d d0 pdis len0 len1 len dis nn
 tempfile tempf
+quietly {
+	bysort `varlist' `vardesc': gen `nn' = _n
+}
 
 cap drop _sug_code
 cap drop _solved
@@ -43,8 +46,13 @@ qui merge m:1 `code0' using `tempf', gen(`_merge')
 qui drop if `_merge' == 2
 drop `_merge'
 
-ustrdist `desc' `des', gen(`d')
-ustrdist `desc' `des0', gen(`d0')
+quietly {
+	ustrdist `desc' `des' `if' & `nn' == 1, gen(`d')
+	bysort `varlist' `vardesc' (`d'): replace `d' = `d'[1]
+	ustrdist `desc' `des0' `if' & `nn' == 1, gen(`d0')
+	bysort `varlist' `vardesc' (`d0'): replace `d0' = `d0'[1]
+}
+drop `nn'
 
 * Keep the best match
 qui replace `code' = cond(`d' < `d0', `code', `code0')

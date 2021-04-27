@@ -1,4 +1,4 @@
-*! 0.7 9Apr2021
+*! 0.7 27Apr2021
 * Programmed by Gustavo Iglésias
 * Dependencies: 
 * savesome (version 1.1.0 23feb2015)
@@ -77,7 +77,7 @@ if "`fromlabel'" == "fromlabel" {
 	local lencount: word count `lenlevels'
 	if `lencount' > 1 {
 		di as error "Warning: codes retrieved from label do not have the same" ///
-			"length for every observation" _n
+			" length for every observation" _n
 		tab `decode_len'
 		di _n
 	}
@@ -247,9 +247,16 @@ else {
 	}
 	
 	if trim("`solvevar'") != "" {
-	    solve_valid _cae_str if inlist(_valid_cae_`rev', 30, 300, 3000), ///
-			solvevar(`solvevar') valid(_valid_cae_`rev') th(`solveth')  ///
-			`eng' file(`temp')
+		qui count if inlist(_valid_cae_`rev', 30, 300, 3000)
+		if `r(N)' {
+			solve_valid _cae_str if inlist(_valid_cae_`rev', 30, 300, 3000), ///
+				solvevar(`solvevar') valid(_valid_cae_`rev') th(`solveth')  ///
+				`eng' file(`temp')			
+		}
+		else {
+			di
+			di "No ambiguities to solve"
+		}
 	} 
 }
 
@@ -338,8 +345,15 @@ else {
 					inlist(_valid_cae_`rev', 2, 20, 200, 2000)
 			}
 			else {
-				qui replace _cae_str = "0" + _cae_str if ///
-					inlist(_valid_cae_`rev', 2, 20, 200, 2000) & _solved != 1			    
+				cap confirm var _solved 
+				if _rc {
+					qui replace _cae_str = "0" + _cae_str if ///
+						inlist(_valid_cae_`rev', 2, 20, 200, 2000)				
+				}
+				else {
+					qui replace _cae_str = "0" + _cae_str if ///
+						inlist(_valid_cae_`rev', 2, 20, 200, 2000) & _solved != 1
+				}
 			}
 		}	
 	}
