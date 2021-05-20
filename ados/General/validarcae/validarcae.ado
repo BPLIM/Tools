@@ -1,4 +1,4 @@
-*! 0.7 27Apr2021
+*! 0.7 20May2021
 * Programmed by Gustavo Iglésias
 * Dependencies: 
 * savesome (version 1.1.0 23feb2015)
@@ -16,6 +16,7 @@ if ("`solve'" != "") {
 	local solveth `r(solveth)'
 	local _solved "`r(_solved)'"
 	local eng "`r(eng)'"
+	confirm string var `solvevar'
 }
 
 cap which savesome 
