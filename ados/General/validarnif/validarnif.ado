@@ -1,5 +1,6 @@
-*! version 1.0 27Jun2016
+*! version 1.1 15Jul2021
 * Programmed by Paulo Guimarães
+* Changed by Gustavo Iglésias (starting digits 45 valid)
 
 program define validarnif
 * Programmed by Paulo Guimarães
@@ -48,7 +49,10 @@ if substr("`vtype'",1,3)=="str" {
 		
 		// first digit invalid
 		qui gen `nipcs'=string(`nipc'_n,"%9.0f")
-		qui replace `dum1'=1 if inlist(substr(`nipcs',1,1),"4","0")&`dum1'==0
+		qui replace `dum1'=1 if substr(`nipcs',1,1) == "0" & `dum1'==0
+		qui replace `dum1'=1 if substr(`nipcs',1,1) == "4" ///
+			& substr(`nipcs',2,1) != "5" & `dum1'==0
+			
 		
 		// check digit invalid
 		qui gen `checkd'=0
@@ -78,7 +82,9 @@ else {
 	
 	// first digit invalid
 	qui gen `nipcs'=string(`nipc',"%9.0f")
-	qui replace `dum1'=1 if inlist(substr(`nipcs',1,1),"4","0")&`dum1'==0
+	qui replace `dum1'=1 if substr(`nipcs',1,1) == "0" & `dum1'==0
+	qui replace `dum1'=1 if substr(`nipcs',1,1) == "4" ///
+		& substr(`nipcs',2,1) != "5" & `dum1'==0
 	
 	// check digit invalid
 	qui gen `checkd'=0
