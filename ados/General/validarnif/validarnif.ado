@@ -1,4 +1,4 @@
-*! version 1.1 15Jul2021
+*! version 1.1 19Jul2021
 * Programmed by Paulo Guimarães
 * Changed by Gustavo Iglésias (starting digits 45 valid)
 
@@ -23,7 +23,12 @@ version 13
 tempvar dum1 nipcs checkd checkd2 
 local nipc = "`varlist'"
 
-capture drop _valid `nipc'_n
+capture drop `nipc'_n
+cap confirm var _valid , exact
+if !_rc {
+	di "{error:variable {bf:_valid} already defined}"
+	exit 110
+}
 
 
 local vtype: type `nipc'
