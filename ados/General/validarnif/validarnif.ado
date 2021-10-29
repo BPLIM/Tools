@@ -1,6 +1,6 @@
 *! version 1.1 29Oct2021
 * Programmed by Paulo Guimarães
-
+* Changed by Gustavo Iglésias (starting digits 45 valid)
 
 program define validarnif
 * Programmed by Paulo Guimarães
@@ -37,7 +37,7 @@ if substr("`vtype'",1,3)=="str" {
 
 	if "`force'" != "force" {
 	
-		di as error "Variable's type is string. Specify option force to create a numeric variable"
+		di "{err:Variable's type is string. Specify option force to create a numeric variable}"
 		error 198
 	
 	}
@@ -55,7 +55,10 @@ if substr("`vtype'",1,3)=="str" {
 		
 		// first digit invalid
 		qui gen `nipcs'=string(`nipc'_n,"%9.0f")
-		qui replace `dum1'=1 if inlist(substr(`nipcs',1,1),"4","0")&`dum1'==0
+		qui replace `dum1'=1 if substr(`nipcs',1,1) == "0" & `dum1'==0
+		qui replace `dum1'=1 if substr(`nipcs',1,1) == "4" ///
+			& substr(`nipcs',2,1) != "5" & `dum1'==0
+			
 		
 		// check digit invalid
 		qui gen `checkd'=0
@@ -85,7 +88,9 @@ else {
 	
 	// first digit invalid
 	qui gen `nipcs'=string(`nipc',"%9.0f")
-	qui replace `dum1'=1 if inlist(substr(`nipcs',1,1),"4","0")&`dum1'==0
+	qui replace `dum1'=1 if substr(`nipcs',1,1) == "0" & `dum1'==0
+	qui replace `dum1'=1 if substr(`nipcs',1,1) == "4" ///
+		& substr(`nipcs',2,1) != "5" & `dum1'==0
 	
 	// check digit invalid
 	qui gen `checkd'=0
@@ -105,7 +110,7 @@ else {
 qui rename `dum1' _valid
 capture label drop _nipcl
 label define _nipcl 0 "0 Valid" 1 "1 first digit invalid" ///
-	2 "2 length different from 9 digits" 3 "3 check digit invalid" ///
+	2 "2 length different from 9" 3 "3 check digit invalid" ///
 	4 "4 missing variable" 5 "5 non-numeric type" 
 label values _valid _nipcl
 label var _valid "nipc validity"
