@@ -9,7 +9,9 @@ There have been several revisions to this classification and the command takes t
 
 To install run the following in Stata:
 
+```
 net install coconuts, from("https://github.com/BPLIM/Tools/raw/master/ados/General/coconuts")
+```
 
 ## Files 
 
