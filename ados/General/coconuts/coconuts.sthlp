@@ -9,11 +9,6 @@ help for {cmd:coconuts} {right:()}
 {p 8 15}
 {cmd:coconuts} {hline 1} creates Nomenclature of Territorial Units for Statistics (NUTS) variables for Portuguese municipalities.
 
-{title:Syntax}
-
-{p 8 15}
-{cmd:coconuts}  [{help if}], [{it:options}]
-
 {marker syntax}{...}
 {title:Syntax}
 
