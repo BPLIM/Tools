@@ -1,0 +1,3 @@
+v 3
+d BPLIM Team, BPLIM (bplim@bportugal.pt)
+p coconuts - Creates NUTS variables for Portuguese municipalities

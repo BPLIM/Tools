@@ -1,0 +1,13 @@
+v 3
+
+d COCONUTS: creates Nomenclature of Territorial Units for Statistics (NUTS) variables for Portuguese municipalities
+d
+d Author: BPLIM Team. Banco de Portugal
+d Contact: bplim@bportugal.pt
+D 5 Nov 2021
+d
+d Distribution-Date: 20211105
+d
+f coconuts.ado
+f coconuts.sthlp
+F coconuts_final.dta
