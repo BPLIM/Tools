@@ -32,7 +32,8 @@ else {
 		}
 		******************************************************************************************
 		if _rc != 0 {
-			di as error "[Error: program checkmd_mpz] One or more variables have not been found on the dataset"
+			di "{err:[Error: program checkmd_mpz] One or more variables have not been found" ///
+				" on the dataset}"
 		}
 	}
 	
@@ -52,78 +53,69 @@ else {
 	************************************* verbose ********************************************
 	if "`verbose'" == "verbose" {
 		di ""
-		di "Counting the number of observations for which variable is missing, zero, positive or has a value label missing"
+		di "Counting the number of observations for which variable is missing, zero, positive" 
+			"or has a value label missing"
 	}
 	******************************************************************************************
-
+	local i = 1
 	foreach var in `variables' {
-
+		local `var' = `i' // locals' names max 31 while vars 32
 		// variable missing
 		quietly count if missing(`var')
-		local miss_`var' = r(N)
+		local m``var'' = r(N)
 		if "`verbose'" == "verbose" {
 			di ""
-			di "missing: `var' -> `miss_`var''"
+			di "missing: `var' -> `m``var'''"
 		}
 		// variable > 0
 		capture count if `var'> 0 & !missing(`var')
 		if _rc == 0 {
-			local positive_`var' = r(N)
+			local p``var'' = r(N)
 		}
 		else {
-			local positive_`var' = .
+			local p``var'' = .
 		}
 		if "`verbose'" == "verbose" {
-			di "positive: `var' -> `positive_`var''"
+			di "positive: `var' -> `p``var'''"
 		}
 		// varible = 0
 		capture count if `var' == 0 
 		if _rc == 0 {
-			local zero_`var' = r(N)
+			local z``var'' = r(N)
 		}
 		else {
-			local zero_`var' = .
+			local z``var'' = .
 		}
 		if "`verbose'" == "verbose" {
-			di "zeros: `var' -> `zero_`var''"
+			di "zeros: `var' -> `z``var'''"
 		}
 		// value label missing
-		if `check_label_count' == 1 {
-			if regexm("`check_label'","`var'") == 1 {
+		foreach catvar in `check_label' {
+			if "`catvar'" == "`var'" {
 				tempvar decvar
 				decode `var', gen(`decvar')
 				quietly count if missing(`decvar') & !missing(`var')
-				local misslab_`var' = `r(N)'
+				local v``var'' = `r(N)'
+				continue, break
 			}
 			else {
-				local misslab_`var' = .
+				local v``var'' = .
 			}
-		}
-		else {
-			if regexm("`check_label'"," `var'") == 1 | regexm("`check_label'","`var' ") == 1 {
-				tempvar decvar
-				decode `var', gen(`decvar')
-				quietly count if missing(`decvar') & !missing(`var')
-				local misslab_`var' = `r(N)'
-			}
-			else {
-				local misslab_`var' = .
-			}
-		}		
+		}	
 		if "`verbose'" == "verbose" {
-			di "missing value label: `var' -> `misslab_`var''"
+			di "missing value label: `var' -> `v``var'''"
 		}
 		// local type for rownames
-		local type`var': type `var'
-		local rowname`var' = "`var'[`type`var'']"
-		local rownames = "`rownames'" + " `rowname`var''"
+		local t``var'': type `var'
+		local r``var'' = "`var'[`t``var''']"
+		local rownames = "`rownames'" + " `r``var'''"
 		if "`verbose'" == "verbose" {
 			di ""
 			di "Creating rownames:"
 			di ""
 			di "`rownames'"
 		}
-		
+		local ++i
 	}
 
 	local var_count: word count `variables'
@@ -138,15 +130,15 @@ else {
 	mat A = J(`var_count',4,0)
 	local i = 1
 	foreach var in `variables' {
-		matrix A[`i',1] = `miss_`var''
-		matrix A[`i',2] = `positive_`var''
-		matrix A[`i',3] = `zero_`var''
-		matrix A[`i',4] = `misslab_`var''
+		matrix A[`i',1] = `m``var'''
+		matrix A[`i',2] = `p``var'''
+		matrix A[`i',3] = `z``var'''
+		matrix A[`i',4] = `v``var'''
 		if "`verbose'" == "verbose" {
-			di "matrix A[`i',1] = `miss_`var''"
-			di "matrix A[`i',2] = `positive_`var''"
-			di "matrix A[`i',3] = `zero_`var''"
-			di "matrix A[`i',4] = `misslab_`var''"
+			di "matrix A[`i',1] = `m``var'''"
+			di "matrix A[`i',2] = `p``var'''"
+			di "matrix A[`i',3] = `z``var'''"
+			di "matrix A[`i',4] = `v``var'''"
 		}
 		local i = `i' + 1
 	}

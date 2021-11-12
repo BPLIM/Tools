@@ -4,31 +4,20 @@
 program define checkmd_check, rclass
 
 
-syntax, check(string) id(string) title(string) ///
-		[miss delta(real 0) list_val(int 0) save_obs(int 50) ///
-		verbose tvar(string) addvars(string) ignoremissing ///
-		ignore(string)]
-		
-/**********************************************************************************************************
-check -> condition to be verified in csv file (cond)
-id -> check id (specified by the user)
-title -> title of the check (condition)
-miss -> specifies that missing values of variables inside the check will be set as zeros
-delta -> margin of error
-list_val -> specifies the number on inconsistencies displayed in the html document
-save_obs -> the number of inconsistent observations that will be saved in the inconsistencies dataset
-verbose -> displays additional information about the state of the program 
-tvar -> time variable 
-addvars -> adds specified variables to the inconsistencies dataset 
-ignoremissing -> ignores observations where one of the variables is missing
-The program returns 5 locals: r(tot)		-> number of observations
-							  r(inc) 		-> number of inconsistent observations
-							  r(error),		-> some variable was not found in the dataset 
-							  r(list_val)	-> list differences or not
-							  r(gen_error)	-> error when generating dummy variable (check)
-and 1 matrix:
-                              r(X)		    -> matrix with frequencies (consistent and inconsistent values)
-***********************************************************************************************************/
+syntax, check(string)        /// condition to be verified in csv file (cond)
+		id(string)           /// check id (specified by the user)
+		title(string)        /// title of the check (condition)
+		[				     ///
+			miss             /// specifies that missing values of variables inside the check will be set as zeros
+			delta(real 0)    /// margin of error
+			list_val(int 0)  /// specifies the number on inconsistencies displayed in the html document
+			save_obs(int 50) /// the number of inconsistent observations that will be saved in the inconsistencies dataset
+			verbose          /// displays additional information about the state of the program 
+			tvar(string)     /// time variable 
+			addvars(string)  /// adds specified variables to the inconsistencies dataset
+			ignoremissing    /// ignores observations where one of the variables is missing
+			ignore(string)   /// ignores rows where the condition, which is valid Stata code, is true
+		]
 
 
 ************************************* verbose ********************************************
@@ -505,32 +494,16 @@ local vars = "`str_variables'"
 local vars = stritrim("`vars'")
 local vars = strltrim("`vars'")
 local vars = strrtrim("`vars'")
-quietly ds
-foreach item in `vars' {
-	local out = 0
-	foreach var in `r(varlist)' {
-		if "`item'" == "`var'" {
-			local out = `out' + 1
-		}
-	}
-	if `out' == 0 {
-		local pos = strpos("`vars'","`item'")
-		local leni = length("`item'")
-		local lenv = length("`vars'")
-		if `pos' == 1 {
-			local vars = substr("`vars'",`leni'+1,`lenv'-`leni')
-		}
-		else {
-			local posn = strpos("`vars'"," `item'")
-			local lenin = length(" `item'")
-			local lenvn = length("`vars'")
-			local vars = substr("`vars'",1,`posn'-1) + substr("`vars'",`posn'+`lenin',`lenvn'-`lenin'-`posn'+1)
-		}
-		local vars = stritrim("`vars'")
-		local vars = strltrim("`vars'")
-		local vars = strrtrim("`vars'")
+foreach var in `vars' {
+	cap confirm var `var'
+	if !_rc {
+		local only_vars = "`only_vars'" + " `var'"
 	}
 }
+local vars = "`only_vars'"
+local vars = stritrim("`vars'")
+local vars = strltrim("`vars'")
+local vars = strrtrim("`vars'")
 
 ************************************* verbose ********************************************
 if "`verbose'" == "verbose" {

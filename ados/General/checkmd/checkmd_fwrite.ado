@@ -178,7 +178,7 @@ if "`csv_file'" != "" {
 	file write myfile _n
 
 	forvalue i = 1/`gen_count' {
-		file write myfile "!gen_`i'?" _n
+		file write myfile "quietly !gen_`i'?" _n
 		file write myfile _n
 	}
 
@@ -235,17 +235,17 @@ if "`csv_file'" != "" {
 		file write myfile "	}" _n	
 		file write myfile "	capture matrix X_`i' = r(X)" _n		
 		file write myfile "	if !error_`i'? == 1 | !gen_error_`i'? == 1 {" _n
-		file write myfile "	quietly local title_red_`i' = §`i'. !title_`i'?§" _n
+		file write myfile "	quietly local title_red_`i' = §[!id_`i'?] !title_`i'?§" _n
 		file write myfile "	}" _n
 		file write myfile "	else {" _n
 		file write myfile "	if !asrt_`i'? > 0 {" _n
-		file write myfile "	quietly local title_red_`i' = §`i'. !title_`i'?§" _n
+		file write myfile "	quietly local title_red_`i' = §[!id_`i'?] !title_`i'?§" _n
 		file write myfile "	}" _n
 		file write myfile "	else if !asrt_`i'? == 0 & §`inc_only'§ == §inc_only§ {" _n
 		file write myfile "	quietly local title_blue_`i' " _n
 		file write myfile "	}" _n
 		file write myfile "	else if !asrt_`i'? == 0 & §`inc_only'§ ~= §inc_only§ {" _n
-		file write myfile "	quietly local title_blue_`i' = §`i'. !title_`i'?§ " _n
+		file write myfile "	quietly local title_blue_`i' = §[!id_`i'?] !title_`i'?§ " _n
 		file write myfile "	}" _n
 		file write myfile "	}" _n
 		file write myfile "!!!"	_n
@@ -530,7 +530,10 @@ if "`csv_file'" != "" {
 	file write myfile "!!!s/" _n
 	file write myfile "	quietly use §${out_path}/Reports/report_${dta_file}/${c_date}/summary§, clear" _n
 	file write myfile "	set linesize `linesize'" _n
-	file write myfile "	quietly sort Check_id `tvar'" _n
+	file write myfile "	tempvar lencheck" _n
+	file write myfile "	quietly gen !lencheck? = length(Check_id)" _n
+	file write myfile "	quietly sort !lencheck? Check_id `tvar'" _n
+	file write myfile "	drop !lencheck?" _n
 	file write myfile "	quietly order Check_id `tvar' Check_title" _n
 	if "`tvar'" ~= "" {
 		file write myfile "	list, string(130) abbreviate(15) separator(`tvar_levels_count')" _n

@@ -29,8 +29,8 @@ local commands "gtools markstat matprint"
 foreach com in `commands' {
 	cap which `com'
 	if _rc {
-		di as error "This tool uses `com' as a dependency."
-		error 1
+		di "{err:command {bf:`com'} is unrecognized}"
+		exit 199
 	}
 }
 
@@ -110,7 +110,8 @@ else {
 	}
 	else {
 		di ""
-		di as error "A CSV file named ${dta_file} was not found in the current working directory. No checks will be performed" 
+		di "{err:File {bf:${dta_file}.csv} not found in the current working directory. No checks" ///
+			" will be performed}" 
 		di ""
 		di ""
 		local csv_file 
@@ -149,12 +150,14 @@ if "`csv_file'" != "" {
 		global listinc = 0
 	}
 
-	// Creating globals date and time that will serve to identify the folder inside the folder report_dataset.
+	// Creating globals date and time that will serve to identify the folder inside the folder 
+	// report_dataset.
 
 	************************************* verbose ********************************************	
 	if "`verbose'" == "verbose" {
 		di ""
-		di "Creating globals date and time that will serve to identify the folder inside the folder report_dataset"
+		di "Creating globals date and time that will serve to identify the folder inside the " ///
+			"folder report_dataset"
 	}
 	******************************************************************************************
 
@@ -164,12 +167,14 @@ if "`csv_file'" != "" {
 
 	capture file close myfile
 
-	// Creating locals with the number of checks and the number of lines with stata code used to generate variables for a particular dataset
+	// Creating locals with the number of checks and the number of lines with stata code used to 
+	// generate variables for a particular dataset
 
 	************************************* verbose ********************************************	
 	if "`verbose'" == "verbose" {
 		di ""
-		di "Creating locals with the number of checks and the number of lines with stata code used to generate variables for a particular dataset"
+		di "Creating locals with the number of checks and the number of lines with stata code" ///
+			" used to generate variables for a particular dataset"
 	}
 	******************************************************************************************
 
@@ -181,12 +186,14 @@ if "`csv_file'" != "" {
 		local gen_count = r(N)
 	restore
 
-	// Creating global with path for output files. If the user does not specify this option, the global will be the current working directory
+	// Creating global with path for output files. If the user does not specify this option, ///
+	// the global will be the current working directory
 
 	************************************* verbose ********************************************	
 	if "`verbose'" == "verbose" {
 		di ""
-		di "Creating global with path for output files. If the user does not specify this option, the global will be the current working directory"
+		di "Creating global with path for output files. If the user does not specify this " /// 
+			"option, the global will be the current working directory"
 	}
 	******************************************************************************************
 
