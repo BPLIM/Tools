@@ -44,9 +44,9 @@ Install package {it:ftools} from SSC and place it in "c:/mydir/myados".
 
 
 Example 2:
-Install package {it:bpstatuse} from Github and place it in "c:/mydir/myados".
+Install package {it:bpstat} from Github and place it in "c:/mydir/myados".
 
-{p 8 16}{inp:. adoinstall bpsatuse, to(c:/mydir/myados) from("https://github.com/BPLIM/Tools/raw/master/ados/General/bpstatuse/")}{p_end}
+{p 8 16}{inp:. adoinstall bpsat, to(c:/mydir/myados) from("https://github.com/BPLIM/Tools/raw/master/ados/General/bpstat/")}{p_end}
 
 
 {title:Remarks}
