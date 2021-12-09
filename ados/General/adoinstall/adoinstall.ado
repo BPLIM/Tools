@@ -3,6 +3,8 @@
 
 program define adoinstall
 
+version 13
+
 syntax namelist(min=1 max=1), to(string) [FRom(string) REPLACE ALL FORCE]
 
 local pkgname "`namelist'"
