@@ -1,4 +1,4 @@
-*! version 0.3 04Nov2020
+*! version 0.4 27Jan2022
 * Programmed by Gustavo Iglésias
 * Dependencies: Python 3 (requests and pandas)
 
@@ -37,7 +37,7 @@ else if "`command'" == "dlg" {
 	}
 }
 else {
-	di as error `"Possible subcommands for bpstat are "use", "dlg", "search", "describe" and "browse""'
+	di "{err:{bf:bpstat `command'}: invalid subcommand}"
 	exit 198
 }
 
