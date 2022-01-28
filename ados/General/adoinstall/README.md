@@ -5,9 +5,11 @@ should be used to install user-written commands to a path other than the default
 
 ## Install
 
-`adoinstall` is not available in SSC. To install run the following in Stata:
+To install run the following in Stata:
 
-net install adoinstall, from("https://github.com/BPLIM/Tools/raw/master/ados/General/adoinstall/")
+```
+ssc install adoinstall
+```
 
 
 ## Author
