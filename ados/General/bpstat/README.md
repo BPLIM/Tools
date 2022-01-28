@@ -7,7 +7,9 @@ statistical series from Banco de Portugal [BPstat](https://bpstat.bportugal.pt/)
 
 `bpstat` is not available in SSC. To install run the following in Stata:
 
+```
 net install bpstat, from("https://github.com/BPLIM/Tools/raw/master/ados/General/bpstat/")
+```
 
 ## Dependencies
 
