@@ -6,6 +6,8 @@
 
 program define validarcae
 
+version 15
+
 syntax varlist(min=1 max=1) [if], [ ///
 	rev(int 3) fromlabel dropzero keep getlevels(string) solve(string) ///
 ]
