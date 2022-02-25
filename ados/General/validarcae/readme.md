@@ -7,7 +7,9 @@ There have been several revisions of the Portuguese Economic Activities Classifi
 
 To install run the following in Stata:
 
-net install validarcae, from("https://github.com/BPLIM/Tools/raw/master/ados/General/validarcae")
+```
+ssc install validarcae
+```
 
 ## Files 
 
