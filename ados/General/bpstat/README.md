@@ -1,6 +1,6 @@
 # BPSTAT: Import series from BPstat Databases
 
-`bpstat` is a [Stata](http://www.stata.com/) package that allows users to import over 210,000
+`bpstat` is a [Stata](http://www.stata.com/) package that allows users to import over 260,000
 statistical series from Banco de Portugal [BPstat](https://bpstat.bportugal.pt/) Database. Users may import series using  `bpstat use`, the command line version, or `bpstat dlg`, the menu-driven approach that launches a dialog box for the user to select the series. The package also contains some tools to help users search for series of interest and collect their metadata.
 
 ## Install
