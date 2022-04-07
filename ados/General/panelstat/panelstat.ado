@@ -1398,7 +1398,7 @@ foreach var of varlist `vars4' {
 capture drop `dum1'
 calmmvarst `i' `var' `nn' `NN' `dum1'
 drop `var'
-gen `var'_st=.
+qui gen `var'_st=.
 sort `neword'
 qui replace `var'_st=r(singnon) in -1
 qui replace `var'_st=r(singmis) in -2
