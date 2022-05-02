@@ -730,7 +730,7 @@ As you might have observed, values in column *value_label_default* have changed 
 
 `mdata uniform` is a command that was created with a very particular goal in mind. It serves very specific needs raised by **BPLIM** staff and might not be useful for the general user. Nevertheless, it's worth describing how it works since it's part of the package and it might be useful for people that face the same challenges. To give some perspective, we should describe the problem. 
 
-**BPLIM** gets data every month from data producers. That data contains all type of variables. We are particular interested in categorical data, because this command only applies to that type. Usually those type of variables are not encoded, they come in pairs. One is the code (be it strictly numerical, alphanumerical or containing only letters) and the other is the label. To be efficient storage-wise, we encode every variable using the code and label (creating a value label). When the code contains only numbers there is no problem since the value of the variable corresponds to the actual code. However, when a code contains only letters or letters and numbers, the encoding has to follow some rule. For this task, we use [bpencode](), which was also created by BPLIM. The command has its own logic for the encoding, which is not important for the exposition at hand. 
+**BPLIM** gets data every month from data producers. That data contains all type of variables. We are particular interested in categorical data, because this command only applies to that type. Usually those type of variables are not encoded, they come in pairs. One is the code (be it strictly numerical, alphanumerical or containing only letters) and the other is the label. To be efficient storage-wise, we encode every variable using the code and label (creating a value label). When the code contains only numbers there is no problem since the value of the variable corresponds to the actual code. However, when a code contains only letters or letters and numbers, the encoding has to follow some rule. For this task, we use [bpencode](https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode), which was also created by BPLIM. The command has its own logic for the encoding, which is not important for the exposition at hand. 
 
 Now imagine that we get the data in different months. Some values that are present in the most recent batch of data might be missing in the old one. So, it's possible that the encoding assigns identical numerical codes for different values of the same variable. If we worked with data for only one month, no problem would arise, but we want to be able to combine data from different months. A process for harmonization is needed. That is why we created `mdata uniform`. 
 
@@ -767,7 +767,7 @@ list, noo ab(10)
       +-------------------+
     
 
-We would use [bpencode]() to encode variable **yesno** and label its values using variable **yesno_lbl**. [bpencode]() always uses the original code in the label, so that the label is of the form *code description*. **This is important if you want to use `mdata uniform`, since it uses the code part of the label to harmonize values**. For this mock case we can use [encode](https://www.stata.com/manuals/dencode.pdf) with the same effect.
+We would use [bpencode](https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode) to encode variable **yesno** and label its values using variable **yesno_lbl**. [bpencode](https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode) always uses the original code in the label, so that the label is of the form *code description*. **This is important if you want to use `mdata uniform`, since it uses the code part of the label to harmonize values**. For this mock case we can use [encode](https://www.stata.com/manuals/dencode.pdf) with the same effect.
 
 
 ```stata
@@ -919,7 +919,7 @@ We see immediately that we get two inconsitencies. Let's look at *combcheck.xlsx
 </figure>
 </p>
 
-The problem is flagged in worksheet **vl_yesnolbl**, showing that we have two rows with duplicated values. To solve this problem and harmonize the metadata in file *comb.xlsx* we will use `mdata uniform`. This command uses [bpencode]() to recode values. We have to specify the worsheets that should be harmonized, otherwise it will work on every sheet that starts with "vl_".
+The problem is flagged in worksheet **vl_yesnolbl**, showing that we have two rows with duplicated values. To solve this problem and harmonize the metadata in file *comb.xlsx* we will use `mdata uniform`. This command uses [bpencode](https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode) to recode values. We have to specify the worsheets that should be harmonized, otherwise it will work on every sheet that starts with "vl_".
 
 
 ```stata
@@ -943,10 +943,10 @@ Since we did not specify option **newfile**, the new metadata file is save in *c
 </figure>
 </p>
 
-We observe that now every row has a different value. But there is another difference. We have values 101, 102 and 103 instead of 1, 2, and 3. That's because [bpencode] plays safe and adds digits to allow for more categories in the future. And that is how we would use `mdata uniform`. This would only change the metadata files. Since our goal at BPLIM is to harmonize the actual data, we would change the monthly data using `bp_recode`, a command of package [bpencode]() that uses a metadata file to recode values. 
+We observe that now every row has a different value. But there is another difference. We have values 101, 102 and 103 instead of 1, 2, and 3. That's because [bpencode](https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode) plays safe and adds digits to allow for more categories in the future. And that is how we would use `mdata uniform`. This would only change the metadata files. Since our goal at BPLIM is to harmonize the actual data, we would change the monthly data using `bp_recode`, a command of package [bpencode](https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode) that uses a metadata file to recode values. 
 
 **Dependencies**:
 
   - [gtools](https://gtools.readthedocs.io/en/latest/)
     
-  - [bpencode]()
+  - [bpencode](https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode)
