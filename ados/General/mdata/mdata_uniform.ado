@@ -1,6 +1,6 @@
 *! version 0.1 11Mar2021
 * Programmed by Gustavo Iglésias
-* Dependencies: bp_get_type, bpencode
+* Dependencies: bpencode
 
 program define mdata_uniform
 
