@@ -4,6 +4,8 @@
 
 program define bpencode, sortpreserve
 
+version 16
+
 syntax varlist(min=1 max=1),  [ ///
 	vl(string)       ///
 	GENerate(string) ///
