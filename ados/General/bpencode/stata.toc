@@ -1,0 +1,3 @@
+v 3
+d BPLIM Team, BPLIM (bplim@bportugal.pt)
+p bpencode - Encode into numeric using a variable or an Excel file

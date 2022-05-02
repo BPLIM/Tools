@@ -1,0 +1,14 @@
+v 3
+
+d BPENCODE: Encode into numeric using a variable or an Excel file
+d
+d Author: BPLIM Team. Banco de Portugal
+d Contact: bplim@bportugal.pt
+d
+d
+d
+d Distribution-Date: 20220502
+d
+f bpencode.ado
+f bp_get_type.ado
+f bpencode.sthlp
