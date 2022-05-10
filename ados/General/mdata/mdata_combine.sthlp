@@ -61,7 +61,7 @@ So the resulting meta file of the current combination will include a column {it:
 {pstd}
 Combine metadata from files {it:meta_auto1.xlsx} and {it:meta_auto2.xlsx}. Save the combined metadata in {it:meta_comb.xlsx}
 
-{p 8 16}{inp:. mdata cmp, f1(meta_auto1) f2(meta_auto2) meta(meta_comb)}{p_end}
+{p 8 16}{inp:. mdata combine, f1(meta_auto1) f2(meta_auto2) meta(meta_comb)}{p_end}
 
 
 {title:Remarks}
