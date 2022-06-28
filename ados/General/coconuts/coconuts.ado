@@ -45,17 +45,17 @@ if "`versions'" == "versions" {
 * Create only a new variable for municipality with recoded codes
 if "`nonuts'" == "nonuts" {
     if "`recode'" != "recode" {
-	    di as error "must specify recode option"
-		error 198
+	    di "{err:must specify {bf:recode} option}"
+		exit 198
 	}
     if "`generate'" == "" {
-	    di as error "must specify generate option"
-		error 198
+	    di "{err:must specify {bf:generate} option}"
+		exit 198
 	}
     cap confirm var `generate' 
 	if !_rc {
-	    di as error "variable `generate' already defined"
-		error 110
+	    di "{err:variable {bf:`generate'} already defined}"
+		exit 110
 	}
 	tempname genvallab
 	qui clonevar `generate' = `varlist'
@@ -81,15 +81,15 @@ else if ("`nonuts'" != "nonuts" & "`varlist'" != "") {
 	if !(inlist(`nuts', 1986, 1989, 1998, 1999, 2001, 2002, 2013)) {
 		di as error "Invalid NUTS Classification. Possible values are: " ///
 					"1986, 1989, 1998, 1999, 2001, 2002 and 2013"
-		error 198
+		exit 198
 	}
 
 	forvalues i = 1/3 {
 		cap confirm var nuts`i'_v`nuts'
 		if !_rc & "`replace'" == "" {
-			di as error "Variable(s) nuts#_v`nuts' (# = 1, 2 or 3) already defined"
-			di as error `"Please specify option "replace" to drop these variables"'
-			error 110
+			di "{err:Variable(s) {bf:nuts#_v`nuts'} (# = 1, 2 or 3) already defined}"
+			di "{err:Please specify option {bf:replace} to drop these variables}"
+			exit 110
 		}
 		else {
 			cap drop nuts`i'_v`nuts'
@@ -208,8 +208,8 @@ else {
 if ("`recode'" == "recode" & "`generate'" != "") {
     cap confirm var `generate' 
 	if !_rc {
-	    di as error "variable `generate' already defined"
-		error 110
+	    di "{err:variable {bf:`generate'} already defined}"
+		exit 110
 	}
     rename `conc' `generate'
 	label values `generate' conc_lab
