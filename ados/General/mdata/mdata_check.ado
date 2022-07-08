@@ -223,14 +223,15 @@ frame `frfields' {
 			check_missing_sheets `var', sheets(`sheets') feature(vl)
 			local missing_sheets = "`missing_sheets'" + " `r(missing_sheets)'"
 		}
+	
+		* Chars
+		check_missing_sheets variable if chars > 0, sheets(`sheets') feature(char)
+		local missing_sheets = "`missing_sheets'" + " `r(missing_sheets)'"
+		* Notes 
+		check_missing_sheets variable if notes > 0, sheets(`sheets') feature(note)
+		local missing_sheets = "`missing_sheets'" + " `r(missing_sheets)'"
+		local missing_sheets = trim("`missing_sheets'")
 	}
-	* Chars
-	check_missing_sheets variable if chars > 0, sheets(`sheets') feature(char)
-	local missing_sheets = "`missing_sheets'" + " `r(missing_sheets)'"
-	* Notes 
-	check_missing_sheets variable if notes > 0, sheets(`sheets') feature(note)
-	local missing_sheets = "`missing_sheets'" + " `r(missing_sheets)'"
-	local missing_sheets = trim("`missing_sheets'")
 	if "`missing_sheets'" != "" {
 		clear
 		local i = 1
