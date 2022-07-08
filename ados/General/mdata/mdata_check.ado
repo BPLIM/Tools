@@ -218,9 +218,11 @@ frame `frfields' {
 	local sheets = trim("`sheets'")
 	qui import excel "`meta'", sheet("variables") first clear
 	* Value labels 
-	foreach var of varlist value_label* {
-		check_missing_sheets `var', sheets(`sheets') feature(vl)
-		local missing_sheets = "`missing_sheets'" + " `r(missing_sheets)'"
+	if "`sheets'" != "" {
+		foreach var of varlist value_label* {
+			check_missing_sheets `var', sheets(`sheets') feature(vl)
+			local missing_sheets = "`missing_sheets'" + " `r(missing_sheets)'"
+		}
 	}
 	* Chars
 	check_missing_sheets variable if chars > 0, sheets(`sheets') feature(char)
