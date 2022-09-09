@@ -199,7 +199,7 @@ frame `metaframe' {
 			foreach lang in `labellang' {
 				if  !missing(label_`lang'[`i']) {
 					local label_`lang' = label_`lang'[`i']
-					write_label, var(`var') lang(`lang') label("`label_`lang''")
+					write_label, var(`var') lang(`lang') label(`"`label_`lang''"')
 				}
 				if !missing(value_label_`lang'[`i']) {
 					local value_label_`lang' = value_label_`lang'[`i']
@@ -295,9 +295,11 @@ program define write_label
 
 syntax, var(string) lang(string) label(string)
 
+di `"`label'"'
+
 file write metado `"* Variable label - `lang'"' _n
 file write metado `"label language `lang'"' _n
-file write metado `"label variable `var' "`label'""' _n
+file write metado `"label variable `var' `"`label'"'"' _n
 
 end
 
