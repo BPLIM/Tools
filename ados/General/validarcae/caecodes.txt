@@ -3083,15 +3083,15 @@ cae_num	cae_str	des_pt	des_en	rev
 1610	01610	Actividades dos serviços relacionados com a agricultura	Agricultural service activities	3
 162	0162	Actividades dos serviços relacionados com a produção animal, excepto serviços de veterinária	Animal husbandry service activities, except veterinary activities	3
 1620	01620	Actividades dos serviços relacionados com a produção animal, excepto serviços de veterinária	Animal husbandry service activities, except veterinary activities	3
-163	0163	Preparação de produtos agrícolas para venda 	Post-harvest crop activities	3
-1630	01630	Preparação de produtos agrícolas para venda 	Post-harvest crop activities	3
+163	0163	Preparação de produtos agrícolas para venda	Post-harvest crop activities	3
+1630	01630	Preparação de produtos agrícolas para venda	Post-harvest crop activities	3
 164	0164	Preparação e tratamento de sementes para propagação	Seed processing for propagation	3
 1640	01640	Preparação e tratamento de sementes para propagação	Seed processing for propagation	3
 17	017	Caça, repovoamento cinegético e actividades dos serviços relacionados	Hunting, trapping and game propagation, including related service activities	3
 170	0170	Caça, repovoamento cinegético e actividades dos serviços relacionados	Hunting, trapping and game propagation, including related service activities	3
 1701	01701	Caça e repovoamento cinegético	Hunting, trapping and game propagation	3
 1702	01702	Actividades dos serviços relacionados com a caça e repovoamento cinegético	Related services activities with the hunting, trapping and game propagation	3
-2	02	Silvicultura e exploração florestal 	Forestry and logging	3
+2	02	Silvicultura e exploração florestal	Forestry and logging	3
 21	021	Silvicultura e outras actividades florestais	Silviculture and other forestry activities	3
 210	0210	Silvicultura e outras actividades florestais	Silviculture and other forestry activities	3
 2100	02100	Silvicultura e outras actividades florestais	Silviculture and other forestry activities	3
@@ -3107,9 +3107,9 @@ cae_num	cae_str	des_pt	des_en	rev
 3	03	Pesca e aquicultura	Fishing and aquaculture	3
 31	031	Pesca	Fishing	3
 311	0311	Pesca marítima, apanha de algas e de outros produtos do mar	Marine fishing, collecting seaweed and other sea products	3
-3111	03111	Pesca marítima 	Marine fishing	3
+3111	03111	Pesca marítima	Marine fishing	3
 3112	03112	Apanha de algas e de outros produtos do mar	Collecting seaweed and other sea products	3
-312	0312	Pesca em águas interiores e apanha  produtos de águas interiores	Fishing in inland waters, collecting seaweed and other inland water products	3
+312	0312	Pesca em águas interiores e apanha produtos de águas interiores	Fishing in inland waters, collecting seaweed and other inland water products	3
 3121	03121	Pesca em águas interiores	Fishing in inland waters	3
 3122	03122	Apanha de produtos de águas interiores	Collecting seaweed and other inland water products	3
 32	032	Aquicultura	Aquaculture	3
@@ -3131,7 +3131,7 @@ cae_num	cae_str	des_pt	des_en	rev
 62	062	Extracção de gás natural	Extraction of natural gas	3
 620	0620	Extracção de gás natural	Extraction of natural gas	3
 6200	06200	Extracção de gás natural	Extraction of natural gas	3
-7	07	Extracção e preparação de minérios metálicos	Mining  and preparation of metal ores	3
+7	07	Extracção e preparação de minérios metálicos	Mining and preparation of metal ores	3
 71	071	Extracção e preparação de minérios de ferro	Mining and preparation of iron ores	3
 710	0710	Extracção e preparação de minérios de ferro	Mining and preparation of iron ores	3
 7100	07100	Extracção e preparação de minérios de ferro	Mining and preparation of iron ores	3
@@ -3146,7 +3146,7 @@ cae_num	cae_str	des_pt	des_en	rev
 8111	08111	Extracção de mármore e outras rochas carbonatadas	Quarrying of marble and other carbonated stones	3
 8112	08112	Extracção de granito ornamental e rochas similares	Quarrying of ornamental granite and similar stones	3
 8113	08113	Extracção de calcário e cré	Quarrying of limestone and chalk	3
-8114	08114	Extracção de gesso 	Quarrying of gypsum	3
+8114	08114	Extracção de gesso	Quarrying of gypsum	3
 8115	08115	Extracção de ardósia	Quarrying of slate	3
 812	0812	Extracção de saibro, areia e pedra britada; extracção de argilas e caulino	Operation of gravel and sand pits; mining of clays and kaolin	3
 8121	08121	Extracção de saibro, areia e pedra britada	Operation of gravel and sand pits	3
@@ -3196,9 +3196,9 @@ cae_num	cae_str	des_pt	des_en	rev
 10395	10395	Preparação e conservação de frutos e de produtos hortícolas por outros processos	Preparation and preserving of fruit and vegetables, n.e.c.	3
 104	104	Produção de óleos e gorduras animais e vegetais	Manufacture of vegetable and animal oils and fats	3
 1041	1041	Produção de óleos e gorduras	Manufacture of oils and fats	3
-10411	10411	Produção de óleos e gorduras animais brutos 	Manufacture of crude animal oils and fats	3
+10411	10411	Produção de óleos e gorduras animais brutos	Manufacture of crude animal oils and fats	3
 10412	10412	Produção de azeite	Production of olive oil	3
-10413	10413	Produção de óleos vegetais brutos (excepto azeite) 	Production of crude vegetable oils (except olive oil)	3
+10413	10413	Produção de óleos vegetais brutos (excepto azeite)	Production of crude vegetable oils (except olive oil)	3
 10414	10414	Refinação de azeite, óleos e gorduras	Manufacture of refined oils and fats	3
 1042	1042	Fabricação de margarinas e de gorduras alimentares similares	Manufacture of margarine and similar edible fats	3
 10420	10420	Fabricação de margarinas e de gorduras alimentares similares	Manufacture of margarine and similar edible fats	3
@@ -3216,7 +3216,7 @@ cae_num	cae_str	des_pt	des_en	rev
 10620	10620	Fabricação de amidos, féculas e produtos afins	Manufacture of starches and starch products	3
 107	107	Fabricação de produtos de padaria e outros produtos à base de farinha	Manufacture of bakery and farinaceous products	3
 1071	1071	Panificação e pastelaria	Manufacture of bread; manufacture of fresh pastry goods and cakes	3
-10711	10711	Panificação 	Manufacture of bread	3
+10711	10711	Panificação	Manufacture of bread	3
 10712	10712	Pastelaria	Manufacture of fresh pastry goods and cakes	3
 1072	1072	Fabricação de bolachas, biscoitos, tostas e pastelaria de conservação	Manufacture of rusks and biscuits; manufacture of preserved pastry goods and cakes	3
 10720	10720	Fabricação de bolachas, biscoitos, tostas e pastelaria de conservação	Manufacture of rusks and biscuits; manufacture of preserved pastry goods and cakes	3
@@ -3226,7 +3226,7 @@ cae_num	cae_str	des_pt	des_en	rev
 1081	1081	Indústria do açúcar	Manufacture of sugar	3
 10810	10810	Indústria do açúcar	Manufacture of sugar	3
 1082	1082	Indústria do cacau, do chocolate e dos produtos de confeitaria	Manufacture of cocoa, chocolate and sugar confectionery	3
-10821	10821	Fabricação de cacau e de chocolate 	Manufacture of cocoa and chocolate	3
+10821	10821	Fabricação de cacau e de chocolate	Manufacture of cocoa and chocolate	3
 10822	10822	Fabricação de produtos de confeitaria	Manufacture of sugar confectionery	3
 1083	1083	Indústria do café e do chá	Processing of tea and coffee	3
 10830	10830	Indústria do café e do chá	Processing of tea and coffee	3
@@ -3254,12 +3254,12 @@ cae_num	cae_str	des_pt	des_en	rev
 11012	11012	Fabricação de aguardentes não preparadas	Manufacture of non-prepared spirits	3
 11013	11013	Produção de licores e de outras bebidas destiladas	Manufacture of liqueurs and other distilled alcoholic beverages	3
 1102	1102	Indústria do vinho	Manufacture of wines	3
-11021	11021	Produção de vinhos comuns e licorosos 	Manufacture of ordinary and liqueur wine	3
+11021	11021	Produção de vinhos comuns e licorosos	Manufacture of ordinary and liqueur wine	3
 11022	11022	Produção de vinhos espumantes e espumosos	Manufacture of sparkling wine	3
 1103	1103	Fabricação de cidra e outras bebidas fermentadas de frutos	Manufacture of cider and other fruit wines	3
 11030	11030	Fabricação de cidra e outras bebidas fermentadas de frutos	Manufacture of cider and other fruit wines	3
-1104	1104	Fabricação de vermutes e de outras bebidas fermentadas não destiladas	Manufacture of vermouths and  other non-distilled fermented beverages	3
-11040	11040	Fabricação de vermutes e de outras bebidas fermentadas não destiladas	Manufacture of vermouths and  other non-distilled fermented beverages	3
+1104	1104	Fabricação de vermutes e de outras bebidas fermentadas não destiladas	Manufacture of vermouths and other non-distilled fermented beverages	3
+11040	11040	Fabricação de vermutes e de outras bebidas fermentadas não destiladas	Manufacture of vermouths and other non-distilled fermented beverages	3
 1105	1105	Fabricação de cerveja	Manufacture of beer	3
 11050	11050	Fabricação de cerveja	Manufacture of beer	3
 1106	1106	Fabricação de malte	Manufacture of malt	3
@@ -3271,7 +3271,7 @@ cae_num	cae_str	des_pt	des_en	rev
 120	120	Indústria do tabaco	Manufacture of tobacco products	3
 1200	1200	Indústria do tabaco	Manufacture of tobacco products	3
 12000	12000	Preparação de tabaco	Manufacture of tobacco products	3
-13	13	Fabricação de têxteis 	Manufacture of textiles	3
+13	13	Fabricação de têxteis	Manufacture of textiles	3
 131	131	Preparação e fiação de fibras têxteis	Preparation and spinning of textile fibres	3
 1310	1310	Preparação e fiação de fibras têxteis	Preparation and spinning of textile fibres	3
 13101	13101	Preparação e fiação de fibras do tipo algodão	Preparation and spinning of cotton-type fibres	3
@@ -3287,8 +3287,8 @@ cae_num	cae_str	des_pt	des_en	rev
 133	133	Acabamento de têxteis	Finishing of textiles	3
 1330	1330	Acabamento de têxteis	Finishing of textiles	3
 13301	13301	Branqueamento e tingimento	Bleaching and dyeing	3
-13302	13302	Estampagem 	Printing services of textile articles	3
-13303	13303	Acabamento de fios,  tecidos e artigos têxteis, n.e.	Finishing of yarns, fabrics and textiles products, n.e.c.	3
+13302	13302	Estampagem	Printing services of textile articles	3
+13303	13303	Acabamento de fios, tecidos e artigos têxteis, n.e.	Finishing of yarns, fabrics and textiles products, n.e.c.	3
 139	139	Fabricação de outros têxteis	Manufacture of other textiles	3
 1391	1391	Fabricação de tecidos de malha	Manufacture of knitted and crocheted fabrics	3
 13910	13910	Fabricação de tecidos de malha	Manufacture of knitted and crocheted fabrics	3
@@ -3297,15 +3297,15 @@ cae_num	cae_str	des_pt	des_en	rev
 1393	1393	Fabricação de tapetes e carpetes	Manufacture of carpets and rugs	3
 13930	13930	Fabricação de tapetes e carpetes	Manufacture of carpets and rugs	3
 1394	1394	Fabricação de cordoaria e redes	Manufacture of cordage, rope, twine and netting	3
-13941	13941	Fabricação de cordoaria 	Manufacture of cordage, rope and twine	3
-13942	13942	Fabricação de redes 	Manufacture of nets	3
+13941	13941	Fabricação de cordoaria	Manufacture of cordage, rope and twine	3
+13942	13942	Fabricação de redes	Manufacture of nets	3
 1395	1395	Fabricação de não tecidos e respectivos artigos, excepto vestuário	Manufacture of non-wovens and articles made from non-wovens, except apparel	3
 13950	13950	Fabricação de não tecidos e respectivos artigos, excepto vestuário	Manufacture of non-wovens and articles made from non-wovens, except apparel	3
 1396	1396	Fabricação de têxteis para uso técnico e industrial	Manufacture of technical and industrial textiles	3
 13961	13961	Fabricação de passamanarias e sirgarias	Manufacture of ornamental trimmings and narrow fabrics	3
 13962	13962	Fabricação de têxteis para uso técnico e industrial, n.e.	Manufacture of technical and industrial textiles, n.e.c.	3
 1399	1399	Fabricação de outros têxteis, n.e.	Manufacture of other textiles n.e.c.	3
-13991	13991	Fabricação de bordados 	Manufacture of embroidery	3
+13991	13991	Fabricação de bordados	Manufacture of embroidery	3
 13992	13992	Fabricação de rendas	Manufacture of lace	3
 13993	13993	Fabricação de outros têxteis diversos, n.e.	Manufacture of other miscellaneous textiles, n.e.c.	3
 14	14	Indústria do vestuário	Manufacture of wearing apparel	3
@@ -3358,7 +3358,7 @@ cae_num	cae_str	des_pt	des_en	rev
 16230	16230	Fabricação de outras obras de carpintaria para a construção	Manufacture of other builders' carpentry and joinery	3
 1624	1624	Fabricação de embalagens de madeira	Manufacture of wooden containers	3
 16240	16240	Fabricação de embalagens de madeira	Manufacture of wooden containers	3
-1629	1629	Fabricação de outras obras de madeira, de cestaria e espartaria; indústria da cortiça	Manufacture of other products of wood; manufacture of articles of  straw and plaiting materials; cork industry	3
+1629	1629	Fabricação de outras obras de madeira, de cestaria e espartaria; indústria da cortiça	Manufacture of other products of wood; manufacture of articles of straw and plaiting materials; cork industry	3
 16291	16291	Fabricação de outras obras de madeira	Manufacture of other products of wood	3
 16292	16292	Fabricação de obras de cestaria e de espartaria	Manufacture of articles of straw and plaiting materials	3
 16293	16293	Indústria de preparação da cortiça	Cork preparation industry	3
@@ -3390,8 +3390,8 @@ cae_num	cae_str	des_pt	des_en	rev
 18120	18120	Outra impressão	Other printing	3
 1813	1813	Actividades de preparação da impressão e de produtos media	Pre-press and pre-media services	3
 18130	18130	Actividades de preparação da impressão e de produtos media	Pre-press and pre-media services	3
-1814	1814	Encadernação  e actividades relacionadas	Bookbinding  and related services	3
-18140	18140	Encadernação  e actividades relacionadas	Bookbinding and related services	3
+1814	1814	Encadernação e actividades relacionadas	Bookbinding and related services	3
+18140	18140	Encadernação e actividades relacionadas	Bookbinding and related services	3
 182	182	Reprodução de suportes gravados	Reproduction of recorded media	3
 1820	1820	Reprodução de suportes gravados	Reproduction of recorded media	3
 18200	18200	Reprodução de suportes gravados	Reproduction of recorded media	3
@@ -3410,8 +3410,8 @@ cae_num	cae_str	des_pt	des_en	rev
 20110	20110	Fabricação de gases industriais	Manufacture of industrial gases	3
 2012	2012	Fabricação de corantes e pigmentos	Manufacture of dyes and pigments	3
 20120	20120	Fabricação de corantes e pigmentos	Manufacture of dyes and pigments	3
-2013	2013	Fabricação de outros produtos químicos inorgânicos de base 	Manufacture of other inorganic basic chemicals	3
-20130	20130	Fabricação de outros produtos químicos inorgânicos de base 	Manufacture of other inorganic basic chemicals	3
+2013	2013	Fabricação de outros produtos químicos inorgânicos de base	Manufacture of other inorganic basic chemicals	3
+20130	20130	Fabricação de outros produtos químicos inorgânicos de base	Manufacture of other inorganic basic chemicals	3
 2014	2014	Fabricação de outros produtos químicos orgânicos de base	Manufacture of other organic basic chemicals	3
 20141	20141	Fabricação de resinosos e seus derivados	Manufacture of resinous and related products	3
 20142	20142	Fabricação de carvão (vegetal e animal) e produtos associados	Manufacture of (vegetable and animal) charcoal and similar products	3
@@ -3447,13 +3447,13 @@ cae_num	cae_str	des_pt	des_en	rev
 20530	20530	Fabricação de óleos essenciais	Manufacture of essential oils	3
 2059	2059	Fabricação de outros produtos químicos, n.e.	Manufacture of other chemical products n.e.c.	3
 20591	20591	Fabricação de biodiesel	Manufacture of biodiesel	3
-20592	20592	Fabricação de produtos químicos auxiliares para uso industrial 	Manufacture of chemical products for industrial use	3
+20592	20592	Fabricação de produtos químicos auxiliares para uso industrial	Manufacture of chemical products for industrial use	3
 20593	20593	Fabricação de óleos e massas lubrificantes, com exclusão da efectuada nas refinarias	Manufacture of lubricating oils and greases, except that made in refineries	3
 20594	20594	Fabricação de outros produtos químicos diversos, n.e.	Manufacture of other miscellaneous chemical products, n.e.c.	3
 206	206	Fabricação de fibras sintéticas ou artificiais	Manufacture of man-made fibres	3
 2060	2060	Fabricação de fibras sintéticas ou artificiais	Manufacture of man-made fibres	3
 20600	20600	Fabricação de fibras sintéticas ou artificiais	Manufacture of man-made fibres	3
-21	21	Fabricação de produtos farmacêuticos de base e de  preparações farmacêuticas	Manufacture of basic pharmaceutical products and pharmaceutical preparations	3
+21	21	Fabricação de produtos farmacêuticos de base e de preparações farmacêuticas	Manufacture of basic pharmaceutical products and pharmaceutical preparations	3
 211	211	Fabricação de produtos farmacêuticos de base	Manufacture of basic pharmaceutical products	3
 2110	2110	Fabricação de produtos farmacêuticos de base	Manufacture of basic pharmaceutical products	3
 21100	21100	Fabricação de produtos farmacêuticos de base	Manufacture of basic pharmaceutical products	3
@@ -3479,14 +3479,14 @@ cae_num	cae_str	des_pt	des_en	rev
 2229	2229	Fabricação de outros artigos de plástico	Manufacture of other plastic products	3
 22291	22291	Fabricação de componentes de plástico para calçado	Manufacture of plastic parts of footwear	3
 22292	22292	Fabricação de outros artigos de plástico, n.e.	Manufacture of other plastic products, n.c.e.	3
-23	23	Fabrico de outros produtos minerais não metálicos 	Manufacture of other non-metallic mineral products	3
+23	23	Fabrico de outros produtos minerais não metálicos	Manufacture of other non-metallic mineral products	3
 231	231	Fabricação de vidro e artigos de vidro	Manufacture of glass and glass products	3
 2311	2311	Fabricação de vidro plano	Manufacture of flat glass	3
 23110	23110	Fabricação de vidro plano	Manufacture of flat glass	3
 2312	2312	Moldagem e transformação de vidro plano	Shaping and processing of flat glass	3
 23120	23120	Moldagem e transformação de vidro plano	Shaping and processing of flat glass	3
 2313	2313	Fabricação de vidro de embalagem e cristalaria (vidro oco)	Manufacture of hollow glass and crystal ware	3
-23131	23131	Fabricação de vidro de embalagem 	Manufacture of hollow glass	3
+23131	23131	Fabricação de vidro de embalagem	Manufacture of hollow glass	3
 23132	23132	Cristalaria	Manufacture of crystal ware	3
 2314	2314	Fabricação de fibras de vidro	Manufacture of glass fibres	3
 23140	23140	Fabricação de fibras de vidro	Manufacture of glass fibres	3
@@ -3497,7 +3497,7 @@ cae_num	cae_str	des_pt	des_en	rev
 23200	23200	Fabricação de produtos cerâmicos refractários	Manufacture of refractory ceramic products	3
 233	233	Fabricação de produtos cerâmicos para a construção	Manufacture of ceramic building materials	3
 2331	2331	Fabricação de azulejos, ladrilhos, mosaicos e placas de cerâmica	Manufacture of ceramic tiles and flags	3
-23311	23311	Fabricação de azulejos 	Manufacture of ceramic tiles	3
+23311	23311	Fabricação de azulejos	Manufacture of ceramic tiles	3
 23312	23312	Fabricação de ladrilhos, mosaicos e placas de cerâmica	Manufacture of floor flags, tiles and mosaic	3
 2332	2332	Fabricação de tijolos, telhas e de outros produtos cerâmicos para a construção	Manufacture of ceramic bricks, tiles and construction products	3
 23321	23321	Fabricação de tijolos	Manufacture of bricks	3
@@ -3523,7 +3523,7 @@ cae_num	cae_str	des_pt	des_en	rev
 23510	23510	Fabricação de cimento	Manufacture of cement	3
 2352	2352	Fabricação de cal e gesso	Manufacture of lime and plaster	3
 23521	23521	Fabricação de cal	Manufacture of lime	3
-23522	23522	Fabricação de gesso	Manufacture of  plaster	3
+23522	23522	Fabricação de gesso	Manufacture of plaster	3
 236	236	Fabricação de produtos de betão, gesso e cimento	Manufacture of articles of concrete, cement and plaster	3
 2361	2361	Fabricação de produtos de betão para a construção	Manufacture of concrete products for construction purposes	3
 23610	23610	Fabricação de produtos de betão para a construção	Manufacture of concrete products for construction purposes	3
@@ -3539,7 +3539,7 @@ cae_num	cae_str	des_pt	des_en	rev
 23690	23690	Fabricação de outros produtos de betão, gesso e cimento	Manufacture of other articles of concrete, plaster and cement	3
 237	237	Serragem, corte e acabamento de rochas ornamentais e de outras pedras de construção	Cutting, shaping and finishing of ornamental and building stone	3
 2370	2370	Serragem, corte e acabamento de rochas ornamentais e de outras pedras de construção	Cutting, shaping and finishing of ornamental and building stone	3
-23701	23701	Fabricação de artigos de mármore e de rochas similares 	Manufacture of articles of marble and similar stone	3
+23701	23701	Fabricação de artigos de mármore e de rochas similares	Manufacture of articles of marble and similar stone	3
 23702	23702	Fabricação de artigos em ardósia (lousa)	Manufacture of articles of slate	3
 23703	23703	Fabricação de artigos de granito e de rochas, n.e.	Manufacture of articles of granite and stones, n.e.c.	3
 239	239	Fabricação de produtos abrasivos e de outros produtos minerais não metálicos	Manufacture of abrasive products and non-metallic mineral products n.e.c.	3
@@ -3555,7 +3555,7 @@ cae_num	cae_str	des_pt	des_en	rev
 242	242	Fabricação de tubos, condutas, perfis ocos e respectivos acessórios, de aço	Manufacture of tubes, pipes, hollow profiles and related fittings, of steel	3
 2420	2420	Fabricação de tubos, condutas, perfis ocos e respectivos acessórios, de aço	Manufacture of tubes, pipes, hollow profiles and related fittings, of steel	3
 24200	24200	Fabricação de tubos, condutas, perfis ocos e respectivos acessórios, de aço	Manufacture of tubes, pipes, hollow profiles and related fittings, of steel	3
-243	243	Outras actividades da primeira transformação do aço	Other first processing activities of  steel	3
+243	243	Outras actividades da primeira transformação do aço	Other first processing activities of steel	3
 2431	2431	Estiragem a frio	Cold drawing of bars	3
 24310	24310	Estiragem a frio	Cold drawing of bars	3
 2432	2432	Laminagem a frio de arco ou banda	Cold rolling of narrow strip	3
@@ -3575,8 +3575,8 @@ cae_num	cae_str	des_pt	des_en	rev
 24440	24440	Obtenção e primeira transformação de cobre	Copper production	3
 2445	2445	Obtenção e primeira transformação de outros metais não ferrosos	Other non-ferrous metal production	3
 24450	24450	Obtenção e primeira transformação de outros metais não ferrosos	Other non-ferrous metal production	3
-2446	2446	Tratamento de combustível nuclear 	Processing of nuclear fuel	3
-24460	24460	Tratamento de combustível nuclear 	Processing of nuclear fuel	3
+2446	2446	Tratamento de combustível nuclear	Processing of nuclear fuel	3
+24460	24460	Tratamento de combustível nuclear	Processing of nuclear fuel	3
 245	245	Fundição de metais ferrosos e não ferrosos	Casting of metals	3
 2451	2451	Fundição de ferro fundido	Casting of iron	3
 24510	24510	Fundição de ferro fundido	Casting of iron	3
@@ -3618,10 +3618,10 @@ cae_num	cae_str	des_pt	des_en	rev
 25710	25710	Fabricação de cutelaria	Manufacture of cutlery	3
 2572	2572	Fabricação de fechaduras, dobradiças e de outras ferragens	Manufacture of locks, hinges and other hardware	3
 25720	25720	Fabricação de fechaduras, dobradiças e de outras ferragens	Manufacture of locks, hinges and other hardware	3
-2573	2573	Fabricação de ferramentas 	Manufacture of tools	3
+2573	2573	Fabricação de ferramentas	Manufacture of tools	3
 25731	25731	Fabricação de ferramentas manuais	Manufacture of hand tools	3
 25732	25732	Fabricação de ferramentas mecânicas	Manufacture of mechanical tools	3
-25733	25733	Fabricação de peças sinterizadas 	Manufacture of sintered parts	3
+25733	25733	Fabricação de peças sinterizadas	Manufacture of sintered parts	3
 25734	25734	Fabricação de moldes metálicos	Manufacture of metal moulds	3
 259	259	Fabricação de outros produtos metálicos	Manufacture of other fabricated metal products	3
 2591	2591	Fabricação de embalagens metálicas pesadas	Manufacture of steel drums and similar containers	3
@@ -3636,7 +3636,7 @@ cae_num	cae_str	des_pt	des_en	rev
 25940	25940	Fabricação de rebites, parafusos e porcas	Manufacture of fasteners and screw machine products	3
 2599	2599	Fabricação de outros produtos metálicos, n.e.	Manufacture of other fabricated metal products n.e.c.	3
 25991	25991	Fabricação de louça metálica e artigos de uso doméstico	Manufacture of metal household articles	3
-25992	25992	Fabricação de outros produtos metálicos diversos,  n.e.	Manufacture of other fabricated miscellaneous metal products,  n.e.c.	3
+25992	25992	Fabricação de outros produtos metálicos diversos, n.e.	Manufacture of other fabricated miscellaneous metal products, n.e.c.	3
 26	26	Fabricação de equipamentos informáticos, equipamento para comunicações e produtos electrónicos e ópticos	Manufacture of computer, communication equipment, electronic and optical products	3
 261	261	Fabricação de componentes e de placas, electrónicos	Manufacture of electronic components and boards	3
 2611	2611	Fabricação de componentes electrónicos	Manufacture of electronic components	3
@@ -3654,7 +3654,7 @@ cae_num	cae_str	des_pt	des_en	rev
 26400	26400	Fabricação de receptores de rádio e de televisão e bens de consumo similares	Manufacture of of television and radio receivers and similar consumer goods	3
 265	265	Fabricação de instrumentos e aparelhos de medida, verificação e navegação; relógios e material de relojoaria	Manufacture of instruments and appliances for measuring, testing and navigation; watches and clocks	3
 2651	2651	Fabricação de instrumentos e aparelhos de medida, verificação e navegação	Manufacture of instruments and appliances for measuring, testing and navigation	3
-26511	26511	Fabricação de contadores de electricidade, gás, água e de outros líquidos	Manufacture of instruments for measuring electricity, gas  water and other fluid	3
+26511	26511	Fabricação de contadores de electricidade, gás, água e de outros líquidos	Manufacture of instruments for measuring electricity, gas water and other fluid	3
 26512	26512	Fabricação de instrumentos e aparelhos de medida, verificação, navegação e outros fins, n.e.	Manufacture of instruments and appliances for measuring, checking, testing, navigating and other purposes, n.e.c.	3
 2652	2652	Fabricação de relógios e material de relojoaria	Manufacture of watches and clocks	3
 26520	26520	Fabricação de relógios e material de relojoaria	Manufacture of watches and clocks	3
@@ -3722,7 +3722,7 @@ cae_num	cae_str	des_pt	des_en	rev
 28250	28250	Fabricação de equipamento não doméstico para refrigeração e ventilação	Manufacture of non-domestic cooling and ventilation equipment	3
 2829	2829	Fabricação de outras máquinas para uso geral, n.e.	Manufacture of other general-purpose machinery n.e.c.	3
 28291	28291	Fabricação de máquinas de acondicionamento e de embalagem	Manufacture of packing and wrapping machinery	3
-28292	28292	Fabricação de balanças e de outro equipamento para pesagem 	Manufacture of scales and other weighing machinery	3
+28292	28292	Fabricação de balanças e de outro equipamento para pesagem	Manufacture of scales and other weighing machinery	3
 28293	28293	Fabricação de outras máquinas diversas de uso geral, n.e.	Manufacture of other general purpose miscellaneous machinery, n.e.c.	3
 283	283	Fabricação de máquinas e de tractores para a agricultura, pecuária e silvicultura	Manufacture of agricultural and forestry machinery	3
 2830	2830	Fabricação de máquinas e de tractores para a agricultura, pecuária e silvicultura	Manufacture of agricultural and forestry machinery	3
@@ -3828,12 +3828,12 @@ cae_num	cae_str	des_pt	des_en	rev
 32993	32993	Fabricação de guarda-sóis e chapéus de chuva	Manufacture of parasols and umbrellas	3
 32994	32994	Fabricação de equipamento de protecção e segurança	Manufacture of safety and security equipment	3
 32995	32995	Fabricação de caixões mortuários em madeira	Manufacture of wooden coffins	3
-32996	32996	Outras indústrias transformadoras diversas, n.e.	Other miscellaneous  manufacturing activities, n.e.c.	3
+32996	32996	Outras indústrias transformadoras diversas, n.e.	Other miscellaneous manufacturing activities, n.e.c.	3
 33	33	Reparação, manutenção e instalação de máquinas e equipamentos	Repair, maintenance and installation of machinery and equipment	3
 331	331	Reparação e manutenção de produtos metálicos, máquinas e equipamentos	Repair and maintenance of fabricated metal products, machinery and equipment	3
 3311	3311	Reparação e manutenção de produtos metálicos (excepto máquinas e equipamento)	Repair and maintenance of fabricated metal products (except machinery and equipment)	3
 33110	33110	Reparação e manutenção de produtos metálicos (excepto máquinas e equipamento)	Repair and maintenance of fabricated metal products (except machinery and equipment)	3
-3312	3312	Reparação e  manutenção de máquinas e equipamentos	Repair  and maintenanceof machinery and equipment	3
+3312	3312	Reparação e manutenção de máquinas e equipamentos	Repair and maintenanceof machinery and equipment	3
 33120	33120	Reparação e manutenção de máquinas e equipamentos	Repair and maintenance of machinery and equipment	3
 3313	3313	Reparação e manutenção de equipamento electrónico e óptico	Repair and maintenance of electronic and optical equipment	3
 33130	33130	Reparação e manutenção de equipamento electrónico e óptico	Repair and maintenance of electronic and optical equipment	3
@@ -3857,7 +3857,7 @@ cae_num	cae_str	des_pt	des_en	rev
 35112	35112	Produção de electricidade de origem térmica	Production electricity of thermal origin	3
 35113	35113	Produção de electricidade de origem eólica, geotérmica, solar e de origem, n.e.	Production electricity of wind, geothermal, solar and other origin	3
 3512	3512	Transporte de electricidade	Transmission of electricity	3
-35120	35120	Transporte de electricidade 	Transmission of electricity	3
+35120	35120	Transporte de electricidade	Transmission of electricity	3
 3513	3513	Distribuição de electricidade	Distribution of electricity	3
 35130	35130	Distribuição de electricidade	Distribution of electricity	3
 3514	3514	Comércio de electricidade	Trade of electricity	3
@@ -3923,7 +3923,7 @@ cae_num	cae_str	des_pt	des_en	rev
 42120	42120	Construção de vias férreas	Construction of railways and underground railways	3
 4213	4213	Construção de pontes e túneis	Construction of bridges and tunnels	3
 42130	42130	Construção de pontes e túneis	Construction of bridges and tunnels	3
-422	422	Construção de redes de transporte de águas, de esgotos, de distribuição de energia, de telecomunicações  e de outras redes	Construction of pipelines for transportation of water, sewerage, distribution of energy, telecommunication and other networks	3
+422	422	Construção de redes de transporte de águas, de esgotos, de distribuição de energia, de telecomunicações e de outras redes	Construction of pipelines for transportation of water, sewerage, distribution of energy, telecommunication and other networks	3
 4221	4221	Construção de redes de transporte de águas, de esgotos e de outros fluídos	Construction of pipelines for transportation of water, sewerage and other fluids	3
 42210	42210	Construção de redes de transporte de águas, de esgotos e de outros fluídos	Construction of pipelines for transportation of water, sewerage and other fluids	3
 4222	4222	Construção de redes de transporte e distribuição de electricidade e redes de telecomunicações	Construction of networks for transmission and distribution of electricity and telecommunications networks	3
@@ -3945,7 +3945,7 @@ cae_num	cae_str	des_pt	des_en	rev
 4321	4321	Instalação eléctrica	Electrical installation	3
 43210	43210	Instalação eléctrica	Electrical installation	3
 4322	4322	Instalação de canalizações e de climatização	Plumbing, heat and air conditioning installation	3
-43221	43221	Instalação de canalizações	Plumbing  installation	3
+43221	43221	Instalação de canalizações	Plumbing installation	3
 43222	43222	Instalação de climatização	Air conditioning installation	3
 4329	4329	Outras instalações em construções	Other construction installation	3
 43290	43290	Outras instalações em construções	Other construction installation	3
@@ -4162,7 +4162,7 @@ cae_num	cae_str	des_pt	des_en	rev
 47610	47610	Comércio a retalho de livros, em estabelecimentos especializados	Retail sale of books in specialised stores	3
 4762	4762	Comércio a retalho de jornais, revistas e artigos de papelaria, em estabelecimentos especializados	Retail sale of newspapers, magazines and stationery in specialised stores	3
 47620	47620	Comércio a retalho de jornais, revistas e artigos de papelaria, em estabelecimentos especializados	Retail sale of newspapers, magazines and stationery in specialised stores	3
-4763	4763	Comércio a retalho de  discos, CD, DVD, cassetes e similares, em estabelecimentos especializados	Retail sale of records, CD, DVD, cassettes and similars in specialised stores	3
+4763	4763	Comércio a retalho de discos, CD, DVD, cassetes e similares, em estabelecimentos especializados	Retail sale of records, CD, DVD, cassettes and similars in specialised stores	3
 47630	47630	Comércio a retalho de discos, CD, DVD, cassetes e similares, em estabelecimentos especializados	Retail sale of records, CD, DVD, cassettes and similars in specialised stores	3
 4764	4764	Comércio a retalho de artigos de desporto, de campismo e lazer, em estabelecimentos especializados	Retail sale of sporting, camping and recreation equipment in specialised stores	3
 47640	47640	Comércio a retalho de artigos de desporto, de campismo e lazer, em estabelecimentos especializados	Retail sale of sporting, camping and recreation equipment in specialised stores	3
@@ -4226,21 +4226,21 @@ cae_num	cae_str	des_pt	des_en	rev
 4942	4942	Actividades de mudanças, por via rodoviária	Removal services by road	3
 49420	49420	Actividades de mudanças, por via rodoviária	Removal services by road	3
 495	495	Transportes por oleodutos ou gasodutos	Transport via pipeline	3
-4950	4950	Transportes por oleodutos ou gasodutos 	Transport via pipeline	3
-49500	49500	Transportes por oleodutos ou gasodutos 	Transport via pipeline	3
+4950	4950	Transportes por oleodutos ou gasodutos	Transport via pipeline	3
+49500	49500	Transportes por oleodutos ou gasodutos	Transport via pipeline	3
 50	50	Transportes por água	Water transport	3
 501	501	Transportes marítimos de passageiros	Sea and coastal passenger water transport	3
-5010	5010	Transportes marítimos de passageiros 	Sea and coastal passenger water transport	3
+5010	5010	Transportes marítimos de passageiros	Sea and coastal passenger water transport	3
 50101	50101	Transportes marítimos não costeiros de passageiros	Sea passenger water transport	3
 50102	50102	Transportes costeiros e locais de passageiros	Coastal and local passenger water transport	3
 502	502	Transportes marítimos de mercadorias	Sea and coastal freight water transport	3
-5020	5020	Transportes marítimos de mercadorias 	Sea and coastal freight water transport	3
-50200	50200	Transportes marítimos de mercadorias 	Sea and coastal freight water transport	3
+5020	5020	Transportes marítimos de mercadorias	Sea and coastal freight water transport	3
+50200	50200	Transportes marítimos de mercadorias	Sea and coastal freight water transport	3
 503	503	Transportes de passageiros por vias navegáveis interiores	Inland passenger water transport	3
-5030	5030	Transportes de passageiros por vias navegáveis interiores 	Inland passenger water transport	3
-50300	50300	Transportes de passageiros por vias navegáveis interiores 	Inland passenger water transport	3
-504	504	Transportes de mercadorias por vias navegáveis interiores 	Inland freight water transport	3
-5040	5040	Transportes de mercadorias por vias navegáveis interiores 	Inland freight water transport	3
+5030	5030	Transportes de passageiros por vias navegáveis interiores	Inland passenger water transport	3
+50300	50300	Transportes de passageiros por vias navegáveis interiores	Inland passenger water transport	3
+504	504	Transportes de mercadorias por vias navegáveis interiores	Inland freight water transport	3
+5040	5040	Transportes de mercadorias por vias navegáveis interiores	Inland freight water transport	3
 50400	50400	Transportes de mercadorias por vias navegáveis interiores	Inland freight water transport	3
 51	51	Transportes aéreos	Air transport	3
 511	511	Transportes aéreos de passageiros	Passenger air transport	3
@@ -4257,7 +4257,7 @@ cae_num	cae_str	des_pt	des_en	rev
 52101	52101	Armazenagem frigorífica	Storage of frozen goods	3
 52102	52102	Armazenagem não frigorífica	Storage of non-frozen goods	3
 522	522	Actividades auxiliares dos transportes	Supporting activities for transportation	3
-5221	5221	Actividades auxiliares e de gestão de infra-estruturas dos transportes terrestres	Supporting activities  to land transportation	3
+5221	5221	Actividades auxiliares e de gestão de infra-estruturas dos transportes terrestres	Supporting activities to land transportation	3
 52211	52211	Gestão de infra-estruturas dos transportes terrestres	Operation of land transport infrastructure	3
 52212	52212	Assistência a veículos na estrada	Towing and road side assistance	3
 52213	52213	Outras actividades auxiliares dos transportes terrestres	Other supporting land transport activities	3
@@ -4289,7 +4289,7 @@ cae_num	cae_str	des_pt	des_en	rev
 55117	55117	Aldeamentos turísticos com restaurante	Holiday villages with restaurant	3
 55118	55118	Apartamentos turísticos com restaurante	Holiday flats with restaurant	3
 55119	55119	Outros estabelecimentos hoteleiros com restaurante	Other hotel and similar establishments with restaurant	3
-5512	5512	Estabelecimentos hoteleiros sem restaurante 	Hotels and similar establishments without restaurant	3
+5512	5512	Estabelecimentos hoteleiros sem restaurante	Hotels and similar establishments without restaurant	3
 55121	55121	Hotéis sem restaurante	Hotels without restaurant	3
 55122	55122	Pensões sem restaurante	Guest houses without restaurant	3
 55123	55123	Apartamentos turísticos sem restaurante	Holiday flats without restaurant	3
@@ -4298,8 +4298,8 @@ cae_num	cae_str	des_pt	des_en	rev
 5520	5520	Residências para férias e outros alojamentos de curta duração	Holiday and other short-stay accommodation	3
 55201	55201	Alojamento mobilado para turistas	Letting services of short-stay furnished accommodation	3
 55202	55202	Turismo no espaço rural	Short-stay lodging in farmhouses	3
-55203	55203	Colónias e campos de férias 	Holiday camps	3
-55204	55204	Outros locais de alojamento de curta duração 	Other short-stay accommodation	3
+55203	55203	Colónias e campos de férias	Holiday camps	3
+55204	55204	Outros locais de alojamento de curta duração	Other short-stay accommodation	3
 553	553	Parques de campismo e de caravanismo	Camping sites, including caravan sites	3
 5530	5530	Parques de campismo e de caravanismo	Camping sites, including caravan sites	3
 55300	55300	Parques de campismo e de caravanismo	Camping sites, including caravan sites	3
@@ -4311,13 +4311,13 @@ cae_num	cae_str	des_pt	des_en	rev
 5610	5610	Restaurantes (inclui actividades de restauração em meios móveis)	Restaurants (include mobile food service activities)	3
 56101	56101	Restaurantes tipo tradicional	Traditional restaurants	3
 56102	56102	Restaurantes com lugares ao balcão	Snack-bars restaurants	3
-56103	56103	Restaurantes sem serviço de mesa 	Self-service restaurants	3
+56103	56103	Restaurantes sem serviço de mesa	Self-service restaurants	3
 56104	56104	Restaurantes típicos	Typical restaurants	3
 56105	56105	Restaurantes com espaço de dança	Restaurants with dance floor	3
 56106	56106	Confecção de refeições prontas a levar para casa	Take away eating places	3
 56107	56107	Restaurantes, n.e. (inclui actividades de restauração em meios móveis)	Restaurants , n.e.c. (include mobile food service activities)	3
-562	562	Fornecimento de refeições para eventos e outras actividades de serviço de refeições  	Event catering and other food service activities	3
-5621	5621	Fornecimento de refeições para eventos 	Event catering activities	3
+562	562	Fornecimento de refeições para eventos e outras actividades de serviço de refeições	Event catering and other food service activities	3
+5621	5621	Fornecimento de refeições para eventos	Event catering activities	3
 56210	56210	Fornecimento de refeições para eventos	Event catering activities	3
 5629	5629	Outras actividades de serviço de refeições	Other food service activities	3
 56290	56290	Outras actividades de serviço de refeições	Other food service activities	3
@@ -4327,8 +4327,9 @@ cae_num	cae_str	des_pt	des_en	rev
 56302	56302	Bares	Bars	3
 56303	56303	Pastelarias e casas de chá	Tea and confectionery shops	3
 56304	56304	Outros estabelecimentos de bebidas sem espectáculo	Others beverages establishments, without entertainment	3
-56305	56305	Estabelecimentos de bebidas com espaço de dança 	Others beverages establishments, with dance floor	3
-58	58	Actividades de edição 	Publishing activities	3
+56305	56305	Estabelecimentos de bebidas com espaço de dança	Others beverages establishments, with dance floor	3
+56306	56306	Estabelecimentos de bebidas itinerantes (Lei n.º 66/2018, de 3 de dezembro)	Itinerant beverages establishments (Law No 66/2018, of 3 December)	3
+58	58	Actividades de edição	Publishing activities	3
 581	581	Edição de livros, de jornais e de outras publicações	Publishing of books, periodicals and other publishing activities	3
 5811	5811	Edição de livros	Book publishing	3
 58110	58110	Edição de livros	Book publishing	3
@@ -4347,7 +4348,7 @@ cae_num	cae_str	des_pt	des_en	rev
 58290	58290	Edição de outros programas informáticos	Other software publishing	3
 59	59	Actividades cinematográficas, de vídeo, de produção de programas de televisão, de gravação de som e de edição de música	Motion picture, video and television programme production, sound recording and music publishing activities	3
 591	591	Actividades cinematográficas, de vídeo e de produção de programas de televisão	Motion picture, video and television programme activities	3
-5911	5911	Produção de filmes, de vídeos e de programas de televisão 	Motion picture, video and television programme production activities	3
+5911	5911	Produção de filmes, de vídeos e de programas de televisão	Motion picture, video and television programme production activities	3
 59110	59110	Produção de filmes, de vídeos e de programas de televisão	Motion picture, video and television programme production activities	3
 5912	5912	Actividades técnicas de pós-produção para filmes, vídeos e programas de televisão	Motion picture, video and television programme post-production activities	3
 59120	59120	Actividades técnicas de pós-produção para filmes, vídeos e programas de televisão	Motion picture, video and television programme post-production activities	3
@@ -4407,7 +4408,7 @@ cae_num	cae_str	des_pt	des_en	rev
 64190	64190	Outra intermediação monetária	Other monetary intermediation	3
 642	642	Actividades das sociedades gestoras de participações sociais	Management activities of holding companies	3
 6420	6420	Actividades das sociedades gestoras de participações sociais	Management activities of holding companies	3
-64201	64201	Actividades das sociedades gestoras de participações sociais financeiras	Management activities of  financial holding companies	3
+64201	64201	Actividades das sociedades gestoras de participações sociais financeiras	Management activities of financial holding companies	3
 64202	64202	Actividades das sociedades gestoras de participações sociais não financeiras	Management activities of non financial holding companies	3
 643	643	Trusts, fundos e entidades financeiras similares	Trusts, funds and similar financial entities	3
 6430	6430	Trusts, fundos e entidades financeiras similares	Trusts, funds and similar financial entities	3
@@ -4457,7 +4458,7 @@ cae_num	cae_str	des_pt	des_en	rev
 681	681	Compra e venda de bens imobiliários	Buying and selling of own real estate	3
 6810	6810	Compra e venda de bens imobiliários	Buying and selling of own real estate	3
 68100	68100	Compra e venda de bens imobiliários	Buying and selling of own real estate	3
-682	682	Arrendamento de bens imobiliários	Renting  of own or leased real estate	3
+682	682	Arrendamento de bens imobiliários	Renting of own or leased real estate	3
 6820	6820	Arrendamento de bens imobiliários	Renting of own or leased real estate	3
 68200	68200	Arrendamento de bens imobiliários	Renting of own or leased real estate	3
 683	683	Actividades imobiliárias por conta de outrem	Real estate activities on a fee or contract basis	3
@@ -4569,8 +4570,8 @@ cae_num	cae_str	des_pt	des_en	rev
 7830	7830	Outro fornecimento de recursos humanos	Other human resources provision	3
 78300	78300	Outro fornecimento de recursos humanos	Other human resources provision	3
 79	79	Agências de viagem, operadores turísticos, outros serviços de reservas e actividades relacionadas	Travel agency, tour operator, reservation service and related activities	3
-791	791	Agências de viagem e operadores turísticos 	Travel agency and tour operator activities	3
-7911	7911	Actividades das agências de viagem  	Travel agency activities	3
+791	791	Agências de viagem e operadores turísticos	Travel agency and tour operator activities	3
+7911	7911	Actividades das agências de viagem	Travel agency activities	3
 79110	79110	Actividades das agências de viagem	Travel agency activities	3
 7912	7912	Actividades dos operadores turísticos	Tour operator activities	3
 79120	79120	Actividades dos operadores turísticos	Tour operator activities	3
@@ -4578,7 +4579,7 @@ cae_num	cae_str	des_pt	des_en	rev
 7990	7990	Outros serviços de reservas e actividades relacionadas	Other reservation service and related activities	3
 79900	79900	Outros serviços de reservas e actividades relacionadas	Other reservation service and related activities	3
 80	80	Actividades de investigação e segurança	Security and investigation activities	3
-801	801	Actividades de segurança privada 	Private security activities	3
+801	801	Actividades de segurança privada	Private security activities	3
 8010	8010	Actividades de segurança privada	Private security activities	3
 80100	80100	Actividades de segurança privada	Private security activities	3
 802	802	Actividades relacionadas com sistemas de segurança	Security systems service activities	3
@@ -4632,7 +4633,7 @@ cae_num	cae_str	des_pt	des_en	rev
 8412	8412	Administração pública - actividades de saúde, educação, culturais e sociais, excepto segurança social obrigatória	Public administration - health care, education, cultural and other social services activities, excluding social security	3
 84121	84121	Administração Pública - actividades de saúde	Public administration - health care activities	3
 84122	84122	Administração Pública - actividades de educação	Public administration - education activities	3
-84123	84123	Administração Pública - actividades da cultura, desporto, recreativas, ambiente, habitação e de outras actividades sociais, excepto segurança social obrigatória	Public administration - culture, sport, recreation, environment, housing and other social services activities  , except compulsory social security activities	3
+84123	84123	Administração Pública - actividades da cultura, desporto, recreativas, ambiente, habitação e de outras actividades sociais, excepto segurança social obrigatória	Public administration - culture, sport, recreation, environment, housing and other social services activities , except compulsory social security activities	3
 8413	8413	Administração pública - actividades económicas	Public administration - economic activities	3
 84130	84130	Administração pública - actividades económicas	Public administration - economic activities	3
 842	842	Negócios estrangeiros, defesa, justiça, segurança, ordem pública e protecção civil	Foreign affairs, defence, justice, public security, order and civil protection	3
@@ -4690,14 +4691,14 @@ cae_num	cae_str	des_pt	des_en	rev
 86210	86210	Actividades de prática médica de clínica geral, em ambulatório	General medical practice activities	3
 8622	8622	Actividades de prática médica de clínica especializada, em ambulatório	Specialist medical practice activities	3
 86220	86220	Actividades de prática médica de clínica especializada, em ambulatório	Specialist medical practice activities	3
-8623	8623	Actividades  de medicina dentária e odontologia	Dental practice activities	3
-86230	86230	Actividades  de medicina dentária e odontologia	Dental practice activities	3
+8623	8623	Actividades de medicina dentária e odontologia	Dental practice activities	3
+86230	86230	Actividades de medicina dentária e odontologia	Dental practice activities	3
 869	869	Outras actividades de saúde humana	Other human health activities	3
 8690	8690	Outras actividades de saúde humana	Other human health activities	3
 86901	86901	Laboratórios de análises clínicas	Activities of medical laboratories	3
 86902	86902	Actividades de ambulâncias	Ambulance services	3
-86903	86903	Actividades de enfermagem 	Nursing activities	3
-86904	86904	Centros de recolha e bancos de órgãos 	Activities of organ banks	3
+86903	86903	Actividades de enfermagem	Nursing activities	3
+86904	86904	Centros de recolha e bancos de órgãos	Activities of organ banks	3
 86905	86905	Actividades termais	Thermal activities	3
 86906	86906	Outras actividades de saúde humana, n.e.	Other human health activities, n.e.c.	3
 87	87	Actividades de apoio social com alojamento	Social work activities with accommodation	3
@@ -4746,7 +4747,7 @@ cae_num	cae_str	des_pt	des_en	rev
 91030	91030	Actividades dos sítios e monumentos históricos	Historical sites, buildings and similar visitor attractions activities	3
 9104	9104	Actividades dos jardins zoológicos, botânicos e aquários e dos parques e reservas naturais	Botanical and zoological gardens, aquaria, parks and nature reserves activities	3
 91041	91041	Actividades dos jardins zoológicos, botânicos e aquários	Botanical and zoological gardens and aquaria activities	3
-91042	91042	Actividade dos parques e reservas naturais 	Parks and nature reserves activities	3
+91042	91042	Actividade dos parques e reservas naturais	Parks and nature reserves activities	3
 92	92	Lotarias e outros jogos de aposta	Gambling and betting activities	3
 920	920	Lotarias e outros jogos de aposta	Gambling and betting activities	3
 9200	9200	Lotarias e outros jogos de aposta	Gambling and betting activities	3
@@ -4764,12 +4765,14 @@ cae_num	cae_str	des_pt	des_en	rev
 93192	93192	Outras actividades desportivas, n.e.	Other sports activities, n.c.e.	3
 932	932	Actividades de diversão e recreativas	Amusement and recreation activities	3
 9321	9321	Actividades dos parques de diversão e temáticos	Activities of amusement parks and theme parks	3
-93210	93210	Actividades dos  parques de diversão e temáticos	Activities of amusement parks and theme parks	3
+93210	93210	Actividades dos parques de diversão e temáticos	Activities of amusement parks and theme parks	3
+93211	93211	Atividades de parques de diversão itinerantes (Lei n.º 66/2018, de 3 de dezembro)	Itinerant amusement parks activities (Law No 66/2018, of 3 December)	3
 9329	9329	Outras actividades de diversão e recreativas	Other amusement and recreation activities	3
 93291	93291	Actividades tauromáquicas	Bullfighting activities	3
 93292	93292	Actividades dos portos de recreio (marinas)	Recreational harbours (marinas) activities	3
 93293	93293	Organização de actividades de animação turística	Organization of tourist animation activities	3
 93294	93294	Outras actividades de diversão e recreativas, n.e.	Other amusement and recreational activities n.e.c.	3
+93295	93295	Outras atividades de diversão itinerantes (Lei n.º 66/2018, de 3 de dezembro)	Other itinerant amusement and recreational activities (Law No 66/2018, of 3 December)	3
 94	94	Actividades das organizações associativas	Activities of membership organisations	3
 941	941	Actividades de organizações económicas, patronais e profissionais	Activities of business, employers and professional membership organisations	3
 9411	9411	Actividades de organizações económicas e patronais	Activities of business and employers membership organisations	3
@@ -4791,7 +4794,7 @@ cae_num	cae_str	des_pt	des_en	rev
 94994	94994	Associações de pais e encarregados de educação	Parents and persons in charge of students education associations	3
 94995	94995	Outras actividades associativas, n.e.	Other activities of associations, n.e.c.	3
 95	95	Reparação de computadores e de bens de uso pessoal e doméstico	Repair of computers and personal and household goods	3
-951	951	Reparação de computadores e de equipamento de comunicação 	Repair of computers and communication equipment	3
+951	951	Reparação de computadores e de equipamento de comunicação	Repair of computers and communication equipment	3
 9511	9511	Reparação de computadores e de equipamento periférico	Repair of computers and peripheral equipment	3
 95110	95110	Reparação de computadores e de equipamento periférico	Repair of computers and peripheral equipment	3
 9512	9512	Reparação de equipamento de comunicação	Repair of communication equipment	3
@@ -4848,7 +4851,7 @@ cae_num	cae_str	des_pt	des_en	rev
 103000000	G	Comércio por grosso e a retalho; reparação de veículos automóveis e motociclos	Wholesale and retail trade; repair of motor vehicles and motorcycles	3
 104000000	H	Transportes e armazenagem	Transportation and storage	3
 105000000	I	Alojamento, restauração e similares	Accommodation and food service activities	3
-106000000	J	Actividades de informação e de comunicação 	Information and communication activities	3
+106000000	J	Actividades de informação e de comunicação	Information and communication activities	3
 107000000	K	Actividades financeiras e de seguros	Financial and insurance activities	3
 108000000	L	Actividades imobiliárias	Real estate activities	3
 109000000	M	Actividades de consultoria, científicas, técnicas e similares	Consultancy, scientific and technical activities	3
