@@ -1,0 +1,15 @@
+v 3
+
+d ADOVERSION: reports the version of every ado found in the paths returned by command ADOPATH
+d
+d Author: BPLIM Team. Banco de Portugal
+d Contact: bplim@bportugal.pt
+D 26 Jul 2021
+d
+d KW: None
+d
+d
+d Distribution-Date: 20221206
+d
+f adoversion.ado
+f adoversion.sthlp
