@@ -13,7 +13,7 @@ net install bpstat, from("https://github.com/BPLIM/Tools/raw/master/ados/General
 
 ## Dependencies
 
-This package uses Python embedded code which is only available in Stata 16. Furthermore, `bpstat` will only work with Pyhton 3.5+.
+This package uses Python embedded code which is only available in Stata 16. Furthermore, `bpstat` will only work with Python 3.6+.
 
 - ### Third party packages required in Python:
 
