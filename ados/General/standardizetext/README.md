@@ -1,6 +1,6 @@
 # STANDARDIZETEXT: Normalize Unicode string variables
 
-`standardizetext` is a [Stata](http://www.stata.com/) command that normalizes text, by returning the normal form of of a Unicode string variable. It also removes 
+`standardizetext` is a [Stata](http://www.stata.com/) command that normalizes text, by returning the normal form of a Unicode string variable. It also removes 
 special characters and stop words if specified by the user.
 
 ## Install
