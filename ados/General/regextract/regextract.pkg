@@ -1,0 +1,12 @@
+v 3
+
+d REGEXTRACT: Extract capture groups from regex patterns
+d
+d Author: BPLIM Team. Banco de Portugal
+d Contact: bplim@bportugal.pt
+d
+d
+d Distribution-Date: 20230223
+d
+f regextract.ado
+f regextract.sthlp
