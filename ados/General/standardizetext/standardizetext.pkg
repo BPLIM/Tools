@@ -1,0 +1,12 @@
+v 3
+
+d STANDARDIZETEXT: Normalize Unicode string variables
+d
+d Author: BPLIM Team. Banco de Portugal
+d Contact: bplim@bportugal.pt
+d
+d
+d Distribution-Date: 20230223
+d
+f standardizetext.ado
+f standardizetext.sthlp
