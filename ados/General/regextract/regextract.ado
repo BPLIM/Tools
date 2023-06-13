@@ -1,4 +1,4 @@
-*! version 0.1 11May2022
+*! version 0.1 13June2023
 * Programmed by Gustavo Iglésias
 * Dependencies: Python 3 (pandas)
 
@@ -7,7 +7,18 @@ program define regextract
 
 version 16
 
-syntax varname(str), REGex(str) GENerate(str)
+syntax varname(str), REGex(str) GENerate(str) [replace]
+
+foreach var of varlist `generate'* {
+	cap confirm var `var'
+	if !_rc & "`replace'" == "" {
+		di "{err:Prefix/variable {bf:`generate'} already defined}"
+		exit 110
+	}
+	else {
+		drop `var'
+	}
+}
 
 python: extract("`varlist'", "`regex'", "`generate'")
 

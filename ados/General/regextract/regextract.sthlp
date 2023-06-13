@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1 23Feb2023}{...}{smcl}
+{* *! version 0.1 13Jun2023}{...}{smcl}
 {.-}
 help for {cmd:regextract} {right:}
 {.-}
@@ -29,7 +29,11 @@ help for {cmd:regextract} {right:}
 {syntab :Options}
 {synopt :{opt reg:ex(pattern)}} is the regular expression pattern with capturing groups. This option is mandatory.
 {p_end}
-{synopt :{opt gen:erate(stub)}} specifies the name(s) of the variable(s) to be created. This option is mandatory.
+{synopt :{opt gen:erate(stub)}} specifies the name(s) of the variable(s) to be created. This option is mandatory. 
+Please note that more than one variable may be created, corresponding to the capture groups specified.
+{p_end}
+{synopt :{opt replace}} replace all variables with prefix specified in option {opt generate}. This option 
+should be used with caution, since it will remove every variable that contains prefix {it:stub}.
 {p_end}
 {synoptline}
 {p2colreset}{...}
