@@ -258,8 +258,8 @@ foreach var of varlist * {
 		else {
 			replace variable = "`var'" in `i'
 			foreach lang in `labellang' {
-				replace label_`lang' = "`label_`lang''" in `i'
-				replace value_label_`lang' = "`value_label_`lang''" in `i'
+				replace label_`lang' = `"`label_`lang''"' in `i'
+				replace value_label_`lang' = `"`value_label_`lang''"' in `i'
 			}
 			replace type = "`type'" in `i'
 			replace format = "`format'" in `i'
