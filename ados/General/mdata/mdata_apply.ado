@@ -295,7 +295,7 @@ program define write_label
 
 syntax, var(string) lang(string) label(string)
 
-di `"`label'"'
+// di `"`label'"'
 
 file write metado `"* Variable label - `lang'"' _n
 file write metado `"label language `lang'"' _n
