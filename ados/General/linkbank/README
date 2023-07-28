@@ -1,0 +1,10 @@
+# LINKBANK: Create linking ids for financial institutions
+
+`linkbank` is a [Stata](http://www.stata.com/) tool that creates linking ids for financial institutions for the purpose of merging various databases at BPLIM such as the Central Credit Responsibility (CRC) Database, Bank Balance Sheet (BBS) and Historical Series of the Portuguese Banking Sector (SLB) databases. 
+
+
+## Author
+
+BPLIM Team
+<br>Banco de Portugal
+<br>Email: bplim@bportugal.pt
