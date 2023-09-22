@@ -292,7 +292,7 @@ syntax, lang(string) report(string) meta(string)
 tempname labframe
 frame create `labframe'
 frame `labframe' {
-	qui import excel "`meta'", sheet("variables") first clear
+	qui import excel "`meta'", sheet("variables") all first clear
 	foreach lg in `lang' {
 		local keep_vars = "`keep_vars'" + " label_`lg'"
 	}
