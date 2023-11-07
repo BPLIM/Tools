@@ -1,4 +1,4 @@
-*! version 0.1 29Apr2022
+*! version 0.2 7Nov2023
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools
 
@@ -235,19 +235,30 @@ frame `frfields' {
 	if "`missing_sheets'" != "" {
 		clear
 		local i = 1
+		local num_warns = 0
+		local num_incon = 0
 		foreach sheet in `missing_sheets' {
 		    qui set obs `i'
 			if `i' == 1 {
 			    qui gen missing_sheets = "`sheet'" in `i'
+				qui gen type = ""
 			}
 			else {
 			    qui replace missing_sheets = "`sheet'" in `i'
 			}
+			if (inlist(substr("`sheet'", 1, 4), "note", "char")) {
+				local ++num_warns
+				qui replace type = "warning" in `i'
+			}
+			else {
+				local ++num_incon
+				qui replace type = "inconsistency" in `i'
+			}
 			local ++i
 		}
-		local i = `i' - 1
+		
 		qui export excel using "`report'", sheet("missing_sheets", replace) first(var)
-		put_summary, file("`report'") value(missing_sheets) inc(`i') 
+		put_summary, file("`report'") value(missing_sheets) inc(`num_incon') warn(`num_warns') 
 		global CELLNUM = ${CELLNUM} + 1
 	}
 }
