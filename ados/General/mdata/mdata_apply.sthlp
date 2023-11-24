@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1 1Mar2021}{...}{smcl}
+{* *! version 0.2 8Nov2023}{...}{smcl}
 {.-}
 help for {cmd:mdata apply} {right:}
 {.-}
@@ -25,6 +25,12 @@ help for {cmd:mdata apply} {right:}
  This option is mandatory.
 {p_end}
 {synopt :{opt do:file}} saves a do-file with all the code used to apply the metadata.
+{p_end}
+{synopt :{opt chars}} applies information about variables and data {help char:characteristics}. 
+The default behavior is to not apply characteristics to variables and data.
+{p_end}
+{synopt :{opt notes}} applies information about variables and data {help notes:notes}. 
+The default behavior is to not apply notes to variables and data.
 {p_end}
 {synopt :{opt trunc:ate}} truncates variables and value labels names if their length is larger than 25 and 27 characters, respectively.
 {p_end}

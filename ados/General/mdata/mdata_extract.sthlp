@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1 1Mar2021}{...}{smcl}
+{* *! version 0.2 8Nov2023}{...}{smcl}
 {.-}
 help for {cmd:mdata extract} {right:}
 {.-}
@@ -27,6 +27,12 @@ file extension. Defaults to {it:metafile.xlsx}.
 {synopt :{opt problems}} uses {help mdata_check:mdata check} to find inconsistencies in the metadata.
 {p_end}
 {synopt :{opt check:file}} should only be specified along with option {opt problems}. See {help mdata_check:mdata check}.
+{p_end}
+{synopt :{opt chars}} extracts information about variables and data {help char:characteristics}. 
+The default behavior is to not extract variables and data characteristics.
+{p_end}
+{synopt :{opt notes}} extracts information about data {help notes:notes}. 
+The default behavior is to not extract variables and data notes.
 {p_end}
 {synopt :{opt trunc:ate}} truncates variables and value labels names if their length is larger than 25 and 27 characters, respectively. This may become a problem because the name of worksheets in Excel cannot exceed 30 characters.
 {p_end}

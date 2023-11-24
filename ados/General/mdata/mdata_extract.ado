@@ -1,4 +1,4 @@
-*! version 0.1 5Mar2021
+*! version 0.2 7Nov2023
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools, uselabel
 
@@ -10,7 +10,7 @@ value labels, notes, etc.
 */
 version 16
 
-syntax, [METAfile(string) problems CHECKfile(string) TRUNCate]
+syntax, [METAfile(string) problems CHECKfile(string) TRUNCate CHARS NOTES]
 
 qui describe 
 if `r(N)' == 0 | `r(k)' == 0 {
@@ -83,10 +83,10 @@ quietly {
 	if (`labelcount' > 1) local labellang: list labellang - default_label
 	
 	descdata, filename(`metafile') descframe(`descframe') ///
-		labellang(`labellang') `problems'
+		labellang(`labellang') `problems' `chars' `notes'
 	
 	descvars, filename(`metafile') descframe(`descframe') ///
-		labellang(`labellang') `problems' 
+		labellang(`labellang') `problems' `chars' `notes'
 }
 
 di 
@@ -120,7 +120,7 @@ General description of the data: file name, last update, data label,
 number of observations and variables, data sorting, size, data signature 
 and notes. The info is stored in the worksheet "Data Features"
 */
-syntax, filename(string) descframe(string) labellang(string) [problems]
+syntax, filename(string) descframe(string) labellang(string) [problems chars notes]
 
 
 local fn "${S_FN}"
@@ -151,29 +151,34 @@ frame `descframe' {
 
 local i = 5
 
-notes _count notes_count : _dta
-forvalues j = 1/`notes_count' {
-	notes _fetch note : _dta `j'
-	frame `descframe' {
-		set obs `i'
-		replace var = "Data note `j'" in `i'
-		replace desc = `"`note'"' in `i'
-	}
-	local ++i
-}
-* Data characteristics
-local dta_chars: char _dta[]
-frame `descframe' {
-	* remove chars that start with note
-	foreach chr in `dta_chars' {
-		if substr("`chr'", 1, 4) != "note" {
-			local new_chars = "`new_chars'" + " `chr'"
+if ("`notes'" == "notes") {
+	notes _count notes_count : _dta
+	forvalues j = 1/`notes_count' {
+		notes _fetch note : _dta `j'
+		frame `descframe' {
+			set obs `i'
+			replace var = "Data note `j'" in `i'
+			replace desc = `"`note'"' in `i'
 		}
-	}
-	local dta_cc: word count `new_chars' 
-	set obs `i' 
-	replace var = "Data characteristics" in `i'
-	replace desc = "`dta_cc'" in `i'
+		local ++i
+	}	
+}
+
+* Data characteristics
+if ("`chars'" == "chars") {
+	local dta_chars: char _dta[]
+	frame `descframe' {
+		* remove chars that start with note
+		foreach chr in `dta_chars' {
+			if substr("`chr'", 1, 4) != "note" {
+				local new_chars = "`new_chars'" + " `chr'"
+			}
+		}
+		local dta_cc: word count `new_chars' 
+		set obs `i' 
+		replace var = "Data characteristics" in `i'
+		replace desc = "`dta_cc'" in `i'
+	}	
 }
 
 frame `descframe' {
@@ -208,15 +213,15 @@ Extracts variables' metadata
 */
 
 syntax, filename(string) descframe(string) labellang(string) ///
-		[problems report(string)]
+		[problems report(string) chars notes]
 
 metavars, filename(`filename') descframe(`descframe') labellang(`labellang')
 
 metavallab, filename(`filename') labellang(`labellang') `problems' 
 
-metachars, filename(`filename') descframe(`descframe') 
+if ("`chars'" == "chars") metachars, filename(`filename') descframe(`descframe') 
 
-metanotes, filename(`filename') descframe(`descframe') 
+if ("`notes'" == "notes") metanotes, filename(`filename') descframe(`descframe') 
 
 end
 

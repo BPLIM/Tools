@@ -1,4 +1,4 @@
-*! version 0.1 5Mar2021
+*! version 0.2 8Nov2023
 * Programmed by Gustavo Iglésias
 
 program define mdata_apply
@@ -6,7 +6,7 @@ program define mdata_apply
 Applies metadata to data in memory. 
 */
 
-syntax, METAfile(string) [DOfile(string) TRUNCate]
+syntax, METAfile(string) [DOfile(string) TRUNCate CHARS NOTES]
 
 qui describe 
 if `r(N)' == 0 | `r(k)' == 0 {
@@ -66,12 +66,13 @@ else {
 	qui file open metado using "`dofile'.do", write replace
 }
 
-write_data_features, metafile(`metafile') metaframe(`metaframe')
+write_data_features, metafile(`metafile') metaframe(`metaframe') `chars' `notes'
 
 get_data_features, metafile(`metafile') metaframe(`metaframe')
 local labellang "`r(labellang)'"
 
-write_var_features, metafile(`metafile') metaframe(`metaframe') labellang(`labellang')
+write_var_features, metafile(`metafile') metaframe(`metaframe') labellang(`labellang') ///
+	`chars' `notes'
 
 // file write metado `"save "`file'", replace"' _n
 
@@ -94,7 +95,7 @@ end
 
 program define write_data_features
 
-syntax, metafile(string) metaframe(string) 
+syntax, metafile(string) metaframe(string) [CHARS NOTES]
 
 get_data_features, metafile(`metafile') metaframe(`metaframe')
 
@@ -105,28 +106,51 @@ local labellang "`r(labellang)'"
 foreach lang in `labellang' {
     file write metado `"cap label language `lang', new"' _n
 }
-if (`r(note_count)') {
-    forvalues i=1/`r(note_count)' {
-	    file write metado `"note: `r(data_note_`i')'"' _n
+
+if ("`notes'" == "notes") {
+	if (`r(note_count)') {
+		forvalues i=1/`r(note_count)' {
+			file write metado `"note: `r(data_note_`i')'"' _n
+		}
+	}	
+	else {
+		di 
+		di "{err:Data notes not available in metadata file}"
 	}
 }
-if (`r(data_chars)') {
-	frame `metaframe' {
-		qui import excel using `metafile', sheet("char__dta") first clear
-		* Remove Stata default chars 
-		qui drop if substr(char, 1, 1) == "_" | ///
-			substr(char, 1, length("datasignature")) == "datasignature" | ///
-			substr(char, 1, 4) == "note"
-		qui count 
-		if `r(N)' {
-			forvalues i=1/`r(N)' {
-				local char = char[`i']
-				local value = value[`i']
-				file write metado `"char _dta[`char'] `value'"' _n
-			}	
+
+if ("`chars'" == "chars") {
+	if ("`r(data_chars)'" == "") local data_chars 0
+	else local data_chars `r(data_chars)'
+	if (`data_chars)') {
+		frame `metaframe' {
+			cap import excel using `metafile', sheet("char__dta") first clear
+			if (_rc == 601) {
+				di
+				di "{err:Worksheet {bf:char__dta} not found in metafile}"
+			}
+			else {
+				* Remove Stata default chars 
+				qui drop if substr(char, 1, 1) == "_" | ///
+					substr(char, 1, length("datasignature")) == "datasignature" | ///
+					substr(char, 1, 4) == "note"
+				qui count 
+				if `r(N)' {
+					forvalues i=1/`r(N)' {
+						local char = char[`i']
+						local value = value[`i']
+						file write metado `"char _dta[`char'] `value'"' _n
+					}	
+				}				
+			}
 		}
 	}
+	else {
+		di 
+		di "{err:Data characteristics not available in metadata file}"		
+	}
 }
+
 
 file write metado _n(2)
 
@@ -165,7 +189,7 @@ end
 
 program define write_var_features
 
-syntax, metafile(string) metaframe(string) labellang(string)
+syntax, metafile(string) metaframe(string) labellang(string) [CHARS NOTES]
 
 tempfile temp
 tempname fvallab fchars fnotes
@@ -217,10 +241,28 @@ frame `metaframe' {
 					}
 				}
 			}
-			local chars = chars[`i']
-			if (`chars' > 0) write_chars, var(`var') frame(`fchars') metafile(`metafile')
-			local notes = notes[`i']
-			if (`notes' > 0) write_notes, var(`var') frame(`fnotes') metafile(`metafile')
+			if ("`chars'" == "chars") {
+				local chars_var = chars[`i']
+				if (`chars_var' > 0) {
+					cap write_chars, var(`var') frame(`fchars') metafile(`metafile')
+					if (_rc == 601) {
+						di 
+						di "{err:worksheet {bf:char_`var'} not found. Skipping }" ///
+							"{err:apply for {bf:`var'} characteristic}"
+					}
+				}
+			}
+			if ("`notes'" == "notes") {
+				local notes_var = notes[`i']
+				if (`notes_var' > 0) {
+					cap write_notes, var(`var') frame(`fnotes') metafile(`metafile')
+					if (_rc == 601) {
+						di 
+						di "{err:worksheet {bf:note_`var'} not found. Skipping }" ///
+							"{err:apply for {bf:`var'} note}"
+					}
+				}
+			}
 			file write metado _n(2)
 		}
 	}

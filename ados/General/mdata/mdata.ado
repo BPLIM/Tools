@@ -1,4 +1,4 @@
-*! version 0.1 25Feb2021
+*! version 0.2 8Nov2023
 * Programmed by Gustavo Iglésias
 
 program define mdata

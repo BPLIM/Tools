@@ -9,16 +9,24 @@ version 16
 
 syntax varname(str), REGex(str) GENerate(str) [replace]
 
-foreach var of varlist `generate'* {
-	cap confirm var `var'
-	if !_rc & "`replace'" == "" {
-		di "{err:Prefix/variable {bf:`generate'} already defined}"
-		exit 110
-	}
-	else {
-		drop `var'
-	}
+capture {
+	foreach var of varlist `generate'* { 
+		continue
+	}	
 }
+if (_rc != 111) {
+	foreach var of varlist `generate'* {
+		cap confirm var `var'
+		if !_rc & "`replace'" == "" {
+			di "{err:Prefix/variable {bf:`generate'} already defined}"
+			exit 110
+		}
+		else {
+			drop `var'
+		}
+	}	
+}
+
 
 python: extract("`varlist'", "`regex'", "`generate'")
 
