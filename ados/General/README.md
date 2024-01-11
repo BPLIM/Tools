@@ -2,7 +2,7 @@
 
 `adocompare` - compares versions of ados found in two paths/files
 
-`adoinstall` - wrapper around `ssc install` and `net install` to allow installation of Stata packages in a specified path[^*]
+`adoinstall` - wrapper around `ssc install` and `net install` to allow installation of Stata packages in a specified path
 
 `adoversion` - generates a report about ado files currently available to the user and their version
 
@@ -24,10 +24,9 @@
 
 `standardizetext` - normalizes text, by returning the normal form of a Unicode string variable
 
-`validarcae` - provides several functionalities for dealing with codes from the Portuguese Classification of Economic Activities (CAE)[]
+`validarcae` - provides several functionalities for dealing with codes from the Portuguese Classification of Economic Activities (CAE)
 
 `validarnif` - validates the tax identification number (nipc/nif)
 
-[^*]: available in ssc
 
 
