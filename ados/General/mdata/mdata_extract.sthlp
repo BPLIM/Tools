@@ -87,8 +87,6 @@ connected to the use of the item, whether or not based upon warranty, contract, 
 
 {pstd}
 {cmd:gtools} package by Mauricio Bravo{p_end}
-{pstd}
-{cmd:uselabel} {p_end}
 
 
 {title:Author}
