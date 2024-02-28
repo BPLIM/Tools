@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.5 5Nov2021}{...}{smcl}
+{* *! version 0.6 28Feb2024}{...}{smcl}
 {.-}
 help for {cmd:coconuts} {right:()}
 {.-}
@@ -33,7 +33,7 @@ does not need to specify a variable when using this option.{p_end}
 
 {synopt :{opt nuts(number)}} is the NUTS revision used for allocating municipalities. As 
 seen above, {it:number} is the year of the revision. The following revisions are 
-available:  1986, 1989, 1998, 1999, 2001, 2002, and 2013. The default is 2013.{p_end}
+available:  1986, 1989, 1998, 1999, 2001, 2002, 2013 and 2024. The default is 2024.{p_end}
 
 {synopt :{opt levels(numlist)}} specifies which regions should be created: 1, 2, 
 and/or 3. The default is 1, 2 and 3.{p_end}
@@ -53,10 +53,11 @@ regions's level and yyyy is the revision specified by the user in option {opt nu
 values of {it: municipality} as long as the user specifies option {opt recode}.{p_end}
 
 {synopt :{opt tostring}} creates a string version of the NUTS variables. 
-This option only applies to level 3 of NUTS2002 and NUTS2013 because not all of the 
-codes for these classifications and that level have a numerical representation. 
-Therefore, the user may use this option to get the string version of those codes. 
-Variables are named as nuts#_vyyyy_str, where # = 3 and yyyy = 2002 or 2013.{p_end}
+This option only applies to level 3 of NUTS2002 and NUTS2013 and levels 2 and 3 
+of NUTS2024 because not all of the codes for these classifications and levels 
+have a numerical representation. Therefore, the user may use this option to get 
+the string version of those codes. Variables are named as nuts#_vyyyy_str, where # = 2, 3 
+and yyyy = 2002, 2013 or 2024.{p_end}
 
 {synopt :{opt no:nuts}} skips the allocation of municipalities to NUTS regions when the 
 user specifies options {opt recode} and {opt generate}. This option is useful 
@@ -91,14 +92,16 @@ Each revision is best suited for a specific time period:
 {pstd}
 {space 4}nuts2002:  05nov2002  -  31dec2014;{p_end}
 {pstd}
-{space 4}nuts2013:  01jan2015  - {space 9}.{p_end}
+{space 4}nuts2013:  01jan2015  -  31dec2023;{p_end}
+{pstd}
+{space 4}nuts2024:  01jan2024  - {space 9}.{p_end}
 
 
 {title:Examples}
 
 {pstd}
 Example 1:
-Create variables nuts1_v2013, nuts2_v2013 and nuts3_v2013 using variable concelho.
+Create variables nuts1_v2024, nuts2_v2024 and nuts3_v2024 using variable concelho.
 
 {p 8 16}{inp:. coconuts concelho}{p_end}
 

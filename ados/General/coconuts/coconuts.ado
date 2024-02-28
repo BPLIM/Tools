@@ -1,4 +1,4 @@
-*! version 0.5 5Nov2021
+*! version 0.6 28Feb2024
 * Programmed by Gustavo Iglésias
 
 program define coconuts, sortpreserve
@@ -7,7 +7,7 @@ version 15
 
 syntax [varlist(default=none)] [if], [ ///
 	versions                           ///
-	nuts(int 2013)                     ///
+	nuts(int 2024)                     ///
 	levels(numlist >=1<=3 int asc)     ///
 	keep                               ///  
 	RECode                             ///
@@ -78,9 +78,9 @@ else if ("`nonuts'" != "nonuts" & "`varlist'" != "") {
 	local varcount: word count `varlist'
 	if `varcount' > 1 error 103
 
-	if !(inlist(`nuts', 1986, 1989, 1998, 1999, 2001, 2002, 2013)) {
+	if !(inlist(`nuts', 1986, 1989, 1998, 1999, 2001, 2002, 2013, 2024)) {
 		di as error "Invalid NUTS Classification. Possible values are: " ///
-					"1986, 1989, 1998, 1999, 2001, 2002 and 2013"
+					"1986, 1989, 1998, 1999, 2001, 2002, 2013 and 2024"
 		exit 198
 	}
 
@@ -133,7 +133,7 @@ program define get_nuts
 
 syntax varlist(min=1 max=1), [ ///
 	file(string)               ///
-	nuts(int 2013)             ///
+	nuts(int 2024)             ///
 	levels(numlist)            ///
 	keep                       ///
 	recode                     ///
@@ -216,11 +216,11 @@ if ("`recode'" == "recode" & "`generate'" != "") {
 }
 
 * Label NUTS variables and change to string type if specified by the user (only
-* applies to NUTS3 - 2002 and 2013)
+* applies to NUTS3 - 2002 and 2013, and NUTS2/3 - 2024)
 foreach num in `levels' {
     label var nuts`num'_v`nuts' "NUTS `nuts' - Level `num'"
 	if "`tostring'" == "tostring" {
-	    if ((`nuts' == 2002 | `nuts' == 2013) & `num' == 3) {
+	    if ((`nuts' == 2002 | `nuts' == 2013) & `num' == 3) | (`nuts' == 2024 & inlist(`num', 2, 3)) {
 		    qui decode nuts`num'_v`nuts', gen(nuts`num'_v`nuts'_str)
 			qui replace nuts`num'_v`nuts'_str = word(nuts`num'_v`nuts'_str, 1)
 		}
@@ -228,7 +228,6 @@ foreach num in `levels' {
 }
 
 end
-
 
 
 program define recode_var
