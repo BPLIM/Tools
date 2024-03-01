@@ -26,6 +26,8 @@
 
 `validarcae` - provides several functionalities for dealing with codes from the Portuguese Classification of Economic Activities (CAE)
 
+`validarloc` - provides several functionalities for dealing with official codes from Portugal's administrative division
+
 `validarnif` - validates the tax identification number (nipc/nif)
 
 
