@@ -1,0 +1,16 @@
+v 3
+
+d VALIDARLOC: Validates the Portuguese administrative division codes
+d
+d Author: BPLIM Team. Banco de Portugal
+d Contact: bplim@bportugal.pt
+D 1 Mar 2024
+d
+d KW: parishes, municipalities, districts
+d
+d
+d Distribution-Date: 20240301
+d
+f validarloc.ado
+f validarloc.sthlp
+F versoes.dta
