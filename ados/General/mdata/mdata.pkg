@@ -27,3 +27,7 @@ f mdata_setdefaultfmt.ado
 f mdata_truncate.ado
 f mdata_uniform.ado
 f mdata_uniform.sthlp
+f mdata_diff.ado
+f mdata_diff.sthlp
+f mdata_stats.ado
+f mdata_stats.sthlp

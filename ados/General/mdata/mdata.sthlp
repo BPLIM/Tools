@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1 26Feb2021}{...}
+{* *! version 0.2 1Jun2023}{...}
 {title:Title}
 
 {p2colset 5 18 23 2}{...}
@@ -30,6 +30,12 @@ tools are available (each tool is a subcommand of {opt mdata}):
 
 {p 8 17 2}
 {help mdata_uniform:uniform} harmonizes information in metadata files. {p_end}
+
+{p 8 17 2}
+{help mdata_diff:diff} flags differences in metadata files. {p_end}
+
+{p 8 17 2}
+{help mdata_stats:stats} extracts statistics and metadata from data in memory. {p_end}
 
 {p 8 17 2}
 {opt clear} removes all metadata from data in memory. {p_end}
@@ -72,6 +78,8 @@ connected to the use of the item, whether or not based upon warranty, contract, 
 {cmd:gtools} package by Mauricio Bravo{p_end}
 {pstd}
 {cmd:bpencode} package by BPLIM{p_end}
+{pstd}
+{cmd:uselabel} {p_end}
 
 
 {title:Author}
