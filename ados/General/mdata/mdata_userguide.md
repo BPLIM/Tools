@@ -21,6 +21,10 @@
 
 - **uniform** harmonizes information in metadata files
 
+- **diff** flags differences in metadata files
+
+- **stats** extracts statistics and metadata from data in memory
+
 - **clear** removes all metadata from data in memory
 
 Almost every subcommand of this package uses an Excel file to store or retrieve metadata.
@@ -945,7 +949,112 @@ Since we did not specify option **newfile**, the new metadata file is save in *c
 
 We observe that now every row has a different value. But there is another difference. We have values 101, 102 and 103 instead of 1, 2, and 3. That's because [bpencode](https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode) plays safe and adds digits to allow for more categories in the future. And that is how we would use `mdata uniform`. This would only change the metadata files. Since our goal at BPLIM is to harmonize the actual data, we would change the monthly data using `bp_recode`, a command of package [bpencode](https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode) that uses a metadata file to recode values. 
 
+
+## 9. `mdata diff`
+
+We have seen that `mdata cmp` compares two metadata files. However, if we have more than two metadata files, there should be a way to flag differences in those files. `mdata diff` is the tool for such cases. The command flags differences in metadata under the assumption that information should be consistent across metadata files. Consistent means that the information in every metadata file should be equal to the one included in the base file, which can be chosen by the user. Let's see an example. We are going to save three metadata files, making minor changes between exporting each one:
+
+```stata
+sysuse nlsw88, clear
+mkdir test
+* Save first meta file
+mdata extract, meta(test/meta)
+* Change race type, save second meta file
+recast int race
+mdata extract, meta(test/meta1)
+* Add one value and label to race/racelbl
+label define racelbl 4 "alien", add
+label values race racelbl
+replace race = 4 if _n < 5
+* Save third meta file
+mdata extract, meta(test/meta2)
+```
+
+We first saved the metadata in file *test/meta.xlsx* without making any changes. This will be our base file. Then we made some changes, that will be reflected in files *test/meta1.xlsx* and *test/meta2.xlsx*. Now we will check for differences across metadata files:
+
+```stata
+mdata diff, path("test") save("test/diff") diffonly
+```
+
+We need to specify the folder where the files have been saved. By default, the command inspects every *xlsx* file that it encounters. It is possible to specify a pattern for the names of the files, but in this case we only have metadata files in the directory. We save the report in file *test/diff.xlsx* and set option `diffonly` to only output differences to the saved file. The default is to export a complete report, not only the differences across files. Let's inspect the contents of *test/diff.xlsx*:
+
+
+<p align="center">
+<figure>
+    <img width="447" alt="9_extract_01" src="https://github.com/BPLIM/Tools/assets/44852742/af6de5bd-067f-4092-898d-f6012968d5da">
+    <figcaption><strong>Figure 9.1</strong></figcaption>
+</figure>
+</p>
+
+The first worksheet, **Index**, shows just the naming of the metadata files found in the directory. These names - **base**, **f1** and **f2** - are used in the remaining worksheets to refer to files *meta.xlsx*, *meta1.xlsx* and *meta2.xlsx*, respectively. Note that the base file is the one used for comparisons. So files **f1** and **f2** are not compared between them, only with the **base** file. It is possible to change the base file in the command. If not specified, the base file is chosen based on alphabetical order within the directory. 
+
+
+<p align="center">
+<figure>
+    <img width="447" alt="9_extract_02" src="https://github.com/BPLIM/Tools/assets/44852742/6deb039a-5a04-4e91-9822-a3e13e736f1a">
+    <figcaption><strong>Figure 9.2</strong></figcaption>
+</figure>
+</p>
+
+The second worksheet presents a summary of the differences found across files. We observe that the command found one difference in the variables' type and one value label **racelbl**, just as we would expect. The worksheet **Data Characteristics** summarizes the general characteristics of the data for each file. The next two figures show the worksheets where differences were found - **type** and **vl_race_lbl**.
+
+
+<p align="center">
+<figure>
+    <img width="447" alt="9_extract_03" src="https://github.com/BPLIM/Tools/assets/44852742/d366a1e9-f182-4285-863b-b6fda103ac3a">
+    <figcaption><strong>Figure 9.3</strong></figcaption>
+</figure>
+</p>
+
+In worksheet **type**, we observe that the command flagged a difference between files **f1/f2** and **base**. The variable race has a different type in the **base** file, which reflects the change we introduced by recasting the type of the variable. 
+
+
+<p align="center">
+<figure>
+    <img width="447" alt="9_extract_04" src="https://github.com/BPLIM/Tools/assets/44852742/85bfa680-8426-470f-a54a-080991c7f056">
+    <figcaption><strong>Figure 9.4</strong></figcaption>
+</figure>
+</p>
+
+Worksheet **vl_racelbl** signals that we have a new value label in metadata file **f2** - *test/meta2.xlsx*. In fact, we did add a new value to variable **race** and defined a label for that value. As we can see in the legend, file **f2** contains the value label, while **base** and **f1** do not.
+
+Please note that this is small example for illustrative purposes. The command becomes quite useful when dealing with a large number of metadata files, because it allows the user to quickly spot differences between metadata in data files.
+
+## 10. `mdata stats`
+
+`mdata stats` is very similar to `mdata extract`. The difference is that, besides extracting metadata from data in memory, it also extracts statistics. Below we demonstrate its usage and syntax with data set **nlswork**. It is not by chance that we choose a panel data set to show an example of `mdata stats`. Some options of the command only make sense with panel data.
+
+```stata
+webuse nlswork, clear
+mdata stats, save(meta, replace) panel(idcode) time(year)
+```
+
+The command above saves the file *meta.xlsx* in the current working directory. Note that now the **variables** worksheet includes statistics for each variable:
+
+<p align="center">
+<figure>
+    <img width="447" alt="10_extract_01" src="https://github.com/BPLIM/Tools/assets/44852742/0e61c48c-78a5-4667-80c2-3fb3cd1fa22b">
+    <figcaption><strong>Figure 10.1</strong></figcaption>
+</figure>
+</p>
+
+By default, the command exports the mean, standard deviation, percentiles 5, 50 and 95 (the statistics to export may be set by the user), and the share of zeros, negative values and missing values. Since we provided a panel variable and a time variable, the worksheet also includes the share of time invariant observations and the minimum and maximum dates per variable. 
+
+Also, as in `mdata extract`, each value label has its own worksheet, where we find every value defined and the corresponding label. However, we can immediately spot one key difference:
+
+<p align="center">
+<figure>
+    <img width="447" alt="10_extract_02" src="https://github.com/BPLIM/Tools/assets/44852742/7de6ce95-d645-4b83-9928-e305d573152f">
+    <figcaption><strong>Figure 10.1</strong></figcaption>
+</figure>
+</p>
+
+The frequencies for each level of the categorical variable are also exported and saved in column **freq_race**. The name of the variable is part of the column name because it is possible to have multiple frequency columns, since a value label may be assigned to more than one variable. 
+
+
 **Dependencies**:
+
+  - [filelist](https://ideas.repec.org/c/boc/bocode/s457727.html)
 
   - [gtools](https://gtools.readthedocs.io/en/latest/)
     
