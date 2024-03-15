@@ -1,0 +1,17 @@
+v 3
+
+d DUMMYFI: creates random data from metadata information and sampled ids
+d
+d Author: BPLIM Team. Banco de Portugal
+d Contact: bplim@bportugal.pt
+D 15 Mar 2024
+d
+d KW: dummy data
+d
+d
+d Distribution-Date: 20240315
+d
+f dummyfi.ado
+f dummyfi.sthlp
+f sampleid.ado
+f sampleid.sthlp
