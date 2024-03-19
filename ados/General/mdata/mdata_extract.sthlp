@@ -53,7 +53,7 @@ The sheet {opt data_features_gen} contains general information about the
 data set, namely file name, data label, variables used to sort the data, label 
 languages defined, notes and characteristics. The second sheet, {opt data_features_spec}, 
 displays information on number of observations, number of variables, data set size, 
-data singature and date of last change. A third sheet named {opt variables} presents 
+data signature and date of last change. A third sheet named {opt variables} presents 
 a table with information for each variable, namely variable name, label (for every
 defined language), value labels (if they exist), type, format, notes and characteristics.
 
