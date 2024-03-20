@@ -1018,7 +1018,7 @@ In worksheet **type**, we observe that the command flagged a difference between 
 
 Worksheet **vl_racelbl** signals that we have a new value label in metadata file **f2** - *test/meta2.xlsx*. In fact, we did add a new value to variable **race** and defined a label for that value. As we can see in the legend, file **f2** contains the value label, while **base** and **f1** do not.
 
-Please note that this is small example for illustrative purposes. The command becomes quite useful when dealing with a large number of metadata files, because it allows the user to quickly spot differences between metadata in data files.
+Please note that this small example is for illustrative purposes. The command becomes quite useful when dealing with a large number of metadata files, because it allows the user to quickly spot differences between metadata in data files.
 
 ## 10. `mdata stats`
 
@@ -1045,7 +1045,7 @@ Also, as in `mdata extract`, each value label has its own worksheet, where we fi
 <p align="center">
 <figure>
     <img width="447" alt="10_extract_02" src="https://github.com/BPLIM/Tools/assets/44852742/7de6ce95-d645-4b83-9928-e305d573152f">
-    <figcaption><strong>Figure 10.1</strong></figcaption>
+    <figcaption><strong>Figure 10.2</strong></figcaption>
 </figure>
 </p>
 
