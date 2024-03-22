@@ -87,6 +87,8 @@ quietly {
 	
 	descvars, filename(`metafile') descframe(`descframe') ///
 		labellang(`labellang') `problems' `chars' `notes'
+		
+	export_data_chars, filename(`metafile')
 }
 
 di 
@@ -110,6 +112,50 @@ if "`problems'" == "problems" {
 		mdata_check, meta(`metafile') check(`checkfile') problems
 	} 
 }
+
+end
+
+
+program define export_data_chars
+
+syntax, filename(str)
+
+* Export data chars
+tempname dtacharsfr
+frame create `dtacharsfr'
+local dta_chars: char _dta[]
+
+local k = 1
+foreach chr in `dta_chars' {
+	if substr("`chr'", 1, 4) != "note" {
+		local chr_value: char _dta[`chr']
+		if `k' == 1 {
+			frame `dtacharsfr' {
+				set obs `k'
+				gen char = "`chr'" in `k'
+				gen value = `"`chr_value'"' in `k'
+			}
+		}
+		else {
+			frame `dtacharsfr' {
+				set obs `k'
+				replace char = "`chr'" in `k'
+				replace value = `"`chr_value'"' in `k'
+			}					
+		}
+		local ++k		
+	}	
+}
+frame `dtacharsfr' {
+	qui count 
+	if `r(N)' {
+		sort char
+		export excel using "`filename'", sheet("char_dta", replace) first(var)	
+		clear
+	}
+}
+
+frame drop `dtacharsfr'
 
 end
 
@@ -151,35 +197,33 @@ frame `descframe' {
 
 local i = 5
 
-if ("`notes'" == "notes") {
-	notes _count notes_count : _dta
-	forvalues j = 1/`notes_count' {
-		notes _fetch note : _dta `j'
-		frame `descframe' {
-			set obs `i'
-			replace var = "Data note `j'" in `i'
-			replace desc = `"`note'"' in `i'
-		}
-		local ++i
-	}	
-}
+notes _count notes_count : _dta
+forvalues j = 1/`notes_count' {
+	notes _fetch note : _dta `j'
+	frame `descframe' {
+		set obs `i'
+		replace var = "Data note `j'" in `i'
+		replace desc = `"`note'"' in `i'
+	}
+	local ++i
+}	
+
 
 * Data characteristics
-if ("`chars'" == "chars") {
-	local dta_chars: char _dta[]
-	frame `descframe' {
-		* remove chars that start with note
-		foreach chr in `dta_chars' {
-			if substr("`chr'", 1, 4) != "note" {
-				local new_chars = "`new_chars'" + " `chr'"
-			}
+local dta_chars: char _dta[]
+frame `descframe' {
+	* remove chars that start with note
+	foreach chr in `dta_chars' {
+		if substr("`chr'", 1, 4) != "note" {
+			local new_chars = "`new_chars'" + " `chr'"
 		}
-		local dta_cc: word count `new_chars' 
-		set obs `i' 
-		replace var = "Data characteristics" in `i'
-		replace desc = "`dta_cc'" in `i'
-	}	
-}
+	}
+	local dta_cc: word count `new_chars' 
+	set obs `i' 
+	replace var = "Data characteristics" in `i'
+	replace desc = "`dta_cc'" in `i'
+}	
+
 
 frame `descframe' {
     rename (var desc) (Features Content)
@@ -213,7 +257,7 @@ Extracts variables' metadata
 */
 
 syntax, filename(string) descframe(string) labellang(string) ///
-		[problems report(string) chars notes]
+		[problems report(string) chars NOTES]
 
 metavars, filename(`filename') descframe(`descframe') labellang(`labellang')
 
@@ -371,17 +415,12 @@ syntax, filename(string) descframe(string)
 
 qui ds
 local vars "`r(varlist)'"
-local dta_chars: char _dta[]
-if trim("`dta_chars'") != "" {
-	local vars = "_dta " + "`vars'" 
-}
 
 foreach var in `vars' {
 	local chars: char `var'[]
 	if "`chars'" != "" {
 		local i = 1
 		foreach chr in `chars' {
-			if (("`var'" == "_dta") & (substr("`chr'", 1, 4) == "note")) continue
 			local chr_value: char `var'[`chr']
 			if `i' == 1 {
 				frame `descframe' {
@@ -402,6 +441,7 @@ foreach var in `vars' {
 		frame `descframe' {
 			qui count 
 			if `r(N)' {
+				sort char
 				export excel using "`filename'", sheet("char_`var'", replace) first(var)	
 				clear
 			}
@@ -420,6 +460,7 @@ named "notes_`var'", where `var' is the name of the variable. There is
 one sheet per variable. The sheet contains the variables' notes 
 */
 syntax, filename(string) descframe(string) 
+
 	
 foreach var of varlist * {
 	notes _count notes_count : `var'
