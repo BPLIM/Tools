@@ -51,7 +51,7 @@ only apply the metadata after checking its integrity (see {help mdata_check:mdat
 Please note that all previous metadata is removed once you run the command (see {help mdata_clear:mdata clear}). It is
 also worth mentioning that some of the metadata might no be applied to your data. This 
 includes metadata generated automatically by Stata and usually concerns characteristics
-that start with "_". So we suggest that users do not define charcateristics that follow that pattern.
+that start with "_". So we suggest that users do not define characteristics that follow that pattern.
 
 {title:Examples}
 

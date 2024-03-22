@@ -29,12 +29,13 @@ that are included in the analysis. The pattern is based on {help strmatch:strmat
 defaults to {it:*.xlsx}. The user should not provide the extension of the file
 because only {it:*.xlsx} files are allowed.
 {p_end}
-{synopt :{opt save(filename)}} sets the name of the Excel file where the analysis is saved. The user should not provide the file extension. Defaults to {it:metadiff.xlsx}.
+{synopt :{opt save(filename)}} sets the name of the Excel file where the analysis 
+is saved. The user should not provide the file extension. Defaults to {it:metadiff.xlsx}.
 {p_end}
 {synopt :{opt replace}} overwrites existing Excel file.
 {p_end}
 {synopt :{opt base:file(filename)}} sets {it:filename} as the base for comparison 
-between meta files. Defauts to the first in the list of sorted files' names. 
+between meta files. Defaults to the first in the list of sorted files' names. 
 {p_end}
 {synopt :{opt diff:only}} does not display rows where values are equal across 
 metafiles.

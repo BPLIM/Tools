@@ -24,12 +24,12 @@ help for {cmd:mdata check} {right:}
 {synopt :{opt meta:file}} is name of the Excel file where the metadata is stored.
  This option is mandatory.
 {p_end}
-{synopt :{opt check:file(fn [, replace])}} saves the inconsitencies found by the command in the Excel file {it:fn.xlsx}.
+{synopt :{opt check:file(fn [, replace])}} saves the inconsistencies found by the command in the Excel file {it:fn.xlsx}.
 {p_end}
-{synopt :{opt del:imit}} sets a delimiter for labels in value labels. Only the text after
-the delimiter is considered to find warnings or inconsistencies. This option is useful
-to find duplicated descriptions in value labels when the first word of the label 
-is the value (see {help numlabel}).
+{synopt :{opt del:imit(delimiter)}} sets a delimiter for labels in value labels. 
+Only the text after the delimiter is considered to find warnings or 
+inconsistencies. This option is useful to find duplicated descriptions in 
+value labels when the first word of the label is the value (see {help numlabel}).
 {p_end}
 {synoptline}
 {p2colreset}{...}
@@ -42,7 +42,7 @@ is the value (see {help numlabel}).
 {opt mdata check} is a Stata command that verifies the integrity of metadata stored
 in an Excel file. The command assumes that the Excel file has the structure of the 
 file produced by {help mdata_extract:mdata extract}. The program searches for 
-possible problems in the metadata, dividing them into warnings and inconsitencies, 
+possible problems in the metadata, dividing them into warnings and inconsistencies, 
 the latter being the most problematic. 
 
 {pstd}
@@ -58,7 +58,7 @@ Inconsistencies include duplicated variables in the meta file, missing sheets, a
 duplicated labels or duplicated values in value labels. Warnings cover problems such
 as duplicated data features, missing variable labels, truncated variable labels, 
 missing value labels if there is more than one language defined, as well as problems 
-with value labels other than duplcated labels or values. Most of the value label 
+with value labels other than duplicated labels or values. Most of the value label 
 problems were based on {help labelbook}, used with option {opt problems}.
 
 

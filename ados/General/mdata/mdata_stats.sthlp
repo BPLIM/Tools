@@ -33,7 +33,7 @@ the statistics will not be exported.
 not be exported. Set this option to {it:_all} in case you 
 do not want to export frequencies.
 {p_end}
-{synopt :{opt time:var(varname)}} provides a time varible to 
+{synopt :{opt time:var(varname)}} provides a time variable to 
 compute additional statistics, namely the minimum and maximum 
 dates for each variable.
 {p_end}

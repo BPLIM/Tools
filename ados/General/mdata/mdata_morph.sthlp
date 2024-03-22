@@ -21,7 +21,7 @@ help for {cmd:mdata morph} {right:}
 {synopthdr}
 {synoptline}
 {syntab :Options}
-{synopt :{opt meta:file}} is name of the Excel file where the metadata is stored.
+{synopt :{opt meta:file(fn)}} is name of the Excel file where the metadata is stored.
  This option is mandatory.
 {p_end}
 {synopt :{opt save(fn [, replace])}} saves the transformed metadata in the Excel file {it:fn.xlsx}.
@@ -75,7 +75,7 @@ data in {it:meta_new.xlsx}
 {pstd}
 {opt Warning}: please note that in these examples {it:vl_lab#} stands for the name of
 Excel sheet where the value label data is stored and {it:lab#} is the name of the value 
-label. Users must always this syntax, since it is assumed that the metadata file follows
+label. Users must always use this syntax, since it is assumed that the metadata file follows
 the structure of the file exported by {help mdata_extract:mdata extract}. Also, users 
 should not use one of the old worksheet's name for the new sheet.
 

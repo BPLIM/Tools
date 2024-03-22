@@ -21,10 +21,11 @@ help for {cmd:mdata uniform} {right:}
 {synopthdr}
 {synoptline}
 {syntab :Options}
-{synopt :{opt meta:file}} is name of the Excel file where the metadata is stored.
+{synopt :{opt meta:file(fn)}} is the name of the Excel file where the metadata is stored.
  This option is mandatory.
 {p_end}
-{synopt :{opt sh:eets}} specify the sheets that should be harmonized. The default is all.
+{synopt :{opt sh:eets(worksheets)}} specify the worksheets that should be 
+harmonized. The default is all.
 {p_end}
 {synopt :{opt new:file(fn [, replace])}} saves the harmonized metadata in the Excel file {it:fn.xlsx}.
 Defaults to {opt <option metafile>}{it:_new}{opt .xlsx}.
