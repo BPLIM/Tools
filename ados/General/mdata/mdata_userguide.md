@@ -342,7 +342,7 @@ mdata check, meta(metafile) check(checkfile)
     No warnings or inconsistencies found. File checkfile.xlsx will not be saved
     
 
-We can see that we do not have warnings or inconsitencies. So even though we specify option **check**file to save the report, the program does not create such file.
+We can see that we do not have warnings or inconsistencies. So even though we specify option **check**file to save the report, the program does not create such file.
 
 Now imagine that someone had removed one value label sheet by mistake. While this can be done manually, we will use `mata` to remove one worksheet. 
 
@@ -390,7 +390,7 @@ mdata check, meta(metafile) check(checkfile, replace)
     File checkfile.xlsx saved
     
 
-Now we get an inconsistency instead of a a warning. We will see what sets them apart in a while. First let's take a look at *checkfile.xlsx*.
+Now we get an inconsistency instead of a warning. We will see what sets them apart in a while. First, let's take a look at *checkfile.xlsx*.
 
 <p align="center">
 <figure>
@@ -406,7 +406,7 @@ Now we get an inconsistency instead of a a warning. We will see what sets them a
 </figure>
 </p>
 
-The summary tells us that we have only one problem, **missing_sheets**, which is an inconsitency and the number of missing sheets is on. Inspecting the worksheet **missing_sheets**, we check that **vl_marlbl** is missing, as we would expect. 
+The summary tells us that we have only one problem, **missing_sheets**, which is an inconsistency and the number of missing sheets is on. Inspecting the worksheet **missing_sheets**, we check that **vl_marlbl** is missing, as we would expect. 
 
 So what distinguishes an inconsistency from a warning? As stated in the help file of `mdata check`, 
 
@@ -589,7 +589,7 @@ The **Variables** worksheet presents a table with only one row and two columns, 
 </figure>
 </p>
 
-Worksheet **Variables' label_default** presents a table differences in variables' labels. The suffix **_default** is the label language. The structure of the table is always the same. There is a column with variables that contain differences and two additional columns, in this case *_new_label_default* and *_old_label_default*. *_new_label_default* stands for the the variable label in the new file (*metafile2.xlsx*) defined for label language *default*. The same logic applies to *_old_label_default*.
+Worksheet **Variables' label_default** presents a table of differences in variables' labels. The suffix **_default** is the label language. The structure of the table is always the same. There is a column with variables that contain differences and two additional columns, in this case *_new_label_default* and *_old_label_default*. *_new_label_default* stands for the variable label in the new file (*metafile2.xlsx*) defined for label language *default*. The same logic applies to *_old_label_default*.
 
 
 <p align="center">
@@ -599,9 +599,9 @@ Worksheet **Variables' label_default** presents a table differences in variables
 </figure>
 </p>
 
-Finally, worksheet **vl_marlbl** flags differences in value label *marlbl*. Even if we had not defined a new level for *marlbl*, this sheet would signal that the new meta file contains a new value. That is the reason why the table presented has four columns, *value*, *desc*, *label_old* and *label_new*. In the case at hand, value 2 is only present in the new file (*metafile2.xlsx*) and has value label "2 divorced". Please notice that these type of comparison only makes sense for categorical variables.
+Finally, worksheet **vl_marlbl** flags differences in value label *marlbl*. Even if we had not defined a new level for *marlbl*, this sheet would signal that the new meta file contains a new value. That is the reason why the table presented has four columns, *value*, *desc*, *label_old* and *label_new*. In the case at hand, value 2 is only present in the new file (*metafile2.xlsx*) and has value label "2 divorced". Please notice that this type of comparison only makes sense for categorical variables.
 
-We have seen a small of example of how to use `mdata cmp`. However, so not forget that we only introduced three small changes in the data. The comparison performed by `mdata cmp` is exhaustive. Every sheet and value in the metadata files are compared. 
+We have seen a small example of how to use `mdata cmp`. However, so not forget that we only introduced three small changes in the data. The comparison performed by `mdata cmp` is exhaustive. Every sheet and value in the metadata files are compared. 
 
 We should also be able to combine two meta files. And for that we have `mdata combine`.
 
@@ -676,7 +676,7 @@ mdata extract, meta(metafile, replace)
 </figure>
 </p>
 
-Looking at the **variables** worksheet, we have the new variable - **bcollgrad** - in the last row, with **bgradlbl** as value label. On the other hand, variable **collgrad** has value label **gradlbl**. We can check worksheets *vl_gradlab* and *vl_bgradlbl* to see that we have duplicated infromation.
+Looking at the **variables** worksheet, we have the new variable - **bcollgrad** - in the last row, with **bgradlbl** as value label. On the other hand, variable **collgrad** has value label **gradlbl**. We can check worksheets *vl_gradlab* and *vl_bgradlbl* to see that we have duplicated information.
 
 <p align="center">
 <figure>
@@ -734,7 +734,7 @@ As you might have observed, values in column *value_label_default* have changed 
 
 `mdata uniform` is a command that was created with a very particular goal in mind. It serves very specific needs raised by **BPLIM** staff and might not be useful for the general user. Nevertheless, it's worth describing how it works since it's part of the package and it might be useful for people that face the same challenges. To give some perspective, we should describe the problem. 
 
-**BPLIM** gets data every month from data producers. That data contains all type of variables. We are particular interested in categorical data, because this command only applies to that type. Usually those type of variables are not encoded, they come in pairs. One is the code (be it strictly numerical, alphanumerical or containing only letters) and the other is the label. To be efficient storage-wise, we encode every variable using the code and label (creating a value label). When the code contains only numbers there is no problem since the value of the variable corresponds to the actual code. However, when a code contains only letters or letters and numbers, the encoding has to follow some rule. For this task, we use [bpencode](https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode), which was also created by BPLIM. The command has its own logic for the encoding, which is not important for the exposition at hand. 
+**BPLIM** gets data every month from data producers. That data contains all type of variables. We are particularly interested in categorical data, because this command only applies to that type. Usually, those types of variables are not encoded, they come in pairs. One is the code (be it strictly numerical, alphanumeric, or containing only letters) and the other is the label. To be efficient storage-wise, we encode every variable using the code and label (creating a value label). When the code contains only numbers there is no problem since the value of the variable corresponds to the actual code. However, when a code contains only letters or letters and numbers, the encoding has to follow some rules. For this task, we use [bpencode](https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode), which was also created by BPLIM. The command has its own logic for the encoding, which is not important for the exposition at hand. 
 
 Now imagine that we get the data in different months. Some values that are present in the most recent batch of data might be missing in the old one. So, it's possible that the encoding assigns identical numerical codes for different values of the same variable. If we worked with data for only one month, no problem would arise, but we want to be able to combine data from different months. A process for harmonization is needed. That is why we created `mdata uniform`. 
 
@@ -876,7 +876,7 @@ In file *month2.xlsx*, worksheet **vl_yesnolbl** is different.
 </figure>
 </p>
 
-Now we are going to combine the metadata from both months, because our goal is to have harmonized data.
+Now we are going to combine the metadata from both months because our goal is to have harmonized data.
 
 
 ```stata
@@ -923,7 +923,7 @@ We see immediately that we get two inconsitencies. Let's look at *combcheck.xlsx
 </figure>
 </p>
 
-The problem is flagged in worksheet **vl_yesnolbl**, showing that we have two rows with duplicated values. To solve this problem and harmonize the metadata in file *comb.xlsx* we will use `mdata uniform`. This command uses [bpencode](https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode) to recode values. We have to specify the worsheets that should be harmonized, otherwise it will work on every sheet that starts with "vl_".
+The problem is flagged in worksheet **vl_yesnolbl**, showing that we have two rows with duplicated values. To solve this problem and harmonize the metadata in file *comb.xlsx* we will use `mdata uniform`. This command uses [bpencode](https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode) to recode values. We have to specify the worksheets that should be harmonized, otherwise it will work on every sheet that starts with "vl_".
 
 
 ```stata
@@ -938,7 +938,7 @@ mdata uniform, meta(comb) sh(vl_yesnolbl)
     File comb_new.xlsx saved
     
 
-Since we did not specify option **newfile**, the new metadata file is save in *comb_new.xlsx* (the name of the meta file plus the suffix new). Let's check the contents of *comb_new.xlsx*, specifically worksheet **vl_yesnolbl**.
+Since we did not specify option **newfile**, the new metadata file is saved in *comb_new.xlsx* (the name of the meta file plus the suffix new). Let's check the contents of *comb_new.xlsx*, specifically worksheet **vl_yesnolbl**.
 
 <p align="center">
 <figure>
