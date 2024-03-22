@@ -1,4 +1,4 @@
-*! version 0.1 2Aug2021
+*! version 0.1 22Mar2024
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools
 
@@ -9,7 +9,7 @@ be stored in an Excel file. This can be achieved using the
 command mdata extract
 */
 
-syntax, NEWfile(string) OLDfile(string) [export(string)]
+syntax, f1(string) f2(string) [export(string)]
 
 version 16
 
@@ -46,18 +46,18 @@ global CELLNUM = 5
 cap putexcel save
 
 qui putexcel set "`export'", open modify sheet("${MAINSHEET}")
-qui putexcel A1 = "Old File", bold
-qui putexcel A2 = "New File", bold
+qui putexcel A1 = "f2", bold
+qui putexcel A2 = "f1", bold
 qui putexcel A4 = "Sheet", bold
 qui putexcel B4 = "Inconsistencies found", bold
-qui putexcel B1 = "`oldfile'.xlsx"
-qui putexcel B2 = "`newfile'.xlsx"
+qui putexcel B1 = "`f2'.xlsx"
+qui putexcel B2 = "`f1'.xlsx"
 qui putexcel save
  
 
-compare_vars, new(`newfile'.xlsx) old(`oldfile'.xlsx) export(`export')
+compare_vars, new(`f1'.xlsx) old(`f2'.xlsx) export(`export')
 
-compare_sheets, new(`newfile'.xlsx) old(`oldfile'.xlsx) export(`export')
+compare_sheets, new(`f1'.xlsx) old(`f2'.xlsx) export(`export')
 
 if ${CELLNUM} == 5 {
     di
