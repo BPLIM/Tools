@@ -272,7 +272,7 @@ We can see that are no characteristics or notes ascribed to any variable, but so
 
 Please keep in mind that value labels worsheets' names will always follow the pattern *vl_\<vl_name\>*. Each worksheet for value labels presents a table with two columns, the value and the corresponding label.
 
-There are no characteristics or notes ascribed to any variable, but from **Figure 2.1** we observe that the data set has characteristics, two to be more precise. The contents of these characteristics are stored in worksheet **char__dta**, presented below:
+There are no characteristics or notes ascribed to any variable, but from **Figure 2.1** we observe that the data set has characteristics, two to be more precise. The contents of these characteristics are stored in worksheet **char_dta**, presented below:
 
 <p align="center">
 <figure>
@@ -291,11 +291,11 @@ notes age: age note 1
 notes age: age note 2
 ```
 
-We will export the metadata again. If we were to use the same syntax, `mdata extract`, we will get an error, since *metafile.xlsx* already exists. We can specify a different name or replace the existing file. Both ways demand that we specify the option **meta**. We choose the latter, replacing the existing file.
+We will export the metadata again. If we were to use the same syntax, `mdata extract`, we will get an error, since *metafile.xlsx* already exists. We can specify a different name or replace the existing file. Both ways demand that we specify the option **meta**. We choose the latter, replacing the existing file. Also, please note that the default behavior is to not export characteristics and notes for variables, so we have to set two additional options in order to export them.
 
 
 ```stata
-mdata extract, meta(metafile, replace)
+mdata extract, meta(metafile, replace) notes chars
 ```
 
     
@@ -424,7 +424,7 @@ So the organization of warnings and inconsistencies depends on the command `mdat
 
 
 ```stata
-mdata extract, meta(metafile, replace)
+mdata extract, meta(metafile, replace) notes chars
 ```
 
     
@@ -539,7 +539,7 @@ label define marlbl 2 "2 divorced", add
 * Change label 
 label var idcode "worker id"
 * Extract the metadata
-mdata extract, meta(metafile2)
+mdata extract, meta(metafile2) chars notes
 ```
 
     
@@ -555,7 +555,7 @@ Now that we have two Excel files with metadata, we are going to compare them. Th
 
 
 ```stata
-mdata cmp, new(metafile2) old(metafile) 
+mdata cmp, f1(metafile2) f2(metafile) 
 ```
 
     
