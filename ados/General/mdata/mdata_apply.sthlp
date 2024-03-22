@@ -14,17 +14,17 @@ help for {cmd:mdata apply} {right:}
 
 {p 8 17 2}
 {cmd:mdata apply}
-{cmd:} , [{it:options}]
+{cmd:} , {opt meta:file(fn)} [{it:options}]
 
 {synoptset 30 tabbed}{...}
 {marker table_options}{...}
 {synopthdr}
 {synoptline}
 {syntab :Options}
-{synopt :{opt meta:file}} is name of the Excel file where the metadata is stored.
- This option is mandatory.
+{p2coldent :* {opt meta:file(fn)}} is name of the Excel file where the 
+metadata is stored.
 {p_end}
-{synopt :{opt do:file}} saves a do-file with all the code used to apply the metadata.
+{synopt :{opt do:file(fn)}} saves a do-file with all the code used to apply the metadata.
 {p_end}
 {synopt :{opt chars}} applies information about variables and data {help char:characteristics}. 
 The default behavior is to not apply characteristics to variables and data.
@@ -35,6 +35,8 @@ The default behavior is to not apply notes to variables and data.
 {synopt :{opt trunc:ate}} truncates variables and value labels names if their length is larger than 25 and 27 characters, respectively.
 {p_end}
 {synoptline}
+{p 4 6 2}
+* required{p_end}
 {p2colreset}{...}
 {p 4 6 2}
 

@@ -14,23 +14,23 @@ help for {cmd:mdata cmp} {right:}
 
 {p 8 17 2}
 {cmd:mdata cmp}
-{cmd:} , [{it:options}]
+{cmd:} , {opt f1(fn)} {opt f2(fn)} [{it:options}]
 
 {synoptset 30 tabbed}{...}
 {marker table_options}{...}
 {synopthdr}
 {synoptline}
 {syntab :Options}
-{synopt :{opt new:file}} is the name of the Excel file where the metadata is stored.
- This option is mandatory.
+{p2coldent :* {opt f1(fn)}} is the name of the first Excel file where the metadata is stored.
 {p_end}
-{synopt :{opt old:file}} is name of the second Excel file where the metadata is stored.
- This option is mandatory.
+{p2coldent :* {opt f2(fn)}} is name of the second Excel file where the metadata is stored.
 {p_end}
 {synopt :{opt export(fn [, replace])}} saves the inconsitencies found by the command in the Excel file {it:fn.xlsx}.
 Defaults to {it:metacmp.xlsx}.
 {p_end}
 {synoptline}
+{p 4 6 2}
+* required{p_end}
 {p2colreset}{...}
 {p 4 6 2}
 

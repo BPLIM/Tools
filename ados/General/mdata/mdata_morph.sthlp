@@ -14,15 +14,17 @@ help for {cmd:mdata morph} {right:}
 
 {p 8 17 2}
 {cmd:mdata morph}
-{cmd:} ({it:vl_lab1 = vl_lab2 vl_lab3 ...}) [({it:vl_lab7 = vl_lab5 vl_lab6 ...}) ...], [{it:options}]
+{cmd:} ({it:vl_lab1 = vl_lab2 vl_lab3 ...}) [({it:vl_lab7 = vl_lab5 vl_lab6 ...}) ...], 
+{opt meta:file(fn)} 
+[{it:options}]
 
 {synoptset 30 tabbed}{...}
 {marker table_options}{...}
 {synopthdr}
 {synoptline}
 {syntab :Options}
-{synopt :{opt meta:file(fn)}} is name of the Excel file where the metadata is stored.
- This option is mandatory.
+{p2coldent :* {opt meta:file(fn)}} is name of the Excel file where the 
+metadata is stored.
 {p_end}
 {synopt :{opt save(fn [, replace])}} saves the transformed metadata in the Excel file {it:fn.xlsx}.
 Defaults to {opt <option metafile>}{it:_new}{opt .xlsx}.
@@ -30,6 +32,8 @@ Defaults to {opt <option metafile>}{it:_new}{opt .xlsx}.
 {synopt :{opt keep}} keeps old sheets that were morphed into new sheets.
 {p_end}
 {synoptline}
+{p 4 6 2}
+* required{p_end}
 {p2colreset}{...}
 {p 4 6 2}
 

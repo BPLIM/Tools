@@ -14,23 +14,25 @@ help for {cmd:mdata combine} {right:}
 
 {p 8 17 2}
 {cmd:mdata combine}
-{cmd:} , [{it:options}]
+{cmd:} , {opt f1(fn)} {opt f2(fn)} [{it:options}]
 
 {synoptset 30 tabbed}{...}
 {marker table_options}{...}
 {synopthdr}
 {synoptline}
 {syntab :Options}
-{synopt :{opt f1}} is the name of the first Excel file where the metadata is stored.
- This option is mandatory.
+{p2coldent :* {opt f1(fn)}} is the name of the first Excel file where the 
+metadata is stored.
 {p_end}
-{synopt :{opt f2}} is name of the second Excel file where the metadata is stored.
- This option is mandatory.
+{p2coldent :* {opt f2(fn)}} is name of the second Excel file where the 
+metadata is stored.
 {p_end}
 {synopt :{opt meta:file(fn [, replace])}} saves the combined metadata in the Excel file {it:fn.xlsx}.
 Defaults to {it:metafile.xlsx}.
 {p_end}
 {synoptline}
+{p 4 6 2}
+* required{p_end}
 {p2colreset}{...}
 {p 4 6 2}
 
