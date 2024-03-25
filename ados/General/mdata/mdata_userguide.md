@@ -291,11 +291,11 @@ notes age: age note 1
 notes age: age note 2
 ```
 
-We will export the metadata again. If we were to use the same syntax, `mdata extract`, we will get an error, since *metafile.xlsx* already exists. We can specify a different name or replace the existing file. Both ways demand that we specify the option **meta**. We choose the latter, replacing the existing file. Also, please note that the default behavior is to not export characteristics and notes for variables, so we have to set two additional options in order to export them.
+We will export the metadata again. If we were to use the same syntax, `mdata extract`, we will get an error, since *metafile.xlsx* already exists. We can specify a different name or replace the existing file. We choose the latter, replacing the existing file. Also, please note that the default behavior is to not export characteristics and notes for variables, so we have to set two additional options in order to export them.
 
 
 ```stata
-mdata extract, meta(metafile, replace) notes chars
+mdata extract, notes chars replace
 ```
 
     
@@ -424,7 +424,7 @@ So the organization of warnings and inconsistencies depends on the command `mdat
 
 
 ```stata
-mdata extract, meta(metafile, replace) notes chars
+mdata extract, notes chars replace
 ```
 
     
