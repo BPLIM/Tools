@@ -1,4 +1,4 @@
-*! version 0.2 7Nov2023
+*! version 0.2 25Mar2024
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools, uselabel
 
@@ -10,7 +10,7 @@ value labels, notes, etc.
 */
 version 16
 
-syntax, [METAfile(string) problems CHECKfile(string) TRUNCate CHARS NOTES]
+syntax, [METAfile(string) problems CHECKfile(string) TRUNCate CHARS NOTES REPLACE]
 
 qui describe 
 if `r(N)' == 0 | `r(k)' == 0 {
@@ -20,28 +20,19 @@ if `r(N)' == 0 | `r(k)' == 0 {
 
 if trim("`metafile'") == "" {
 	local metafile "metafile.xlsx"
-	cap confirm file "`metafile'"
-	if !_rc {
-		di as error `"File "`metafile'" already exists. Please specify "' ///
-		`"option "metafile" to save the file under a different name"'
-		exit 602
-	}
 }
 else {
-	gettoken metafile replacemeta: metafile, p(",")
-	local metafile = trim("`metafile'")
 	local metafile "`metafile'.xlsx"
-	gettoken lixo replacemeta: replacemeta, p(",")
-	cap confirm file "`metafile'"
-	if !_rc & trim("`replacemeta'") != "replace" {
-		di as error `"File "`metafile'" already exists. Please specify"' ///
-		`"sub-option "replace" to overwrite the existing file"'
-		exit 602
-	}
-	else {
-		cap rm "`metafile'"
-	}
 }
+cap confirm file "`metafile'"
+if !_rc & "`replace'" != "replace" {
+	di as error `"File "`metafile'" already exists."'
+	exit 602	
+}
+else {
+	cap rm "`metafile'"
+}
+
 if "`truncate'" == "" {
 	qui ds 
 	foreach var in `r(varlist)' {
