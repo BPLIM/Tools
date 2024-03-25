@@ -551,7 +551,7 @@ mdata extract, meta(metafile2) chars notes
     File metafile2.xlsx saved
     
 
-Now that we have two Excel files with metadata, we are going to compare them. The files under comparison should be specified in options **oldfile** and **newfile**. The report is saved in an Excel file. The user may use option **export** to specify the name of this file, or it defaults to *metacmp.xlsx*.
+Now that we have two Excel files with metadata, we are going to compare them. The files under comparison should be specified in options **f1** and **f2**. The report is saved in an Excel file. The user may use option **export** to specify the name of this file, or it defaults to *metacmp.xlsx*.
 
 
 ```stata
@@ -564,7 +564,7 @@ mdata cmp, f1(metafile2) f2(metafile)
 
 <p align="center">
 <figure>
-    <img width="578" alt="3_extract_01" src="https://user-images.githubusercontent.com/44852742/110456259-3fa8c280-80c1-11eb-88a8-56c7101abb73.PNG">
+    <img width="578" alt="3_extract_01" src="https://github.com/BPLIM/Tools/assets/44852742/d61eefa2-b476-42e5-9cff-91d7e16b267e">
     <figcaption><strong>Figure 5.1</strong></figcaption>
 </figure>
 </p>
@@ -573,35 +573,35 @@ Inspecting *metacmp.xlsx*, specifically the **Summary** worksheet, we observe th
 
 <p align="center">
 <figure>
-    <img width="413" alt="3_extract_02" src="https://user-images.githubusercontent.com/44852742/110456254-3e779580-80c1-11eb-82b1-29193e5900ac.PNG">
+    <img width="413" alt="3_extract_02" src="https://github.com/BPLIM/Tools/assets/44852742/3d5c9dfb-377a-4716-81e9-56347c3d1119">
     <figcaption><strong>Figure 5.2</strong></figcaption>
 </figure>
 </p>
 
-The **Variables** worksheet presents a table with only one row and two columns, **variable** and **desc**. The first column is self-explanatory, the second lets us know that the variable *random* only appears in the new file. If it were only present in the old file, the value in that cell would be *old*. Please notice that values *old* and *new* depend on the files specified in `mdata cmp` through options **oldfile** and **newfile**.
+The **Variables** worksheet presents a table with only one row and two columns, **variable** and **desc**. The first column is self-explanatory, the second let's us know that the variable *random* only appears in the new file -  *f1*. If it were only present in the old file, the value in that cell would be *f2*. Please notice that values *f1* and *f2* depend on the files specified in `mdata cmp` through options **f1** and **f2**.
 
 
 
 <p align="center">
 <figure>
-    <img width="413" alt="3_extract_03" src="https://user-images.githubusercontent.com/44852742/110456257-3f102c00-80c1-11eb-857b-0c1b0f961805.PNG">
+    <img width="413" alt="3_extract_03" src="https://github.com/BPLIM/Tools/assets/44852742/e4dcd1c8-2ee4-4fd0-87eb-6a3fed551b79">
     <figcaption><strong>Figure 5.3</strong></figcaption>
 </figure>
 </p>
 
-Worksheet **Variables' label_default** presents a table of differences in variables' labels. The suffix **_default** is the label language. The structure of the table is always the same. There is a column with variables that contain differences and two additional columns, in this case *_new_label_default* and *_old_label_default*. *_new_label_default* stands for the variable label in the new file (*metafile2.xlsx*) defined for label language *default*. The same logic applies to *_old_label_default*.
+Worksheet **Variables' label_default** presents a table of differences in variables' labels. The suffix **_default** is the label language. The structure of the table is always the same. There is a column with variables that contain differences and two additional columns, in this case *_f1_label_default* and *_f2_label_default*. *_f2_label_default* stands for the variable label in the new file (*metafile2.xlsx*) defined for label language *default*. The same logic applies to *_f1_label_default*.
 
 
 <p align="center">
 <figure>
-    <img width="414" alt="3_extract_04" src="https://user-images.githubusercontent.com/44852742/110456258-3f102c00-80c1-11eb-8945-e33aff56d241.PNG">
+    <img width="414" alt="3_extract_04" src="https://github.com/BPLIM/Tools/assets/44852742/8cd8e6d1-f4f3-4b9e-bcf2-9bef3e5ab31b">
     <figcaption><strong>Figure 5.4</strong></figcaption>
 </figure>
 </p>
 
-Finally, worksheet **vl_marlbl** flags differences in value label *marlbl*. Even if we had not defined a new level for *marlbl*, this sheet would signal that the new meta file contains a new value. That is the reason why the table presented has four columns, *value*, *desc*, *label_old* and *label_new*. In the case at hand, value 2 is only present in the new file (*metafile2.xlsx*) and has value label "2 divorced". Please notice that this type of comparison only makes sense for categorical variables.
+Finally, worksheet **vl_marlbl** flags differences in value label *marlbl*. Even if we had not defined a new level for *marlbl*, this sheet would signal that the new meta file contains a new value. That is the reason why the table presented has four columns, *value*, *desc*, *label_f1* and *label_f2*. In the case at hand, value 2 is only present in the new file (*metafile2.xlsx*) and has value label "2 divorced". Please notice that this type of comparison only makes sense for categorical variables.
 
-We have seen a small example of how to use `mdata cmp`. However, so not forget that we only introduced three small changes in the data. The comparison performed by `mdata cmp` is exhaustive. Every sheet and value in the metadata files are compared. 
+We have seen a small example of how to use `mdata cmp`. However, do not forget that we only introduced three small changes in the data. The comparison performed by `mdata cmp` is exhaustive. Every sheet and value in the metadata files are compared. 
 
 We should also be able to combine two meta files. And for that we have `mdata combine`.
 
