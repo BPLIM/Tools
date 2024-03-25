@@ -117,12 +117,12 @@ frame create `framenew'
 frame `frameold' {
     qui import excel using "`old'", sheet("variables") first clear
 	* rename variables to compare them after the merge
-	rename_vars, prefix(_old_)
+	rename_vars, prefix(_f2_)
 }
 frame `framenew' {
     qui import excel using "`new'", sheet("variables") first clear
 	* rename variables to compare them after the merge
-	rename_vars, prefix(_new_)
+	rename_vars, prefix(_f1_)
 	qui save "`temp'", replace
 }
 * Compare worksheets
@@ -134,8 +134,8 @@ frame `frameold' {
 	if `r(N)' {
 		put_summary, file("`export'") value(Variables) num(`r(N)')
 		global CELLNUM = ${CELLNUM} + 1
-		qui gen desc = "old" if _m == 1
-		qui replace desc = "new" if _m == 2
+		qui gen desc = "f2" if _m == 1
+		qui replace desc = "f1" if _m == 2
 		qui export excel variable desc using "`export'" if _m != 3, ///
 			sheet("Variables", modify) first(var)
 	}
@@ -150,12 +150,12 @@ frame `frameold' {
 		local cell_num = 2
 		foreach col in `r(cols_master)' {
 			putexcel A`cell_num' = "`col'"
-			putexcel B`cell_num' =  "old"
+			putexcel B`cell_num' =  "f2"
 			local cell_num = `cell_num' + 1
 		}
 		foreach col in `r(cols_using)' {
 			putexcel A`cell_num' = "`col'"
-			putexcel B`cell_num' = "new"
+			putexcel B`cell_num' = "f1"
 			local cell_num = `cell_num' + 1
 		}
 		qui putexcel save
@@ -167,12 +167,12 @@ frame `frameold' {
 	* Third section
 	tempvar temp
 	foreach var in `r(matched)' {
-	    qui gen `temp' =  (_new_`var' == _old_`var')
+	    qui gen `temp' =  (_f1_`var' == _f2_`var')
 		qui count if `temp' == 0
 		if `r(N)' {
 			put_summary, file("`export'") value(Variables' `var') num(`r(N)')
 			global CELLNUM = ${CELLNUM} + 1
-			qui export excel variable _new_`var' _old_`var' using "`export'" if `temp' == 0, ///
+			qui export excel variable _f1_`var' _f2_`var' using "`export'" if `temp' == 0, ///
 				sheet("Variables' `var'", modify) first(var) 
 		}
 		else {
@@ -227,13 +227,13 @@ local vars "`r(varlist)'"
 local var "variable"
 local rem_vars: list vars - var 
 foreach var in `rem_vars' {
-    if strpos("`var'", "_old_") local vars_old = "`vars_old'" + " `var'"
-	if strpos("`var'", "_new_") local vars_new = "`vars_new'" + " `var'"
+    if strpos("`var'", "_f2_") local vars_old = "`vars_old'" + " `var'"
+	if strpos("`var'", "_f1_") local vars_new = "`vars_new'" + " `var'"
 }
 * Convert locals to columns
-frame `frold': local_to_column, local(`vars_old') var(`column') first(6)
+frame `frold': local_to_column, local(`vars_old') var(`column') first(5)
 frame `frnew' {
-    local_to_column, local(`vars_new') var(`column') first(6)
+    local_to_column, local(`vars_new') var(`column') first(5)
 	qui save `temp', replace
 }
 * Compare columns (each column contains variables' features)
@@ -296,8 +296,8 @@ frame `frameold' {
 	if `r(N)' {
 		put_summary, file("`export'") value(Sheets) num(`r(N)')
 		global CELLNUM = ${CELLNUM} + 1
-	    qui gen desc = "old" if _m == 1
-		replace desc = "new" if _m == 2
+	    qui gen desc = "f2" if _m == 1
+		replace desc = "f1" if _m == 2
 		rename `sheet' sheet 
 		qui export excel sheet desc using "`export'" if _m != 3, ///
 			sheet("Sheets", modify) first(var)
@@ -352,11 +352,11 @@ frame create `framenew'
 * Read value labels worksheets
 frame `frameold' {
     qui import excel using "`old'", sheet(`sheet')  first
-	rename label label_old
+	rename label label_f2
 }
 frame `framenew' {
     qui import excel using "`new'", sheet(`sheet')  first
-	rename label label_new
+	rename label label_f1
 	qui save "`temp'", replace
 }
 
@@ -366,12 +366,12 @@ frame `frameold' {
 	qui merge 1:1 value using `temp'
 	qui count if _m != 3
 	if `r(N)' {
-	    qui gen desc = "old" if _m == 1
-		qui replace desc = "new" if _m == 2
+	    qui gen desc = "f2" if _m == 1
+		qui replace desc = "f1" if _m == 2
 		local incon = `incon' + `r(N)'
 	}
 	* Compare labels
-	qui gen `equal_label' = (label_new == label_old)
+	qui gen `equal_label' = (label_f1 == label_f2)
 	qui count if _m == 3 & `equal_label' == 0
 	if `r(N)' {
 		if `incon' {
@@ -385,7 +385,7 @@ frame `frameold' {
 	if `incon' {
 		put_summary, file("`export'") value(`sheet') num(`incon')
 		global CELLNUM = ${CELLNUM} + 1
-	    qui export excel value desc label_old label_new ///
+	    qui export excel value desc label_f2 label_f1 ///
 			using "`export'" if (_m != 3) | (_m == 3 & `equal_label' == 0) , ///
 			sheet("`sheet'", modify) first(var)
 	}
@@ -422,7 +422,7 @@ frame `frameold' {
 		substr(char, 1, length("destring")) == "destring" | ///
 		substr(char, 1, length("tostring")) == "tostring" | ///
 		substr(char, 1, 4) == "note"
-	rename value value_old
+	rename value value_f2
 }
 frame `framenew' {
     qui import excel using "`new'", sheet(`sheet') first
@@ -432,7 +432,7 @@ frame `framenew' {
 		substr(char, 1, length("destring")) == "destring" | ///
 		substr(char, 1, length("tostring")) == "tostring" | ///
 		substr(char, 1, 4) == "note"
-	rename value value_new
+	rename value value_f1
 	qui save "`temp'", replace
 }
 
@@ -442,12 +442,12 @@ frame `frameold' {
 	qui merge 1:1 char using `temp'
 	qui count if _m != 3
 	if `r(N)' {
-	    qui gen desc = "old" if _m == 1
-		qui replace desc = "new" if _m == 2
+	    qui gen desc = "f2" if _m == 1
+		qui replace desc = "f1" if _m == 2
 		local incon = `incon' + `r(N)'
 	}
 	* Compare chars' values
-	qui gen `equal_value' = (value_new == value_old)
+	qui gen `equal_value' = (value_f1 == value_f2)
 	qui count if _m == 3 & `equal_value' == 0
 	if `r(N)' {
 		if `incon' {
@@ -461,7 +461,7 @@ frame `frameold' {
 	if `incon' {
 		put_summary, file("`export'") value(`sheet') num(`incon')
 		global CELLNUM = ${CELLNUM} + 1
-	    qui export excel char desc value_old value_new ///
+	    qui export excel char desc value_f2 value_f1 ///
 			using "`export'" if (_m != 3) | (_m == 3 & `equal_value' == 0) , ///
 			sheet("`sheet'", modify) first(var)
 	}
@@ -498,8 +498,8 @@ frame `frameold' {
 	if `r(N)' {
 		put_summary, file("`export'") value(`sheet') num(`r(N)')
 		global CELLNUM = ${CELLNUM} + 1
-	    qui gen desc = "old" if _m == 1
-		qui replace desc = "new" if _m == 2
+	    qui gen desc = "f2" if _m == 1
+		qui replace desc = "f1" if _m == 2
 	    qui export excel note desc using "`export'" if (_m != 3), ///
 			sheet("`sheet'", modify) first(var)
 	}
