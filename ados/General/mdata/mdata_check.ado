@@ -1,10 +1,10 @@
-*! version 0.2 7Nov2023
+*! version 0.2 27Mar2024
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools
 
 program define mdata_check, rclass
 
-syntax, METAfile(string) [CHECKfile(string) DELimit(string) problems]
+syntax, METAfile(string) [CHECKfile(string) DELimit(string)]
 
 local metafile "`metafile'.xlsx"
 
@@ -39,10 +39,7 @@ cap putexcel save
 qui putexcel set "`checkfile'", open modify sheet("${MAINSHEET}")
 qui putexcel A1 = "Meta file", bold
 qui putexcel B1 = "`metafile'"
-if "`problems'" == "problems" {
-	qui putexcel A2 = "Data", bold
-	qui putexcel B2 = "${S_FN}"
-}
+
 qui putexcel A4 = "worksheet", bold
 qui putexcel B4 = "warnings", bold
 qui putexcel C4 = "inconsistencies", bold
@@ -58,16 +55,15 @@ frame `lgframe' {
 }
 frame drop `lgframe'
 
-if "`problems'" == "problems" {
-	qui putexcel set "`checkfile'", open modify sheet("${MAINSHEET}")
-	check_ds_unusedvl, meta(`metafile')
-	if "`r(unused_lab)'" != "" {
-		qui putexcel A$CELLNUM = "unused_value_label"
-		qui putexcel B$CELLNUM = "`r(unused_lab)'"
-		global CELLNUM = ${CELLNUM} + 1 
-	}
-	qui putexcel save
+
+qui putexcel set "`checkfile'", open modify sheet("${MAINSHEET}")
+check_ds_unusedvl, meta(`metafile')
+if "`r(unused_lab)'" != "" {
+	qui putexcel A$CELLNUM = "unused_value_label"
+	qui putexcel B$CELLNUM = "`r(unused_lab)'"
+	global CELLNUM = ${CELLNUM} + 1 
 }
+qui putexcel save
 
 check_data_features, report(`checkfile') meta(`metafile')
 
@@ -146,6 +142,8 @@ frame `dtasgn' {
 	qui glevelsof Content if Features == "unused_value_labels", local(levels)
 	return local unused_lab `levels'
 }
+
+frame drop `dtasgn'
 
 end
 
