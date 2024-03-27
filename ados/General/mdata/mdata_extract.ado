@@ -1,4 +1,4 @@
-*! version 0.2 25Mar2024
+*! version 0.2 27Mar2024
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools, uselabel
 
@@ -10,7 +10,7 @@ value labels, notes, etc.
 */
 version 16
 
-syntax, [METAfile(string) problems CHECKfile(string) TRUNCate CHARS NOTES REPLACE]
+syntax, [METAfile(string) TRUNCate CHARS NOTES REPLACE]
 
 qui describe 
 if `r(N)' == 0 | `r(k)' == 0 {
@@ -80,13 +80,8 @@ quietly {
 		labellang(`labellang') `problems' `chars' `notes'
 		
 	export_data_chars, filename(`metafile')
-}
-
-di 
-di as text "File " as result "`metafile'" as text " saved"
-
-if "`problems'" == "problems" {
-	qui unused_valab, lang(`labellang')
+	
+	unused_valab, lang(`labellang')
 	if trim("`r(unused)'") != "" {
 		quietly {
 			putexcel set `metafile', sheet("data_features_spec") open modify
@@ -95,14 +90,10 @@ if "`problems'" == "problems" {
 			putexcel save
 		}
 	}
-	local metafile = subinstr("`metafile'", ".xlsx", "", 1)
-	if "`checkfile'" == "" {
-		mdata_check, meta(`metafile') problems
-	}
-	else {
-		mdata_check, meta(`metafile') check(`checkfile') problems
-	} 
 }
+
+di 
+di as text "File " as result "`metafile'" as text " saved"
 
 end
 
@@ -373,13 +364,11 @@ preserve
 				}
 				else {
 					qui replace label = "" if _m == 2
-					if "`problems'" == "problems" {
-						qui count if _m == 1
-						local m1_prob = `r(N)'
-						if `m1_prob' {
-							qui gen obs = "Label not used" if _m == 1
-							local var_obs`lbl' "obs"
-						}
+					qui count if _m == 1
+					local m1_prob = `r(N)'
+					if `m1_prob' {
+						qui gen obs = "Label not used" if _m == 1
+						local var_obs`lbl' "obs"
 					}
 					drop _m
 					qui export excel value label `var_obs`lbl'' using `"`filename'"', ///

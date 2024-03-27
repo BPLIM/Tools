@@ -24,11 +24,6 @@ help for {cmd:mdata extract} {right:}
 {synopt :{opt meta:file(fn)}} sets the name of the Excel file where the metadata is saved. The 
 user should not provide the file extension. Defaults to {it:metafile.xlsx}.
 {p_end}
-{synopt :{opt problems}} uses {help mdata_check:mdata check} to find inconsistencies in the metadata.
-{p_end}
-{synopt :{opt check:file}} should only be specified along with option {opt problems}. See 
-{help mdata_check:mdata check}.
-{p_end}
 {synopt :{opt chars}} extracts information about variables and data {help char:characteristics}. 
 The default behavior is to not extract variables and data characteristics.
 {p_end}
