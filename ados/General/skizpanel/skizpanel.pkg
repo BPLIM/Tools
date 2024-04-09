@@ -1,0 +1,17 @@
+v 1
+
+d SKIZPANEL: allows to manipulate a panel data set
+d
+d Author: BPLIM Team. Banco de Portugal
+d Contact: bplim@bportugal.pt
+D 09 Apr 2024
+d
+d KW: panel
+d
+d
+d Distribution-Date: 20240409
+d
+f skizpanel.ado
+f skizpanel.sthlp
+f unskizpanel.ado
+f unskizpanel.sthlp
