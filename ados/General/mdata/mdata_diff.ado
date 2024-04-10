@@ -454,7 +454,7 @@ program define variables_chars_sheet, rclass
 	local obs = `r(N)'
 	
 	if (`obs' == 0) {
-		di "{err:Worsheet {bf:`var'} not exported because of option}" ///
+		di "{err:Worsheet {bf:`var'} not exported because of option} " ///
 			"{err:{bf:diffonly}}"
 	}
 	else {
