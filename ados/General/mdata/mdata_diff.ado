@@ -215,6 +215,7 @@ program define data_history
 		* Merge with the indexed data created with `index_data`
 		qui merge m:1 _file using `index_data', gen(`_merge')
 		drop `_merge'
+		keep Content Features _file index
 		sort Features _file
 		drop _file
 		qui compress
@@ -263,11 +264,12 @@ program define vars_history, rclass
 		* Merge with the indexed data created with `index_data`
 		qui merge m:1 _file using `index_data', gen(`_merge')
 		drop `_merge'
+		keep variable label* value_label* type format chars notes index _file
 		preserve 
 			variables_sheet, history(`history') temp(`temp_vars') ///
 				`diffonly' `verbose'
 			return add
-		restore 
+		restore  
 		qui ds
 		local vars "`r(varlist)'"
 		local vars_exc "variable index _file"
@@ -554,6 +556,7 @@ program define vl_history, rclass
 		* Merge with indexed data
 		qui merge m:1 _file using `index_data', gen(`_merge')
 		drop `_merge'
+		keep value label index _file _vl
 		qui levelsof index, local(index_levels)
 		qui levelsof _vl, local(vl_levels)
 		foreach vl_level in `vl_levels' {
