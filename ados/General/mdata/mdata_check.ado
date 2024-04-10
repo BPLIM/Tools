@@ -138,9 +138,11 @@ syntax, meta(string)
 tempname dtasgn
 frame create `dtasgn'
 frame `dtasgn' {
-	qui import excel "`meta'", sheet("data_features_spec") clear first
-	qui glevelsof Content if Features == "unused_value_labels", local(levels)
-	return local unused_lab `levels'
+	cap import excel "`meta'", sheet("data_features_spec") clear first
+	if !_rc {
+	    qui glevelsof Content if Features == "unused_value_labels", local(levels)
+	    return local unused_lab `levels'
+        }
 }
 
 frame drop `dtasgn'
