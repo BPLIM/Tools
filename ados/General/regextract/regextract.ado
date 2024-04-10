@@ -9,13 +9,10 @@ version 16
 
 syntax varname(str), REGex(str) GENerate(str) [replace]
 
-capture {
-	foreach var of varlist `generate'* { 
-		continue
-	}	
-}
-if (_rc != 111) {
-	foreach var of varlist `generate'* {
+
+qui ds
+foreach var in `r(varlist)' {
+	if (substr("`var'", 1, length("`generate'")) == "`generate'") {
 		cap confirm var `var'
 		if !_rc & "`replace'" == "" {
 			di "{err:Prefix/variable {bf:`generate'} already defined}"
@@ -23,8 +20,8 @@ if (_rc != 111) {
 		}
 		else {
 			drop `var'
-		}
-	}	
+		}		
+	}
 }
 
 
