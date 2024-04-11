@@ -1,4 +1,4 @@
-*! version 0.2 27Mar2024
+*! version 0.2 11Apr2024
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools
 
@@ -102,7 +102,7 @@ else {
 if `keep_check' {
     di 
 	if `no_inc' {
-	    di as text "No warnings or inconsitencies found. File " as result ///
+	    di as text "No warnings or inconsistencies found. File " as result ///
 		"`checkfile'" as text " will not be saved"
 		if (trim("`replacecheck'") != "replace") cap rm "`checkfile'"
 	}
