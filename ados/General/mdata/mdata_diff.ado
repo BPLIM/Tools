@@ -1,4 +1,4 @@
-*! version 0.1 21Feb2024
+*! version 0.1 10Apr2024
 * Programmed by Gustavo Iglésias
 
 program define mdata_diff, rclass
