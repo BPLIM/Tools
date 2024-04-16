@@ -1,4 +1,4 @@
-*! version 0.1 11Mar2021
+*! version 0.1 16Apr2021
 * Programmed by Gustavo Iglésias
 * Dependencies: bpencode
 
@@ -96,7 +96,7 @@ frame `frharm' {
 		exit 198
 	}
 	else {
-		bpencode `code', gen(`num_code')
+		qui bpencode `code', gen(`num_code')
 		qui replace value = `num_code'
 		drop `code' `num_code'
 		sort value
