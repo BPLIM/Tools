@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1 2Mar2021}{...}{smcl}
+{* *! version 0.1 16Apr2024}{...}{smcl}
 {.-}
 help for {cmd:mdata uniform} {right:}
 {.-}
@@ -27,8 +27,10 @@ the metadata is stored.
 {synopt :{opt sh:eets(worksheets)}} specify the worksheets that should be 
 harmonized. The default is all.
 {p_end}
-{synopt :{opt new:file(fn [, replace])}} saves the harmonized metadata in the Excel file {it:fn.xlsx}.
+{synopt :{opt new:file(fn)}} saves the harmonized metadata in the Excel file {it:fn.xlsx}.
 Defaults to {opt <option metafile>}{it:_new}{opt .xlsx}.
+{p_end}
+{synopt :{opt replace}} replaces the harmonized meta file if it exists.
 {p_end}
 {synoptline}
 {p 4 6 2}

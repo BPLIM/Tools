@@ -4,7 +4,7 @@
 
 program define mdata_uniform
 
-syntax, METAfile(string) [SHeets(string) NEWfile(string)]
+syntax, METAfile(string) [SHeets(string) NEWfile(string) REPLACE]
 
 version 16
 
@@ -12,30 +12,22 @@ confirm file `metafile'.xlsx
 
 if trim("`newfile'") == "" {
 	local newfile "`metafile'_new.xlsx"
-	cap confirm file "`newfile'"
-	if !_rc {
-		di as error `"File "`newfile'" already exists. Please specify "' ///
-		`"option "newfile" to save the file under a different name"'
-		exit 602
-	}
 }
 else {
-	gettoken newfile replacenew: newfile, p(",")
-	local newfile = trim("`newfile'")
 	local newfile "`newfile'.xlsx"
-	gettoken lixo replacenew: replacenew, p(",")
-	cap confirm file "`newfile'"
-	if !_rc & trim("`replacenew'") != "replace" {
-		di as error `"File "`newfile'" already exists. Please specify"' ///
-		`"sub-option "replace" to overwrite the existing file"'
-		exit 602
-	}
-	else {
-		cap rm "`newfile'"
-	}
 }
+cap confirm file "`newfile'"
+if !_rc & "`replace'" != "replace" {
+	di as error `"File "`newfile'" already exists."'
+	exit 602	
+}
+else {
+	cap rm "`newfile'"
+}
+
 local metafile `"`metafile'.xlsx"'
 copy "`metafile'" "`newfile'"
+
 * Sheets
 if "`sheets'" == "" {
 	qui import excel using "`metafile'", describe
