@@ -1,4 +1,4 @@
-*! version 0.1 22Mar2024
+*! version 0.1 16Apr2024
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools
 
@@ -9,33 +9,23 @@ be stored in an Excel file. This can be achieved using the
 command mdata extract
 */
 
-syntax, f1(string) f2(string) [export(string)]
+syntax, f1(string) f2(string) [export(string) REPLACE]
 
 version 16
 
 if trim("`export'") == "" {
 	local export "metacmp.xlsx"
-	cap confirm file "`export'"
-	if !_rc {
-		di as error `"File "`export'" already exists. Please specify "' ///
-		`"option "export" to save the file under a different name"'
-		exit 602
-	}
 }
 else {
-	gettoken export replaceexp: export, p(",")
-	local export = trim("`export'")
 	local export "`export'.xlsx"
-	gettoken lixo replaceexp: replaceexp, p(",")
-	cap confirm file "`export'"
-	if !_rc & trim("`replaceexp'") != "replace" {
-		di as error `"File "`export'" already exists. Please specify"' ///
-		`"sub-option "replace" to overwrite the existing file"'
-		exit 602
-	}
-	else {
-		cap rm "`export'"
-	}
+}
+cap confirm file "`export'"
+if !_rc & "`replace'" != "replace" {
+	di as error `"File "`export'" already exists."'
+	exit 602	
+}
+else {
+	cap rm "`export'"
 }
 
 cap drop macro MAINSHEET CELLNUM

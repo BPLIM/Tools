@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1 2Mar2021}{...}{smcl}
+{* *! version 0.1 16Apr2021}{...}{smcl}
 {.-}
 help for {cmd:mdata cmp} {right:}
 {.-}
@@ -25,8 +25,10 @@ help for {cmd:mdata cmp} {right:}
 {p_end}
 {p2coldent :* {opt f2(fn)}} is name of the second Excel file where the metadata is stored.
 {p_end}
-{synopt :{opt export(fn [, replace])}} saves the inconsitencies found by the command in the Excel file {it:fn.xlsx}.
+{synopt :{opt export(fn)}} saves the inconsitencies found by the command in the Excel file {it:fn.xlsx}.
 Defaults to {it:metacmp.xlsx}.
+{p_end}
+{synopt :{opt replace}} replaces the exported  Excel file if it exists.
 {p_end}
 {synoptline}
 {p 4 6 2}
