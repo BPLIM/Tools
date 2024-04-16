@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1 2Mar2021}{...}{smcl}
+{* *! version 0.1 16Apr2024}{...}{smcl}
 {.-}
 help for {cmd:mdata combine} {right:}
 {.-}
@@ -27,8 +27,12 @@ metadata is stored.
 {p2coldent :* {opt f2(fn)}} is name of the second Excel file where the 
 metadata is stored.
 {p_end}
-{synopt :{opt meta:file(fn [, replace])}} saves the combined metadata in the Excel file {it:fn.xlsx}.
+{synopt :{opt meta:file(fn)}} saves the combined metadata in the Excel file {it:fn.xlsx}.
 Defaults to {it:metafile.xlsx}.
+{p_end}
+{synopt :{opt clean}} does not export column {it:file#}.
+{p_end}
+{synopt :{opt replace}} replaces the combined meta file if it exists.
 {p_end}
 {synoptline}
 {p 4 6 2}

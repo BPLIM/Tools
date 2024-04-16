@@ -1,9 +1,9 @@
-*! version 0.1 23Feb2021
+*! version 0.1 16Apr2024
 * Programmed by Gustavo Iglésias
 
 program define mdata_combine
 
-syntax, f1(string) f2(string) [METAfile(string)]
+syntax, f1(string) f2(string) [METAfile(string) CLEAN REPLACE]
 
 local f1 "`f1'.xlsx"
 local f2 "`f2'.xlsx"
@@ -12,27 +12,17 @@ confirm file `f2'
 
 if trim("`metafile'") == "" {
 	local metafile "metafile.xlsx"
-	cap confirm file "`metafile'"
-	if !_rc {
-		di as error `"File "`metafile'" already exists. Please specify "' ///
-		`"option "metafile" to save the file under a different name"'
-		exit 602
-	}
 }
 else {
-	gettoken metafile replacemeta: metafile, p(",")
-	local metafile = trim("`metafile'")
 	local metafile "`metafile'.xlsx"
-	gettoken lixo replacemeta: replacemeta, p(",")
-	cap confirm file "`metafile'"
-	if !_rc & trim("`replacemeta'") != "replace" {
-		di as error `"File "`metafile'" already exists. Please specify"' ///
-		`"sub-option "replace" to overwrite the existing file"'
-		exit 602
-	}
-	else {
-		cap rm "`metafile'"
-	}
+}
+cap confirm file "`metafile'"
+if !_rc & "`replace'" != "replace" {
+	di as error `"File "`metafile'" already exists."'
+	exit 602	
+}
+else {
+	cap rm "`metafile'"
 }
 
 match_sheets, f1(`f1') f2(`f2')
@@ -54,29 +44,29 @@ foreach sheet in `r(matched)' {
     * Data features - general
 	if "`sheet'" == "data_features_gen" {
 	    combine_sheets, sheet(`sheet') f1(`f1') f2(`f2') meta(`metafile') ///
-			unique_on(Features Content) first    
+			unique_on(Features Content) first `clean'   
 	}
 	* Data features - specific
 	if "`sheet'" == "data_features_spec" continue
 	* Variables 
 	if "`sheet'" == "variables" {
 	    combine_sheets, sheet(`sheet') f1(`f1') f2(`f2') meta(`metafile') ///
-			unique_on(variable label* value_label*) sort_on(variable) first
+			unique_on(variable label* value_label*) sort_on(variable) first `clean'
 	}
 	* Value labels
 	if substr("`sheet'", 1, 2) == "vl" {
 	    combine_sheets, sheet(`sheet') f1(`f1') f2(`f2') meta(`metafile') ///
-			unique_on(value label) sort_on(value) first
+			unique_on(value label) sort_on(value) first `clean'
 	}	
 	* Chars
 	if substr("`sheet'", 1, 4) == "char" {
 	    combine_sheets, sheet(`sheet') f1(`f1') f2(`f2') meta(`metafile') ///
-			unique_on(char value) first
+			unique_on(char value) first `clean'
 	}		
 	* Notes
 	if substr("`sheet'", 1, 4) == "note" {
 	    combine_sheets, sheet(`sheet') f1(`f1') f2(`f2') meta(`metafile') ///
-			unique_on(note) first
+			unique_on(note) first `clean'
 	}	
 }
 * Export unmatched sheets
@@ -101,7 +91,7 @@ end
 program define combine_sheets
 
 syntax, sheet(string) f1(string) f2(string) meta(string) ///
-	unique_on(string) [sort_on(string) first]
+	unique_on(string) [sort_on(string) first clean]
 
 tempfile temp
 tempname sh_frame
@@ -128,6 +118,7 @@ frame `sh_frame' {
 	drop `file1'
 	drop_dups `unique_on', fc(`fc')
 	if ("`sort_on'" != "") sort `sort_on'
+	if ("`clean'" == "clean") cap drop file*
 	if "`first'" == "first" {
 	    qui export excel using "`meta'", sheet("`sheet'", replace) first(var)
 	}
