@@ -79,7 +79,7 @@ connected to the use of the item, whether or not based upon warranty, contract, 
 {pstd}
 {cmd:bpencode} package by BPLIM{p_end}
 {pstd}
-{cmd:uselabel} {p_end}
+{cmd:filelist} package by Robert Picard{p_end}
 
 
 {title:Author}
