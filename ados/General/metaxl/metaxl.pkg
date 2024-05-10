@@ -1,0 +1,33 @@
+v 3
+
+d metaxl: Manage metadata
+d
+d Author: BPLIM Team. Banco de Portugal
+d Contact: bplim@bportugal.pt
+d
+d
+d Distribution-Date: 20220429
+d
+f metaxl.ado
+f metaxl.sthlp
+f metaxl_apply.ado
+f metaxl_apply.sthlp
+f metaxl_check.ado
+f metaxl_check.sthlp
+f metaxl_clear.ado
+f metaxl_cmp.ado
+f metaxl_cmp.sthlp
+f metaxl_combine.ado
+f metaxl_combine.sthlp
+f metaxl_extract.ado
+f metaxl_extract.sthlp
+f metaxl_morph.ado
+f metaxl_morph.sthlp
+f metaxl_setdefaultfmt.ado
+f metaxl_truncate.ado
+f metaxl_uniform.ado
+f metaxl_uniform.sthlp
+f metaxl_diff.ado
+f metaxl_diff.sthlp
+f metaxl_stats.ado
+f metaxl_stats.sthlp
