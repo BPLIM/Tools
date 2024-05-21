@@ -65,12 +65,12 @@ it exists.
 
 {pstd}
 {opt dummyfi} creates a do-file that generates random data using a metadata file 
-(see {browse "https://github.com/BPLIM/Tools/tree/master/ados/General/mdata":mdata}) and a file 
+(see {browse "https://github.com/BPLIM/Tools/tree/master/ados/General/metaxl":metaxl}) and a file 
 with sampled ids provided by the user. 
 
 {pstd}
 The first step to generate the random data is to create a metadata file 
-using command {opt mdata stats}. The metadata file contains basic 
+using command {opt metaxl stats}. The metadata file contains basic 
 information about the structure of the data and variables' info and 
 statistics that is used to generate the random dataset. The next step is to 
 sample the ids (units) using {help sampleid}. The units may be a single 
@@ -88,7 +88,7 @@ The command skips string variables and will not include them in the random datas
 Example 1: Create do-file to generate random data from the {it:nlswork} dataset based on a 10% sample. 
 
 {p 8 16}{inp:. webuse nlswork, clear}{p_end}
-{p 8 16}{inp:. mdata stats, save(meta, replace) panel(idcode) time(year)}{p_end}
+{p 8 16}{inp:. metaxl stats, save(meta, replace) panel(idcode) time(year)}{p_end}
 {p 8 16}{inp:. sampleid idcode, sample(10) time(year) save(nlswork_ID) replace}{p_end}
 {p 8 16}{inp:. dummyfi idcode, meta(meta) masterid(nlswork_ID) time(year) do(gen_dummy) name(nlswork_dummy) replace}{p_end}
 
