@@ -70,7 +70,7 @@ This command is the first step to generate random data using command
 It creates a random sample of unique ids, which is then fed to {cmd:dummyfi} to 
 generate a random version of the data using information collected from the data's 
 metafile 
-(see {browse "https://github.com/BPLIM/Tools/tree/master/ados/General/mdata":mdata}). 
+(see {browse "https://github.com/BPLIM/Tools/tree/master/ados/General/metaxl":metaxl}). 
 The goal is to create random data with the same structure as the one in the 
 original file. If option {opt timevar} is set, the time variable will be saved with 
 sampled ids to keep the time structure of the data.
