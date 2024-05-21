@@ -1,4 +1,4 @@
-*! version 0.1 12Feb2024
+*! version 0.1 21May2024
 * Programmed by Gustavo Iglésias
 
 program define metaxl_stats
@@ -13,6 +13,7 @@ program define metaxl_stats
 		PANELvars(varlist)       ///
 		SAVE(str)                ///
 		STATS(str)               ///
+		WEIGHT(varname)          ///
 	    REPLACEstats             ///
 	] 
 	
@@ -93,6 +94,10 @@ program define metaxl_stats
 		local stats_all `stats' sharezeros shareneg sharemiss shareinv datemin datemax
 	}
 	
+	* If there is a weight variable
+	if ("`weight'" != "") {
+		local weight_spec "[aweight=`weight']"
+	}
 
 	get_meta, meta(`savefile') exc(`excludevars') no("`nofreq'")
 	if ("`r(filename)'" != "${S_FN}") {
@@ -156,7 +161,7 @@ program define metaxl_stats
 				di
 				di "{text:Working on variable {bf:`var'}}"
 				di 
-				qui sum `var', detail
+				qui sum `var' `weight_spec', detail
 				* Statistics
 				foreach stat in `stats' {
 					local `stat' = r(`stat')

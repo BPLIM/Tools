@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1 12Feb2024}{...}{smcl}
+{* *! version 0.1 21May2024}{...}{smcl}
 {.-}
 help for {cmd:metaxl stats} {right:}
 {.-}
@@ -60,6 +60,9 @@ as scalars by command {help summarize}. By default, the command
 exports the mean ({it:mean}), the standard deviation ({it:sd}), the median 
 ({it:p50}) and percentiles 5 and 95 ({it:p5} and {it:p95}). Set this 
 option to {it:_all} to export all possible statistics. 
+{p_end}
+{synopt :{opt weight(varname)}} sets a weighting variable to calculate the 
+statistics (see {help weight}).
 {p_end}
 {synopt :{opt replace:stats}} replaces statistics and frequencies 
 on the metadata file in case they exist.
