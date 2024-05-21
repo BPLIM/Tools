@@ -14,7 +14,7 @@ net install dummyfi, from("https://github.com/BPLIM/Tools/raw/master/ados/Genera
 
 ## Useful links
 
-[Medium article]()
+[Medium article](https://medium.com/the-stata-gallery/the-bplim-workflow-for-anonymizing-confidential-data-for-research-6ea4c0d01396)
 
 ## Author
 
