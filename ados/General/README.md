@@ -16,7 +16,7 @@
 
 `coconuts` - allocate Portuguese municipalities to Nomenclature of Territorial Units for Statistics (NUTS) units
 
-`mdata` - suite of tools to help users handling metadata
+`metaxl` - suite of tools to help users handling metadata
 
 `panelstat` - provides a detailed characterization of a panel data set
 
