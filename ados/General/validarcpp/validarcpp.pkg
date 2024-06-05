@@ -1,0 +1,17 @@
+v 3
+
+d VALIDARCPP: Provides several functionalities for dealing with codes from the Portuguese Classification of Occupations (CPP) / National Classification of Occupations (CNP)
+d
+d Author: BPLIM Team. Banco de Portugal
+d Contact: bplim@bportugal.pt
+D 5 Jun 2024
+d
+d KW: cpp, cnp
+d
+d
+d Distribution-Date: 20240605
+d
+f validarcpp.ado
+f validarcpp.sthlp
+F cpp.csv
+F cpp_final.csv
