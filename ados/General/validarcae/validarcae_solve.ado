@@ -1,8 +1,8 @@
-* Dependencies: ustrdist
+* Dependencies: jarowinkler
 
 program define validarcae_solve, sortpreserve
 
-syntax varname [if], vardesc(string) file(string) vars(string) [th(real 0.5)]
+syntax varname [if], vardesc(string) file(string) vars(string) [th(real 0.7)]
 
 
 local ifnot = "!(" + trim(substr(trim("`if'"), 3, .)) + ")"
@@ -47,33 +47,28 @@ qui drop if `_merge' == 2
 drop `_merge'
 
 quietly {
-	ustrdist `desc' `des' `if' & `nn' == 1, gen(`d')
+	jarowinkler `desc' `des', gen(`d')
+	replace `d' = . if `ifnot' | `nn' != 1
 	bysort `varlist' `vardesc' (`d'): replace `d' = `d'[1]
-	ustrdist `desc' `des0' `if' & `nn' == 1, gen(`d0')
+	jarowinkler `desc' `des0', gen(`d0')
+	replace `d0' = . if `ifnot' | `nn' != 1
 	bysort `varlist' `vardesc' (`d0'): replace `d0' = `d0'[1]
 }
 drop `nn'
 
 * Keep the best match
-qui replace `code' = cond(`d' < `d0', `code', `code0')
-qui replace `des' = cond(`d' < `d0', `des', `des0')
-qui gen `dis' = cond(`d' < `d0', `d', `d0')
+qui replace `code' = cond(`d' > `d0', `code', `code0')
+qui replace `des' = cond(`d' > `d0', `des', `des0')
+qui gen `dis' = cond(`d' > `d0', `d', `d0')
 drop `code0' `des0' `d' `d0'
-
-qui gen `len0' = length(`des')
-qui gen `len1' = length(`desc')
-qui gen `len' = cond(`len0' > `len1', `len1', `len0')
-qui gen `pdis' = `dis' / `len'
-
-drop `len0' `len1' `len' `dis'
 
 rename `code' _sug_code
 
 drop `desc'
 
-qui replace _sug_code = "" if `pdis' > `th' | `ifnot'
+qui replace _sug_code = "" if `dis' < `th' | `ifnot'
 qui gen _solved = 1
-qui replace _solved = 0 if `pdis' > `th'
+qui replace _solved = 0 if `dis' < `th'
 qui replace _solved = . if `ifnot'
 label define solvedlbl 0 "0 unsolved for threshold = `th'" 1 "1 solved"
 label values _solved solvedlbl

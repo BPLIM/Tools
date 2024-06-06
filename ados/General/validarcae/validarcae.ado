@@ -1,24 +1,41 @@
-*! 0.8 16Feb2023
+*! 1.0 6Feb2024
 * Programmed by Gustavo Iglésias
 * Dependencies: 
 * savesome (version 1.1.0 23feb2015)
-* ustrdist
+* jarowinkler
 
 program define validarcae
 
 version 15
 
 syntax varlist(min=1 max=1) [if], [ ///
-	rev(int 3) fromlabel dropzero keep getlevels(string) solve(string) ///
+	rev(int 3) fromlabel dropzero keep getlevels(string) solve(string) SIMilarity(str) ///
 ]
 
 if ("`solve'" != "") {
+	cap which jarowinkler
+	if _rc {
+		di "{err:Option {bf:solve} requires command {bf:jarowinkler}}"
+		exit 111
+	}
 	parse_solve, solve(`solve')
 	local solvevar "`r(solvevar)'"
 	local solveth `r(solveth)'
 	local _solved "`r(_solved)'"
 	local eng "`r(eng)'"
 	confirm string var `solvevar'
+}
+
+if ("`similarity'" != "") {
+	cap which jarowinkler
+	if _rc {
+		di "{err:Option {bf:similarity} requires command {bf:jarowinkler}}"
+		exit 111
+	}
+	parse_sim, sim(`similarity')
+	local simvar "`r(simvar)'"
+	local simlg "`r(simlg)'"
+	confirm string var `simvar'
 }
 
 cap which savesome 
@@ -262,7 +279,6 @@ else {
 		}
 	} 
 }
-
 					
 label values _valid_cae_`rev' validlabel`rev'
 
@@ -277,6 +293,33 @@ cap drop _des_pt
 cap drop _des_en
 cap drop _cae_num
 
+
+if ("`simvar'" != "") {
+	tempvar cae_valid
+	qui clonevar `cae_valid' = _cae_str
+	cap confirm var _solved 
+	if _rc {
+		qui replace `cae_valid' = "0" + _cae_str if ///
+			inlist(_valid_cae_`rev', 2, 20, 200, 2000)				
+	}
+	else {
+		qui replace `cae_valid' = "0" + _cae_str if ///
+			inlist(_valid_cae_`rev', 2, 20, 200, 2000) & _solved != 1
+	}
+	
+	if `rev' == 1 {
+		get_sim `cae_valid' if ///
+			inlist(_valid_cae_`rev', 1, 10, 100, 1000, 10000, 100000), ///
+			rev(`rev') simvar(`simvar') file(`temp') lg(`simlg')
+	}
+	else {
+		get_sim `cae_valid' if ///
+			inlist(_valid_cae_`rev', 10, 100, 1000, 10000, 2, 20, 200, 2000), ///
+			rev(`rev') simvar(`simvar') file(`temp') lg(`simlg')		
+	}
+	
+	cap drop `cae_valid'
+}
 
 
 if "`getlevels'" != "" {
@@ -375,9 +418,27 @@ cap compress _cae_str
 end
 
 
+program define get_sim
+
+syntax varlist [if], simvar(str) file(str) lg(str) [rev(int 3)]
+
+tempvar len
+
+if "`lg'" == "en" {
+	validarcae_sim `varlist' `if', ///
+		vardesc(`simvar') file(`file') vars(_cae_str _des_en) rev(`rev')
+}
+else {
+	validarcae_sim `varlist' `if', ///
+		vardesc(`simvar') file(`file') vars(_cae_str _des_pt) rev(`rev')
+}
+
+end
+
+
 program define solve_valid
 
-syntax varlist [if], valid(str) solvevar(str) file(str) [th(real 0.5) eng]
+syntax varlist [if], valid(str) solvevar(str) file(str) [th(real 0.7) eng]
 
 tempvar len
 
@@ -412,28 +473,43 @@ tab _solved
 end
 
 
+program define parse_sim, rclass 
+
+syntax, sim(string)
+
+gettoken simvar simopt: sim, p(",")
+gettoken lixo simopt: simopt, p(",")
+local simopt = trim("`simopt'")
+confirm var `simvar'
+return local simvar `simvar'
+if "`simopt'" == "en" {
+	return local simlg "en"
+}
+else {
+	return local simlg "pt"
+}
+
+end
+	
+	
+	
 program define parse_solve, rclass
 
 syntax, solve(string)
 
-cap which ustrdist
-if _rc {
-	di as error "Option solve requires command ustrdist"
-	exit _rc
-}
 gettoken solvevar solveopt: solve, p(",")
 gettoken lixo solveopt: solveopt, p(",")
 local solveopt = trim("`solveopt'")
 confirm var `solvevar'
 if "`solveopt'" == "" {
-	local solveth 0.5
+	local solveth 0.7
 }
 else {
 	if strpos("`solveopt'", "en") {
 		local eng "eng"
 		local solveth = trim(subinstr("`solveopt'", "en", "", 1))
 		if "`solveth'" == "" {
-			local solveth 0.5
+			local solveth 0.7
 		}
 	}
 	else {

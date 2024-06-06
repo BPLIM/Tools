@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1 9Apr2021}{...}{smcl}
+{* *! version 1.0 5Jun2024}{...}{smcl}
 {.-}
 help for {cmd:validarcae} {right:}
 {.-}
@@ -58,17 +58,28 @@ because option {opt dropzero} was specified.
 {p_end}
 
 {synopt :{opt solve}({it:var}[, {opt th} {opt en}])} this option can
-be used if the user has a string variable with the description of
-the CAE codes. In this case ambiguous cases are solved
+be used if the user has a string variable with the description of 
+CAE codes. Ambiguous cases are solved
 by comparing the description provided by the user with
-the official description. The option uses {help ustrdist:ustrdist} to
-select the codes with the closest string distance.
+the official description. The option uses {help jarowinkler:jarowinkler} to
+select the codes with the closest string distance - the metric is scaled 
+between 0 (not similar at all) and 1 (exact match).
 This option creates variable {opt _solved} taking value one if the ambiguity
 was solved using the description of the code and zero otherwise.
 {break}{space 5}{break}
-{opt th} is the maximum relative distance allowed to solve ambiguities.
-The default is 0.5. If the relative distance between strings is larger
+{opt th} is the minimum Jaro-Winkler similarity score allowed to solve ambiguities.
+The default is 0.7. If the Jaro-Winkler similarity score between strings is smaller
 than this value, the ambiguity will not be solved.{break}{space 5}{break}
+{opt en} sets English as the language of the description in the variable provided.
+The default is Portuguese.
+{p_end}
+
+{synopt :{opt sim:ilarity}({it:var}[, {opt en}])} computes the Jaro-Winkler similarity metric 
+between a string variable with the description of CAE codes and the official description, 
+using {help jarowinkler:jarowinkler} - the metric is scaled 
+between 0 (not similar at all) and 1 (exact match). 
+This option creates variable {opt _jwsim_rev_#}, where # is the Revision number.
+{break}{space 5}{break}
 {opt en} sets English as the language of the description in the variable provided.
 The default is Portuguese.
 {p_end}
