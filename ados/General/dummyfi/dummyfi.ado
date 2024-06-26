@@ -157,7 +157,7 @@ program define dummyfi_call
 	}
 	
 	file write dummycode "* Apply metadata" _n
-	file write dummycode `"mdata apply, meta("`metafile'")"' _n(2)
+	file write dummycode `"metaxl apply, meta("`metafile'")"' _n(2)
 
 	file write dummycode "* Label data" _n
 	file write dummycode `"label data "Pseudo data - Not valid for research""' _n(2)
