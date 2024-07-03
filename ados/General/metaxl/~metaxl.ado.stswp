@@ -17,7 +17,7 @@ foreach package in gtools filelist {
 	cap which `package'
 	local rc = _rc
 	if _rc {
-		di "{err:This tool requires packages {bf:gtools} and {bf:filelist}. }" ///
+		di "{err:This tool requires packages {bf:gtools} and {bf:filelist}.}" ///
 		"{err:{bf:`package'} is not installed in your system}"
 		exit `rc'
 	}
