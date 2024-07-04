@@ -89,8 +89,12 @@ else {
 	    qui import excel using "`checkfile'", sheet("Summary") clear 
 		rename (A B C) (worksheet warnings inconsistencies)
 		qui drop if _n < 5
-		qui glevelsof worksheet if real(inconsistencies) > 0, local(incon)
-		qui glevelsof worksheet if real(warnings) > 0, local(warnings)
+		qui glevelsof worksheet if ///
+			real(inconsistencies) > 0 & !missing(inconsistencies), ///
+			local(incon)
+		qui glevelsof worksheet if ///
+			real(warnings) > 0 & !missing(warnings), ///
+			local(warnings)
 		di 
 		li, noobs ab(20) div sep(1000) 
 	}
