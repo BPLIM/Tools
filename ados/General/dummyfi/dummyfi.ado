@@ -1,4 +1,4 @@
-*! version 0.1 12Feb2024
+*! version 0.1 5Jul2024
 * Programmed by Gustavo Iglésias
 
 program define dummyfi
@@ -308,54 +308,61 @@ program define write_commands_num
 
 	
 	file write `handler' "* `var' - `label'" _n 
-	if (`min' == `max') {
-		file write `handler' "gen `type' `var' = `min'" _n
+	if (`miss' == 1) {
+		file write `handler' "* 100% missing values" _n
+		file write `handler' "gen `type' `var' = ." _n
 	}
 	else {
-		if inlist("`type'", "float", "double") {
-			file write `handler' "gen `type' `var' = runiform(`min', `max')" _n 
+		if (`min' == `max') {
+			file write `handler' "gen `type' `var' = `min'" _n
 		}
 		else {
-			file write `handler' "gen `type' `var' = round(runiform(`min', `max'))" _n
+			if inlist("`type'", "float", "double") {
+				file write `handler' "gen `type' `var' = runiform(`min', `max')" _n 
+			}
+			else {
+				file write `handler' "gen `type' `var' = round(runiform(`min', `max'))" _n
+			}		
+		}
+		* Replace values with missings according to share
+		if (`miss') {
+			file write `handler' "* Replace `var' with missing (`miss')" _n
+			file write `handler' "gen runif = runiform(0, 1)" _n
+			file write `handler' "replace `var' = . if runif <= `miss'" _n
+			file write `handler' "drop runif" _n
+		}
+		* Replace values with zero according to share
+		if (`zero' & (`min' < `max')) {
+			file write `handler' "* Replace `var' with zeros (`zero')" _n
+			file write `handler' "gen runif = runiform(0, 1)" _n
+			file write `handler' "replace `var' = 0 if runif <= `zero' & `var' < ." _n
+			file write `handler' "drop runif" _n
+		}
+		* Change values if time invariant
+		if "`inv'" != "" {
+			if (`inv' & (`min' < `max')) {
+				file write `handler' "* `var' time invariant" _n
+				file write `handler' "bysort `namelist': replace `var' = `var'[1] if `var' < ." _n
+			}
+		}
+		* Replace as missing before datemin 
+		if ("`datemin'" != "" & "`tmin'" != "") {
+			if (`datemin' > `tmin') {
+				local datemin_f: di `tformat' `datemin'
+				file write `handler' "* Remove `var' before `datemin_f'" _n
+				file write `handler' `"replace `var' = . if `tvar' < `datemin'"' _n
+			}
+		}
+		* Replace as missing after datemax 
+		if ("`datemax'" != "" & "`tmax'" != "") {
+			if (`datemax' < `tmax') {
+				local datemax_f: di `tformat' `datemax'
+				file write `handler' "* Remove `var' after `datemax_f'" _n
+				file write `handler' `"replace `var' = . if `tvar' > `datemax'"' _n
+			}
 		}		
 	}
-	* Replace values with missings according to share
-	if (`miss') {
-		file write `handler' "* Replace `var' with missing (`miss')" _n
-		file write `handler' "gen runif = runiform(0, 1)" _n
-		file write `handler' "replace `var' = . if runif <= `miss'" _n
-		file write `handler' "drop runif" _n
-	}
-	* Replace values with zero according to share
-	if (`zero' & (`min' < `max')) {
-		file write `handler' "* Replace `var' with zeros (`zero')" _n
-		file write `handler' "gen runif = runiform(0, 1)" _n
-		file write `handler' "replace `var' = 0 if runif <= `zero' & `var' < ." _n
-		file write `handler' "drop runif" _n
-	}
-	* Change values if time invariant
-	if "`inv'" != "" {
-		if (`inv' & (`min' < `max')) {
-			file write `handler' "* `var' time invariant" _n
-			file write `handler' "bysort `namelist': replace `var' = `var'[1] if `var' < ." _n
-		}
-	}
-	* Replace as missing before datemin 
-	if ("`datemin'" != "" & "`tmin'" != "") {
-		if (`datemin' > `tmin') {
-			local datemin_f: di `tformat' `datemin'
-			file write `handler' "* Remove `var' before `datemin_f'" _n
-			file write `handler' `"replace `var' = . if `tvar' < `datemin'"' _n
-		}
-	}
-	* Replace as missing after datemax 
-	if ("`datemax'" != "" & "`tmax'" != "") {
-		if (`datemax' < `tmax') {
-			local datemax_f: di `tformat' `datemax'
-			file write `handler' "* Remove `var' after `datemax_f'" _n
-			file write `handler' `"replace `var' = . if `tvar' > `datemax'"' _n
-		}
-	}
+
 	file write `handler' "" _n(2)
 
 end
