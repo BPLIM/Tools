@@ -1,16 +1,3 @@
----
-title: A user guide to `bpstat`
-author: BPLIM
-date: 2024/07/10
-format:
-  html:
-    toc: true
-    code-copy: true
-    theme: default
-    self-contained: true
-jupyter: nbstata
----
-
 # Introduction
 
 `bpstat` is a [Stata](https://www.stata.com/) user-written package that allows users to import over 290,000 statistical series from Banco de Portugal [BPstat](https://bpstat.bportugal.pt/)'s database. 
