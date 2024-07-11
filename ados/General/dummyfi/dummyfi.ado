@@ -1,4 +1,4 @@
-*! version 0.1 5Jul2024
+*! version 0.1 11Jul2024
 * Programmed by Gustavo Iglésias
 
 program define dummyfi
@@ -139,7 +139,7 @@ program define dummyfi_call
 		else {
 			if ("``var'_vl'" != "") {
 				write_commands_cat `namelist', var(`var') handler(dummycode) ///
-					label(``var'_label') vl(``var'_vl') type(``var'_type') ///
+					label("``var'_label'") vl(``var'_vl') type(``var'_type') ///
 					format(``var'_fmt') inv(``var'_inv') meta(`metafile') ///
 					datemin(``var'_dmin') datemax(``var'_dmax') ///
 					miss(``var'_miss') tvar(`timevar') tmin(`timevar_min') ///
@@ -147,7 +147,7 @@ program define dummyfi_call
 			}
 			else {
 				write_commands_num `namelist', var(`var') handler(dummycode) ///
-					label(``var'_label') type(``var'_type') format(``var'_fmt') ///
+					label("``var'_label'") type(``var'_type') format(``var'_fmt') ///
 					inv(``var'_inv') min(``var'_min') max(``var'_max') ///
 					datemin(``var'_dmin') datemax(``var'_dmax') ///
 					miss(``var'_miss') zero(``var'_zero') tvar(`timevar') ///
@@ -259,7 +259,7 @@ program define prob_matrix, rclass
 		else {
 			* In case type is string (usually not)
 			destring freq_`var', replace force
-			qui count if (freq_`var' < 0 | freq_`var' > 1) & !missing(freq_`var')
+			qui count if (round(freq_`var', 0.001) < 0 | round(freq_`var', 0.001) > 1) & !missing(freq_`var')
 			if `r(N)' {
 				di "{err:Probabilities must be between 0 and 1}"
 				exit 121
