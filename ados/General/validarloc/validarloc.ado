@@ -1,4 +1,4 @@
-*! 0.1 27Feb2024
+*! 0.2 17Jul2024
 * Programmed by Gustavo Iglésias
 * Dependencies:
 * 	labmask
@@ -38,6 +38,43 @@ program define validarloc, sortpreserve
 		qui tostring `varlist', gen(`loc_code')
 		qui replace `loc_code' = "" if `loc_code' == "."
 	}
+
+	* Call program 
+	tempfile valid_loc
+	preserve 
+		if ("`if'" != "") {
+			qui keep if `if'
+		}
+		validarloc_call `loc_code', refdate(`refdate') ///
+			getlevels(`getlevels') tempfile(`valid_loc') ///
+			name(`varlist') 
+	restore
+	
+	tempvar _merge
+	cap merge m:1 `loc_code' using `valid_loc', gen(`_merge')
+	if !_rc {
+		qui drop if `_merge' == 2
+		drop `_merge'
+		qui replace _valid_loc = . if missing(`varlist')
+	}
+	tab _valid_loc, miss
+	
+end
+
+
+program define validarloc_call
+
+	syntax varname, [   ///
+		REFdate(str)    ///
+		getlevels(str)  ///
+		tempfile(str)   ///
+		name(str)       ///
+	]
+	
+	* File to merge codes
+	mata: st_local("FILE", findfile("versoes.dta"))
+	
+	local loc_code = "`varlist'"
 	
 	tempvar length
 	qui gen `length' = strlen(`loc_code')
@@ -65,44 +102,6 @@ program define validarloc, sortpreserve
 		di 
 		di "Validating parish codes..."
 	}
-
-	* Call program 
-	tempfile valid_loc
-	preserve 
-		if ("`if'" != "") {
-			qui keep if `if'
-		}
-		validarloc_call `loc_code', refdate(`refdate') ///
-			getlevels(`getlevels') tempfile(`valid_loc') ///
-			name(`varlist') code_len(`code_len')
-	restore
-	
-	tempvar _merge
-	cap merge m:1 `loc_code' using `valid_loc', gen(`_merge')
-	if !_rc {
-		qui drop if `_merge' == 2
-		drop `_merge'
-		qui replace _valid_loc = . if missing(`varlist')
-	}
-	tab _valid_loc, miss
-	
-end
-
-
-program define validarloc_call
-
-	syntax varname, [   ///
-		REFdate(str)    ///
-		getlevels(str)  ///
-		tempfile(str)   ///
-		name(str)       ///
-		code_len(int 6) ///
-	]
-	
-	* File to merge codes
-	mata: st_local("FILE", findfile("versoes.dta"))
-	
-	local loc_code = "`varlist'"
 
 	* drop duplicates
 	quietly {
