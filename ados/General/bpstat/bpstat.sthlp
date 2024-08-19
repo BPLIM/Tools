@@ -23,7 +23,7 @@ bpstat {hline 1} imports statistical series from Banco de Portugal {browse "http
 {title:Description of bpstat}
 
 {pstd}
-{cmd:bpstat} allows users to import over 250,000 statistical series from Banco de Portugal BPstat's database. The command uses Python to interface with 
+{cmd:bpstat} allows users to import over 240,000 statistical series from Banco de Portugal BPstat's database. The command uses Python to interface with 
 BPstat's API and download series from several data domains (e.g. National Financial Accounts, Balance of Payments, Interest rates, etc.) with 
 different frequencies. Users are only allowed to import series from the same domain and frequency. Variables are named as DxxxF#########, where: 
 
