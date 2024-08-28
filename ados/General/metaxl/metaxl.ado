@@ -1,4 +1,4 @@
-*! version 0.3 12Feb2024
+*! version 0.3 28Aug2024
 * Programmed by Gustavo Iglésias
 
 program define metaxl
@@ -55,7 +55,7 @@ else if "`command'" == "stats" {
 	metaxl_stats, `options'
 }
 else if "`command'" == "clear" {
-	metaxl_clear
+	metaxl_clear, `options'
 }
 else {
 	di

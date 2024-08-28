@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.2 1Jun2023}{...}
+{* *! version 0.2 28Aug2024}{...}
 {title:Title}
 
 {p2colset 5 18 23 2}{...}
@@ -38,7 +38,7 @@ tools are available (each tool is a subcommand of {opt metaxl}):
 {help metaxl_stats:stats} extracts statistics and metadata from data in memory. {p_end}
 
 {p 8 17 2}
-{opt clear} removes all metadata from data in memory. {p_end}
+{help metaxl_clear:clear} removes all metadata from data in memory. {p_end}
 
 
 {synoptline}

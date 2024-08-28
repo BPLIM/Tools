@@ -1,8 +1,27 @@
-*! version 0.1 5Feb2021
+*! version 0.1 28Aug2024
 * Programmed by Paulo Guimaraes
 * Changed by Gustavo Iglésias (remove chars from dta)
 
 program define metaxl_clear
+
+syntax, [force]
+
+
+if "`force'" == "force" {
+	clear_metadata
+}
+else {
+	capture window stopbox rusure ///
+		"Are you sure you want to clear all the metadata?"
+	if !_rc {
+		clear_metadata
+	}
+}
+
+end
+
+
+program define clear_metadata
 
 * drop labels
 label data ""
@@ -36,6 +55,6 @@ gen long `dum'=_N
 sort `dum'
 drop `dum'
 * reset format 
-qui metaxl_setdefaultfmt *
+qui metaxl_setdefaultfmt *	
 
 end
