@@ -1,4 +1,4 @@
-*! version 0.2 8Nov2023
+*! version 0.3 29Aug2024
 * Programmed by Gustavo Iglésias
 
 program define metaxl_apply
@@ -6,7 +6,7 @@ program define metaxl_apply
 Applies metadata to data in memory. 
 */
 
-syntax, METAfile(string) [DOfile(string) TRUNCate CHARS NOTES]
+syntax, METAfile(string) [DOfile(string) TRUNCate CHARS NOTES NOBackup]
 
 qui describe 
 if `r(N)' == 0 | `r(k)' == 0 {
@@ -53,7 +53,14 @@ if trim(`"`r(inconsistencies)'"') != "" {
 
 local metafile "`metafile'.xlsx"
 
-metaxl clear
+if "`nobackup'" != "nobackup" {
+	quietly metaxl extract, meta(_bk_meta) replace
+	di 
+	di "{text:Backup meta file {bf:_bk_meta.xlsx} saved in the current}" ///
+		"{text: working directory}"
+}
+
+metaxl clear, force
 
 tempname metaframe
 frame create `metaframe'
@@ -86,6 +93,7 @@ if ("`dofile'" == "") {
 }
 else {
 	run "`dofile'.do"
+	di
 	di as text "File " as result "`dofile'.do" as text " saved"
 }
 

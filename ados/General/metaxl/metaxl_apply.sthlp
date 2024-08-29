@@ -32,7 +32,13 @@ The default behavior is to not apply characteristics to variables and data.
 {synopt :{opt notes}} applies information about variables and data {help notes:notes}. 
 The default behavior is to not apply notes to variables and data.
 {p_end}
-{synopt :{opt trunc:ate}} truncates variables and value labels names if their length is larger than 25 and 27 characters, respectively.
+{synopt :{opt trunc:ate}} truncates variables and value labels names if their 
+length is larger than 25 and 27 characters, respectively.
+{p_end}
+{synopt :{opt nob:ackup}} changes the default behavior of saving a backup of the
+ metadata in memory to a file ({it:_bk_meta.xlsx}). Please note that specifying 
+ this option clears all the metadata from memory and replaces it with metadata 
+ from the file provided in option {opt metafile}.
 {p_end}
 {synoptline}
 {p 4 6 2}
@@ -50,10 +56,14 @@ file produced by {help metaxl_extract:metaxl extract}. Moreover, the command wil
 only apply the metadata after checking its integrity (see {help metaxl_check:metaxl check}). 
 
 {pstd}
-Please note that all previous metadata is removed once you run the command (see {help metaxl_clear:metaxl clear}). It is
-also worth mentioning that some of the metadata might no be applied to your data. This 
-includes metadata generated automatically by Stata and usually concerns characteristics
-that start with "_". So we suggest that users do not define characteristics that follow that pattern.
+The command removes all the metadata in memory before applying the new metadata 
+(see {help metaxl_clear:metaxl clear}). A backup file ({it:_bk_meta.xlsx}) 
+containing the previous metadata is saved in the current working directory 
+to guard against unintended usage consequences. It is also worth 
+mentioning that some of the metadata might no be applied to your data. This 
+includes metadata generated automatically by Stata and usually concerns 
+characteristics that start with "_". So we suggest that users do not define 
+characteristics that follow that pattern.
 
 {title:Examples}
 
