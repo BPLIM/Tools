@@ -15,6 +15,7 @@ f metaxl_apply.sthlp
 f metaxl_check.ado
 f metaxl_check.sthlp
 f metaxl_clear.ado
+f metaxl_clear.sthlp
 f metaxl_cmp.ado
 f metaxl_cmp.sthlp
 f metaxl_combine.ado
