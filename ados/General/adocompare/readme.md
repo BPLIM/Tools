@@ -1,7 +1,6 @@
 # ADOCOMPARE: Utility tool that compares versions of ados
 
-`adocompare` is a Stata command that compares versions of ados found in two paths/files. The command produces an Excel report detailing the differences in ados and its versions 
-in the input paths/files.
+`adocompare` is a Stata command that compares versions of ados found in two paths/files. The command produces an Excel report detailing the differences in ados and its versions in the input paths/files.
 
 ## Installation:
 

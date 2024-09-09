@@ -16,15 +16,21 @@
 
 `coconuts` - allocate Portuguese municipalities to Nomenclature of Territorial Units for Statistics (NUTS) units
 
+`dummyfi` - creates pseudo-data creates based on metadata information and sampled ids
+
 `metaxl` - suite of tools to help users handling metadata
 
 `panelstat` - provides a detailed characterization of a panel data set
 
 `regextract` - extracts capture groups from regex patterns
 
+`skizpanel` - reduces the size of a panel data set by collapsing repeated observations into a single line
+
 `standardizetext` - normalizes text, by returning the normal form of a Unicode string variable
 
 `validarcae` - provides several functionalities for dealing with codes from the Portuguese Classification of Economic Activities (CAE)
+
+`validarcpp` - provides several functionalities for dealing with codes from the Portuguese Classification of Occupations (CPP) / National Classification of Occupations (CNP)
 
 `validarloc` - provides several functionalities for dealing with official codes from Portugal's administrative division
 

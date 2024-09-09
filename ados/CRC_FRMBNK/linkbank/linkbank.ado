@@ -38,8 +38,6 @@ if "`replace'" == "" & "`generate'" == "" {
 	error 198
 }
 
-
-
 local varformat: format `2'
 
 if (`2'< 10000 & `2'> 1000) {
