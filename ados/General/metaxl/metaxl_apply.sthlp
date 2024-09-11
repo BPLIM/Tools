@@ -36,9 +36,8 @@ The default behavior is to not apply notes to variables and data.
 length is larger than 25 and 27 characters, respectively.
 {p_end}
 {synopt :{opt nob:ackup}} changes the default behavior of saving a backup of the
- metadata in memory to a file ({it:_bk_meta.xlsx}). Please note that specifying 
- this option clears all the metadata from memory and replaces it with metadata 
- from the file provided in option {opt metafile}.
+ metadata in memory to a file ({it:_bk_meta.xlsx}). With this option the backup 
+file is not created meaning that the changes to the metadata cannot be reversed.
 {p_end}
 {synoptline}
 {p 4 6 2}
