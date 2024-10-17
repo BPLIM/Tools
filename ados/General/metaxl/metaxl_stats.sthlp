@@ -64,6 +64,9 @@ option to {it:_all} to export all possible statistics.
 {synopt :{opt weight(varname)}} sets a weighting variable to calculate the 
 statistics (see {help weight}).
 {p_end}
+{synopt :{opt miss:detail}} reports information about extended 
+missing values (see {help missing:missing}).
+{p_end}
 {synopt :{opt replace:stats}} replaces statistics and frequencies 
 on the metadata file in case they exist.
 {p_end}

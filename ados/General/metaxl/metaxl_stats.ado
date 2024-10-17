@@ -15,6 +15,7 @@ program define metaxl_stats
 		STATS(str)               ///
 		WEIGHT(varname)          ///
 	    REPLACEstats             ///
+		MISSdetail               ///
 	] 
 	
 	if "`panelvars'" != "" {
@@ -83,15 +84,21 @@ program define metaxl_stats
 	else {
 		local stats "mean sd p5 p50 p95"
 	}
+	* Check missing types
+	if "`missdetail'" == "missdetail" {
+		get_missing_types
+		local missing_types = trim("`r(missing_types)'")
+		local missing_types_vars = trim("`r(vars)'")	
+	}
 	* Add shares and time stats
 	if ("`timevar'" == "") {
-		local stats_all `stats' sharezeros shareneg sharemiss
+		local stats_all `stats' sharezeros shareneg sharemiss `missing_types_vars'
 	}
 	else if ("`timevar'" != "" & "`panelvars'" == "") {
-		local stats_all `stats' sharezeros shareneg sharemiss datemin datemax
+		local stats_all `stats' sharezeros shareneg sharemiss `missing_types_vars' datemin datemax
 	}
 	else {
-		local stats_all `stats' sharezeros shareneg sharemiss shareinv datemin datemax
+		local stats_all `stats' sharezeros shareneg sharemiss `missing_types_vars' shareinv datemin datemax
 	}
 	
 	* If there is a weight variable
@@ -178,6 +185,13 @@ program define metaxl_stats
 				* Share of missing
 				qui count if missing(`var')
 				local sharemiss = `r(N)' / _N
+				* Different missings
+				if "`missdetail'" == "missdetail" {
+					foreach miss_type in `missing_types' {
+						qui count if `var' == .`miss_type'
+						local sharemiss_`miss_type' = `r(N)' / _N
+					}
+				}
 				di "Share of missing...done"
 				if ("`timevar'" != "") {
 					* Min and Max dates
@@ -355,3 +369,34 @@ program define parse_stats, rclass
 	}
 
 end
+
+
+program define get_missing_types, rclass
+
+
+	qui ds 
+	foreach var in `r(varlist)'  {
+		if substr("`: type `var''", 1, 3) != "str" {
+			qui glevelsof `var' if `var' > ., miss local(missing_levels)
+			foreach missing_level in `missing_levels' {
+				* .a, .b, -> a, b
+				local missing_suffix = substr("`missing_level'", 2, 1)
+				local missing_types `missing_types' `missing_suffix'
+			}		
+		}	
+	}
+	
+	local missing_types: list uniq missing_types
+	local missing_types: list sort missing_types
+	foreach missing_type of local missing_types {
+		local vars `vars' sharemiss_`missing_type'
+	}
+	if trim("`missing_types'") == "" {
+		di 
+		di "{err:Extended missing values not found}"
+	}
+	return local missing_types = "`missing_types'"
+	return local vars = "`vars'"
+
+
+end 
