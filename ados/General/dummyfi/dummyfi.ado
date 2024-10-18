@@ -1,4 +1,4 @@
-*! version 0.1 11Jul2024
+*! version 0.2 18Oct2024
 * Programmed by Gustavo Iglésias
 
 program define dummyfi
@@ -97,6 +97,7 @@ program define dummyfi_call
 		local `var'_zero = "`r(`var'_zero)'"
 		local `var'_dmin = "`r(`var'_dmin)'"
 		local `var'_dmax = "`r(`var'_dmax)'"
+		local `var'_extra_kwargs = "`r(`var'_extra_kwargs)'"
 		if (substr("``var'_type'", 1, 3) == "str") continue
 		* Rescale share of zeros
 		local `var'_zero = ``var'_zero' / (1 - ``var'_miss')
@@ -143,7 +144,7 @@ program define dummyfi_call
 					format(``var'_fmt') inv(``var'_inv') meta(`metafile') ///
 					datemin(``var'_dmin') datemax(``var'_dmax') ///
 					miss(``var'_miss') tvar(`timevar') tmin(`timevar_min') ///
-					tmax(`timevar_max') tformat(`timevar_fmt~')
+					tmax(`timevar_max') tformat(`timevar_fmt') ``var'_extra_kwargs'
 			}
 			else {
 				write_commands_num `namelist', var(`var') handler(dummycode) ///
@@ -151,7 +152,8 @@ program define dummyfi_call
 					inv(``var'_inv') min(``var'_min') max(``var'_max') ///
 					datemin(``var'_dmin') datemax(``var'_dmax') ///
 					miss(``var'_miss') zero(``var'_zero') tvar(`timevar') ///
-					tmin(`timevar_min') tmax(`timevar_max') tformat(`timevar_fmt')
+					tmin(`timevar_min') tmax(`timevar_max') tformat(`timevar_fmt') ///
+					``var'_extra_kwargs'
 			}			
 		}
 	}
@@ -182,7 +184,7 @@ program define write_commands_cat
 	syntax namelist, handler(str) var(str) meta(str) [ ///
 		label(str) vl(str) type(str) format(str) inv(str) ///
 		datemin(str) datemax(str) tvar(str) miss(real 0) ///
-		tmin(str) tmax(str) tformat(str) ///
+		tmin(str) tmax(str) tformat(str) * ///
 	]
 	
 	qui prob_matrix, meta(`meta') vl(`vl') var(`var')
@@ -206,10 +208,16 @@ program define write_commands_cat
 	file write `handler' "drop runif" _n
 	* Replace values with missings according to share
 	if (`miss') {
-		file write `handler' "* Replace `var' with missing (`miss')" _n
-		file write `handler' "gen runif = runiform(0, 1)" _n
-		file write `handler' "replace `var' = . if runif <= `miss'" _n
-		file write `handler' "drop runif" _n
+		if ("`options'" != "") {
+			process_extra_kwargs, var(`var') share_miss(`miss') ///
+				extra_kwargs(`options') handler(`handler')
+		}
+		else {
+			file write `handler' "* Replace `var' with missing (`miss')" _n
+			file write `handler' "gen runif = runiform(0, 1)" _n
+			file write `handler' "replace `var' = . if runif <= `miss'" _n
+			file write `handler' "drop runif" _n
+		}
 	}
 	* Change values if time invariant
 	if "`inv'" != "" {
@@ -303,9 +311,8 @@ program define write_commands_num
 	syntax namelist, handler(str) var(str) [ ///
 		label(str) type(str) format(str) min(str) max(str) inv(str) ///
 		datemin(str) datemax(str) tvar(str) miss(real 0) zero(real 0) ///
-		tmin(str) tmax(str) tformat(str) ///
+		tmin(str) tmax(str) tformat(str) * ///
 	]
-
 	
 	file write `handler' "* `var' - `label'" _n 
 	if (`miss' == 1) {
@@ -326,10 +333,16 @@ program define write_commands_num
 		}
 		* Replace values with missings according to share
 		if (`miss') {
-			file write `handler' "* Replace `var' with missing (`miss')" _n
-			file write `handler' "gen runif = runiform(0, 1)" _n
-			file write `handler' "replace `var' = . if runif <= `miss'" _n
-			file write `handler' "drop runif" _n
+			if ("`options'" != "") {
+				process_extra_kwargs, var(`var') share_miss(`miss') ///
+					extra_kwargs(`options') handler(`handler')
+			}
+			else {
+				file write `handler' "* Replace `var' with missing (`miss')" _n
+				file write `handler' "gen runif = runiform(0, 1)" _n
+				file write `handler' "replace `var' = . if runif <= `miss'" _n
+				file write `handler' "drop runif" _n
+			}
 		}
 		* Replace values with zero according to share
 		if (`zero' & (`min' < `max')) {
@@ -366,6 +379,33 @@ program define write_commands_num
 	file write `handler' "" _n(2)
 
 end
+
+
+program define process_extra_kwargs 
+
+	syntax, var(str) share_miss(real) extra_kwargs(str) handler(str)
+	
+	file write `handler' "* Replace `var' with missing / extended missing (`share_miss')" _n
+	file write `handler' "gen runif = runiform(0, 1)" _n
+	local previous_value = 0
+	foreach extra_kwarg in `extra_kwargs' {
+		gettoken miss_type value: extra_kwarg, parse("(")
+		gettoken left value: value, parse("(")
+		gettoken value right: value, parse(")")
+		local value = `previous_value' + `value'
+		local miss_type = substr("`miss_type'", -1, 1)
+		local command "replace `var' = .`miss_type' if runif <= `value' & runif > `previous_value'"
+		file write `handler' "`command'" _n
+		local previous_value = `value'
+	}
+	if round(`value', 0.0000000001) < `share_miss' {
+		local command "replace `var' = . if runif <= `share_miss' & runif > `value'"
+		file write `handler' "`command'" _n
+	} 
+	
+	file write `handler' "drop runif" _n
+
+end 
 
 
 program define get_variables_meta, rclass
@@ -416,9 +456,40 @@ program define get_variables_meta, rclass
 		cap return local `var'_zero = sharezero[`i']
 		cap return local `var'_dmin = datemin[`i']
 		cap return local `var'_dmax = datemax[`i']
+		prefix_in_varlist, prefix(sharemiss_)
+		if `r(in)' {
+			local extra_kwargs ""
+			foreach missvar of varlist sharemiss_* {
+				local missvalue = `missvar'[`i']
+				if "`missvalue'" != "" {
+					if `missvalue' > 0 {
+						local extra_kwargs `extra_kwargs' `missvar'(`missvalue')
+					}
+				}
+			}
+			return local `var'_extra_kwargs "`extra_kwargs'"
+		}
 
 	}
 	return local variables = trim("`variables'")
+
+end
+
+
+program define prefix_in_varlist, rclass
+
+	syntax, prefix(str)
+	
+	qui ds
+	local in 0
+	foreach var in `r(varlist)' {
+		if strpos("`var'", "`prefix'") {
+			 local in = `in' + 1
+			 continue, break
+		}
+	}
+	
+	return local in = `in'
 
 end
 
