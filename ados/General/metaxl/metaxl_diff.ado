@@ -344,7 +344,7 @@ program define variables_sheet, rclass
 			varexc(0) num_lines(`obs') 
 	}
 	else {
-		di "{err:Worsheet {bf:variables} not exported because of}" ///
+		di "{err:Worksheet {bf:variables} not exported because of}" ///
 			"{err:option {bf:diffonly}}"
 	}
 	
@@ -456,7 +456,7 @@ program define variables_chars_sheet, rclass
 	local obs = `r(N)'
 	
 	if (`obs' == 0) {
-		di "{err:Worsheet {bf:`var'} not exported because of option} " ///
+		di "{err:Worksheet {bf:`var'} not exported because of option} " ///
 			"{err:{bf:diffonly}}"
 	}
 	else {
@@ -638,7 +638,7 @@ program define vl_report, rclass
 				vlinc(1) vlexc(0) num_lines(`obs')
 	}
 	else {
-		di "{err:Worsheet {bf:`vl_level'} not exported because of option}" ///
+		di "{err:Worksheet {bf:`vl_level'} not exported because of option}" ///
 			"{err: {bf:diffonly}}"
 	}
 		

@@ -270,7 +270,7 @@ We can see that are no characteristics or notes ascribed to any variable, but so
 </figure>
 </p>
 
-Please keep in mind that value labels worsheets' names will always follow the pattern *vl_\<vl_name\>*. Each worksheet for value labels presents a table with two columns, the value and the corresponding label.
+Please keep in mind that value labels worksheets' names will always follow the pattern *vl_\<vl_name\>*. Each worksheet for value labels presents a table with two columns, the value and the corresponding label.
 
 There are no characteristics or notes ascribed to any variable, but from **Figure 2.1** we observe that the data set has characteristics, two to be more precise. The contents of these characteristics are stored in worksheet **char_dta**, presented below:
 
