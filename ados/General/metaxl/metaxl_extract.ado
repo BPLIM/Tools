@@ -368,10 +368,13 @@ preserve
 					local m1_prob = `r(N)'
 					if `m1_prob' {
 						qui gen obs = "Label not used" if _m == 1
-						local var_obs`lbl' "obs"
+						local var_obs "obs"
+					}
+					else {
+						local var_obs ""
 					}
 					drop _m
-					qui export excel value label `var_obs`lbl'' using `"`filename'"', ///
+					qui export excel value label `var_obs' using `"`filename'"', ///
 						sheet("vl_`lbl'", replace) first(var)
 				}
 			}
