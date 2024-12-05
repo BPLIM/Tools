@@ -97,7 +97,7 @@ program define dummyfi_call
 		local `var'_zero = "`r(`var'_zero)'"
 		local `var'_dmin = "`r(`var'_dmin)'"
 		local `var'_dmax = "`r(`var'_dmax)'"
-		local `var'_extra_kwargs = "`r(`var'_extra_kwargs)'"
+		local `var'_exkw = "`r(`var'_exkw)'"
 		if (substr("``var'_type'", 1, 3) == "str") continue
 		* Rescale share of zeros
 		local `var'_zero = ``var'_zero' / (1 - ``var'_miss')
@@ -144,7 +144,7 @@ program define dummyfi_call
 					format(``var'_fmt') inv(``var'_inv') meta(`metafile') ///
 					datemin(``var'_dmin') datemax(``var'_dmax') ///
 					miss(``var'_miss') tvar(`timevar') tmin(`timevar_min') ///
-					tmax(`timevar_max') tformat(`timevar_fmt') ``var'_extra_kwargs'
+					tmax(`timevar_max') tformat(`timevar_fmt') ``var'_exkw'
 			}
 			else {
 				write_commands_num `namelist', var(`var') handler(dummycode) ///
@@ -153,7 +153,7 @@ program define dummyfi_call
 					datemin(``var'_dmin') datemax(``var'_dmax') ///
 					miss(``var'_miss') zero(``var'_zero') tvar(`timevar') ///
 					tmin(`timevar_min') tmax(`timevar_max') tformat(`timevar_fmt') ///
-					``var'_extra_kwargs'
+					``var'_exkw'
 			}			
 		}
 	}
@@ -467,7 +467,7 @@ program define get_variables_meta, rclass
 					}
 				}
 			}
-			return local `var'_extra_kwargs "`extra_kwargs'"
+			return local `var'_exkw "`extra_kwargs'"
 		}
 
 	}
