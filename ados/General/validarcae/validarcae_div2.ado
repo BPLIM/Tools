@@ -125,7 +125,7 @@ foreach item in `levels' {
 		if ("`force'" != "force") qui replace rev2_section = -98 if ///
 			inlist(_valid_cae_2, 30, 300, 3000) 
 		if (`zero_dropped' == 0) qui replace rev2_section = -98 if ///
-			(!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
+			(!missing(_zerosdropped) & !inlist(_valid_cae_2,2,10,20,100,200,1000,2000))
 		qui replace rev2_section = -99 if `len' < 2 
 		label values rev2_section divlabel22
 		label var rev2_section "CAE Rev. 2 Section (Level 1)"
@@ -177,7 +177,7 @@ foreach item in `levels' {
 		if ("`force'" != "force") qui replace rev2_subsection = -98 if ///
 			inlist(_valid_cae_2, 30, 300, 3000) 
 		if (`zero_dropped' == 0) qui replace rev2_subsection = -98 if ///
-			(!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
+			(!missing(_zerosdropped) & !inlist(_valid_cae_2,2,10,20,100,200,1000,2000))
 		qui replace rev2_subsection = -99 if `len' < 2 
 		label values rev2_subsection divlabel22
 		label var rev2_subsection "CAE Rev. 2 Subsection (Level 2)"
@@ -199,7 +199,7 @@ foreach item in `levels' {
 		if ("`force'" != "force") qui replace rev2_division = -98 if ///
 			inlist(_valid_cae_2, 30, 300, 3000) 
 		if (`zero_dropped' == 0) qui replace rev2_division = -98 if ///
-			(!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
+			(!missing(_zerosdropped) & !inlist(_valid_cae_2,2,10,20,100,200,1000,2000))
 		qui replace rev2_division = -99 if `len' < 2 
 		label values rev2_division divlabel22
 		label var rev2_division "CAE Rev. 2 Division (Level 3)"
@@ -221,7 +221,7 @@ foreach item in `levels' {
 		if ("`force'" != "force") qui replace rev2_group = -98 if ///
 			inlist(_valid_cae_2, 30, 300, 3000) 
 		if (`zero_dropped' == 0) qui replace rev2_group = -98 if ///
-			(!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
+			(!missing(_zerosdropped) & !inlist(_valid_cae_2,2,10,20,100,200,1000,2000))
 		qui replace rev2_group = -99 if `len' < 3 
 		label values rev2_group divlabel23
 		label var rev2_group "CAE Rev. 2 Group (Level 4)"
@@ -243,7 +243,7 @@ foreach item in `levels' {
 		if ("`force'" != "force") qui replace rev2_class = -98 if ///
 			inlist(_valid_cae_2, 30, 300, 3000) 
 		if (`zero_dropped' == 0) qui replace rev2_class = -98 if ///
-			(!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
+			(!missing(_zerosdropped) & !inlist(_valid_cae_2,2,10,20,100,200,1000,2000))
 		qui replace rev2_class = -99 if `len' < 4
 		label values rev2_class divlabel24
 		label var rev2_class "CAE Rev. 2 Class (Level 5)"
@@ -261,7 +261,7 @@ foreach item in `levels' {
 		if ("`force'" != "force") qui replace rev2_subclass = -98 if ///
 			inlist(_valid_cae_2, 30, 300, 3000) 
 		if (`zero_dropped' == 0) qui replace rev2_subclass = -98 if ///
-			(!missing(_zerosdropped) & !inlist(_valid_cae_`rev',2,10,20,100,200,1000,2000))
+			(!missing(_zerosdropped) & !inlist(_valid_cae_2,2,10,20,100,200,1000,2000))
 		qui replace rev2_subclass = -99 if `len' < 5
 		label values rev2_subclass divlabel25
 		label var rev2_subclass "CAE Rev. 2 Subclass (Level 6)"

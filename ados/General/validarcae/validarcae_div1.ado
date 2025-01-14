@@ -66,7 +66,7 @@ foreach item in `levels' {
 		qui replace rev1_division = -99 if _valid_cae_1 == 0
 		qui replace rev1_division = -99 if _valid_cae_1 == 200000
 		if (`zero_dropped' == 0) qui replace rev1_division = -98 if ///
-			(!missing(_zerosdropped) & !inlist(_valid_cae_`rev',1,10,100,1000,10000))
+			(!missing(_zerosdropped) & !inlist(_valid_cae_1,1,10,100,1000,10000))
 		qui replace rev1_division = -99 if `len' < 1
 		label var rev1_division "CAE Rev. 1 Division (Level 1)"
 		label values rev1_division divlabel11
@@ -86,7 +86,7 @@ foreach item in `levels' {
 		qui replace rev1_subdivision = -99 if _valid_cae_1 == 0
 		qui replace rev1_subdivision = -99 if _valid_cae_1 == 200000
 		if (`zero_dropped' == 0) qui replace rev1_subdivision = -98 if ///
-			(!missing(_zerosdropped) & !inlist(_valid_cae_`rev',1,10,100,1000,10000))
+			(!missing(_zerosdropped) & !inlist(_valid_cae_1,1,10,100,1000,10000))
 		qui replace rev1_subdivision = -99 if `len' < 2 
 		label var rev1_subdivision "CAE Rev. 1 Subdivision (Level 2)"
 		label values rev1_subdivision divlabel12
@@ -106,7 +106,7 @@ foreach item in `levels' {
 		qui replace rev1_class = -99 if _valid_cae_1 == 0
 		qui replace rev1_class = -99 if _valid_cae_1 == 200000
 		if (`zero_dropped' == 0) qui replace rev1_class = -98 if ///
-			(!missing(_zerosdropped) & !inlist(_valid_cae_`rev',1,10,100,1000,10000))
+			(!missing(_zerosdropped) & !inlist(_valid_cae_1,1,10,100,1000,10000))
 		qui replace rev1_class = -99 if `len' < 3
 		label var rev1_class "CAE Rev. 1 Class (Level 3)"
 		label values rev1_class divlabel13
@@ -126,7 +126,7 @@ foreach item in `levels' {
 		qui replace rev1_group = -99 if _valid_cae_1 == 0
 		qui replace rev1_group = -99 if _valid_cae_1 == 200000
 		if (`zero_dropped' == 0) qui replace rev1_group = -98 if ///
-			(!missing(_zerosdropped) & !inlist(_valid_cae_`rev',1,10,100,1000,10000))
+			(!missing(_zerosdropped) & !inlist(_valid_cae_1,1,10,100,1000,10000))
 		qui replace rev1_group = -99 if `len' < 4 
 		label values rev1_group divlabel14
 		label var rev1_group "CAE Rev. 1 Group (Level 4)"
@@ -146,7 +146,7 @@ foreach item in `levels' {
 		qui replace rev1_subgroup = -99 if _valid_cae_1 == 0
 		qui replace rev1_subgroup = -99 if _valid_cae_1 == 200000
 		if (`zero_dropped' == 0) qui replace rev1_subgroup = -98 if ///
-			(!missing(_zerosdropped) & !inlist(_valid_cae_`rev',1,10,100,1000,10000))
+			(!missing(_zerosdropped) & !inlist(_valid_cae_1,1,10,100,1000,10000))
 		qui replace rev1_subgroup = -99 if `len' < 5
 		label var rev1_subgroup "CAE Rev. 1 Subgroup (Level 5)"
 		label values rev1_subgroup divlabel15
@@ -162,7 +162,7 @@ foreach item in `levels' {
 		qui replace rev1_split = -99 if _valid_cae_1 == 0
 		qui replace rev1_split = -99 if _valid_cae_1 == 200000
 		if (`zero_dropped' == 0) qui replace rev1_split = -98 if ///
-			(!missing(_zerosdropped) & !inlist(_valid_cae_`rev',1,10,100,1000,10000))
+			(!missing(_zerosdropped) & !inlist(_valid_cae_1,1,10,100,1000,10000))
 		qui replace rev1_split = -99 if `len' < 6 
 		label values rev1_split divlabel16
 		label var rev1_split "CAE Rev. 1 Split (Level 6)"
