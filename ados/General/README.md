@@ -8,7 +8,7 @@
 
 `bpencode` - encode a variable using other variable or an Excel file
 
-`bpstat` - allows users to import over 290,000 statistical series from Banco de Portugal [BPstat](https://bpstat.bportugal.pt/) Database
+`bpstat` - allows users to import over 230,000 statistical series from Banco de Portugal [BPstat](https://bpstat.bportugal.pt/) Database
 
 `checkinvariant` - checks whether a given variable is constant or varies within the unique values of another group of variables
 
