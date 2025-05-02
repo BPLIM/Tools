@@ -109,7 +109,7 @@ get_data_features, metafile(`metafile') metaframe(`metaframe')
 
 file write metado `"* Data features"' _n
 if ("`r(datalabel)'" != "") file write metado `"label data "`r(datalabel)'""' _n
-if ("`r(sorted_by)'" != "") file write metado `"sort `r(sorted_by)'"' _n
+if ("`r(sorted_by)'" != "") file write metado `"capture sort `r(sorted_by)'"' _n
 local labellang "`r(labellang)'"
 foreach lang in `labellang' {
     file write metado `"cap label language `lang', new"' _n
