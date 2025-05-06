@@ -106,7 +106,7 @@ frame `sh_frame' {
 	qui save `temp', replace 
 	qui import excel using "`f2'", sheet(`sheet') `first' clear
 	qui gen file`fc' = "f2"
-	qui append using `temp'
+	qui append using `temp', force
 	local fb = `fc' - 1
 	if `fb' {
 		forvalues i = 1/`fb' {
