@@ -45,9 +45,9 @@ else {
 qui metaxl_check, meta(`metafile')
 
 if trim(`"`r(inconsistencies)'"') != "" {
-    di as error `""`metafile'" contains inconsitencies. Cannot apply meta "' ///
+    di as error `""`metafile'" contains inconsistencies. Cannot apply meta "' ///
 	`"data. Please run the command "metaxl check" with option "checkfile" to get"' ///
-	" a more thourough look at the inconsitencies found."
+	" a more thourough look at the inconsistencies found."
 	exit 198
 }
 
