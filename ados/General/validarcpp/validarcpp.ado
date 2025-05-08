@@ -19,23 +19,6 @@ if !inlist(`class', 1980, 1994, 2010) {
 	exit 198
 }
 
-/*
-if ("`similarity'" != "" & "`solve'" != "") {
-	di as error `"options "validatedesc" and "solve" cannot be specified together"'
-	exit 198
-}
-
-if ("`similarity'" != "" & "`keep'" != "") {
-	di as error `"options "validatedesc" and "keep" cannot be specified together"'
-	exit 198
-}
-
-if ("`similarity'" != "" & "`getlevels'" != "") {
-	di as error `"options "validatedesc" and "getlevels" cannot be specified together"'
-	exit 198
-}
-*/
-
 foreach command in charlist labmask {
 	cap which `command'
 	if _rc {
