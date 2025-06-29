@@ -51,6 +51,34 @@ Please make sure `bpstat` is always up to date with the latest available version
 net install bpstat, from("https://github.com/BPLIM/Tools/raw/master/ados/General/bpstat/") replace
 ```
 
+## Adding to the User Menu
+
+You can add **BPstat** to the **User** menu in Stata by running the following commands in the Command window:
+
+```stata
+window menu append submenu "stUser" "Import"
+window menu append submenu "Import" "BPstat"
+window menu append item "BPstat" "&Run BPstat" "bpstat dlg, replace"
+window menu refresh
+```
+
+This will create the menu path:
+User → Import → BPstat → Run BPstat
+
+## Making It Persistent
+
+To automatically add this menu entry each time Stata starts, include the following code in your profile.do file:
+
+```
+capture window menu append submenu "stUser" "Import"
+capture window menu append submenu "Import" "BPstat"
+capture window menu append item "BPstat" "&Run BPstat" "bpstat dlg, replace"
+window menu refresh
+```
+
+You can find or create profile.do in your Stata startup directory.
+To check your current startup directory, type cd in the Stata Command window.
+
 ## Author
 
 BPLIM Team
