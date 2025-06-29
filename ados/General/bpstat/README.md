@@ -57,8 +57,7 @@ You can add **BPstat** to the **User** menu in Stata by running the following co
 
 ```stata
 window menu append submenu "stUser" "Import"
-window menu append submenu "Import" "BPstat"
-window menu append item "BPstat" "&Run BPstat" "bpstat dlg, replace"
+window menu append item "Import" "&BPstat" "bpstat dlg, replace"
 window menu refresh
 ```
 
@@ -71,8 +70,7 @@ To automatically add this menu entry each time Stata starts, include the followi
 
 ```
 capture window menu append submenu "stUser" "Import"
-capture window menu append submenu "Import" "BPstat"
-capture window menu append item "BPstat" "&Run BPstat" "bpstat dlg, replace"
+capture window menu append item "Import" "&BPstat" "bpstat dlg, replace"
 window menu refresh
 ```
 
