@@ -184,13 +184,13 @@ program define data_history
 				sheet("data_features_gen")
 			* General characteristics
 			if !_rc {
-				qui keep if substr(Feature, 1, 4) == "Data" ///
-					| substr(Feature, 1, 5) == "Label"
-				qui count if substr(Feature, 1, 9) == "Data note"
+				qui keep if substr(Features, 1, 4) == "Data" ///
+					| substr(Features, 1, 5) == "Label"
+				qui count if substr(Features, 1, 9) == "Data note"
 				local notescount = `r(N)'
 				qui drop if substr(Features, 1, 9) == "Data note"
 				qui replace Content = "Yes" if !missing(Content) & ///
-					substr(Feature, 1, 10) == "Data Label"
+					substr(Features, 1, 10) == "Data Label"
 				qui count 
 				local last = `r(N)' + 1
 				qui set obs `last'

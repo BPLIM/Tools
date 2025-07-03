@@ -174,7 +174,7 @@ frame `metaframe' {
 	local excel_sheet "data_features_gen"
 	local i = 1
 	foreach feature in "Data Label" "Sorted by" "Label languages" "Data characteristics" {
-		qui glevelsof Content if Feature == "`feature'", local(levels`i')
+		qui glevelsof Content if Features == "`feature'", local(levels`i')
 		if ("`feature'" == "Data Label") return local datalabel `: word 1 of `levels`i'''
 		if ("`feature'" == "Sorted by") return local sorted_by `: word 1 of `levels`i'''
 		if ("`feature'" == "Label languages") return local labellang `: word 1 of `levels`i'''
@@ -182,7 +182,7 @@ frame `metaframe' {
 		local ++i
 	}
 	* Notes
-	qui glevelsof Content if strpos(Feature, "Data note"), local(notes_levels) 
+	qui glevelsof Content if strpos(Features, "Data note"), local(notes_levels) 
 	return local note_count = `: word count `notes_levels''
 	local i = 1
 	foreach note in `notes_levels' {
