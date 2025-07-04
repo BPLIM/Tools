@@ -1,4 +1,4 @@
-*! version 0.3 29Aug2024
+*! version 0.3 4Jul2025
 * Programmed by Gustavo Iglésias
 
 program define metaxl_apply
@@ -27,7 +27,7 @@ if "`truncate'" == "" {
 		}
 	}
 	qui label dir 
-	foreach vl in `r(varlist)' {
+	foreach vl in `r(names)' {
 		local len = length("`vl'")
 		if `len' > 25 {
 			di as error "Length of value label `vl' longer than 27 characters. This will" ///

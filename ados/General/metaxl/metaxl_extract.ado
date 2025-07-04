@@ -46,7 +46,7 @@ if "`truncate'" == "" {
 		}
 	}
 	qui label dir 
-	foreach vl in `r(varlist)' {
+	foreach vl in `r(names)' {
 		local len = length("`vl'")
 		if `len' > 25 {
 			di as error "Length of value label `vl' longer than 27 characters. This will" ///
