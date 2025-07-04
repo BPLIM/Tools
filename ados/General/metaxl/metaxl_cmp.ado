@@ -1,4 +1,4 @@
-*! version 0.1 16Apr2024
+*! version 0.1 4Jul2025
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools
 
@@ -118,19 +118,20 @@ frame `framenew' {
 * Compare worksheets
 frame `frameold' {
 	* First section
-	qui merge 1:1 variable using `temp'
-	qui count if _m != 3
+	tempvar _merge
+	qui merge 1:1 variable using `temp', gen(`_merge')
+	qui count if `_merge' != 3
 	local var_count = `r(N)'
 	if `r(N)' {
 		put_summary, file("`export'") value(Variables) num(`r(N)')
 		global CELLNUM = ${CELLNUM} + 1
-		qui gen desc = "f2" if _m == 1
-		qui replace desc = "f1" if _m == 2
-		qui export excel variable desc using "`export'" if _m != 3, ///
+		qui gen desc = "f2" if `_merge' == 1
+		qui replace desc = "f1" if `_merge' == 2
+		qui export excel variable desc using "`export'" if `_merge' != 3, ///
 			sheet("Variables", modify) first(var)
 	}
-	qui keep if _m == 3
-	drop _m 
+	qui keep if `_merge' == 3
+	drop `_merge'
 	* Second section 
 	compare_columns
 	if `r(col_inc)' {
@@ -228,12 +229,13 @@ frame `frnew' {
 }
 * Compare columns (each column contains variables' features)
 frame `frold' {
-    qui merge 1:1 `column' using `temp'
-	qui count if _m != 3
+	tempvar _merge
+    qui merge 1:1 `column' using `temp', gen(`_merge')
+	qui count if `_merge' != 3
 	local col_inc = r(N)
-	qui glevelsof `column' if _m == 3, local(matched)
-	qui glevelsof `column' if _m == 1, local(cols_master)
-	qui glevelsof `column' if _m == 2, local(cols_using)
+	qui glevelsof `column' if `_merge' == 3, local(matched)
+	qui glevelsof `column' if `_merge' == 1, local(cols_master)
+	qui glevelsof `column' if `_merge' == 2, local(cols_using)
 }
 * Return locals
 return local col_inc = `col_inc'
@@ -281,21 +283,22 @@ frame `framenew' {
 }
 * Compare worksheets
 frame `frameold' {
-	qui merge 1:1 `sheet' using `temp'
-	qui count if _m != 3
+	tempvar _merge
+	qui merge 1:1 `sheet' using `temp', gen(`_merge')
+	qui count if `_merge' != 3
 	if `r(N)' {
 		put_summary, file("`export'") value(Sheets) num(`r(N)')
 		global CELLNUM = ${CELLNUM} + 1
-	    qui gen desc = "f2" if _m == 1
-		replace desc = "f1" if _m == 2
+	    qui gen desc = "f2" if `_merge' == 1
+		replace desc = "f1" if `_merge' == 2
 		rename `sheet' sheet 
-		qui export excel sheet desc using "`export'" if _m != 3, ///
+		qui export excel sheet desc using "`export'" if `_merge' != 3, ///
 			sheet("Sheets", modify) first(var)
 		drop desc
 		rename sheet `sheet'
 	}
-	qui keep if _m == 3
-	drop _m  
+	qui keep if `_merge' == 3
+	drop `_merge'  
 	* Compares worksheets' contents
 	qui glevelsof `sheet', local(sheets)
 	foreach wsheet in `sheets' {
@@ -353,22 +356,23 @@ frame `framenew' {
 frame `frameold' {
     local incon = 0
 	* Compare values
-	qui merge 1:1 value using `temp'
-	qui count if _m != 3
+	tempvar _merge 
+	qui merge 1:1 value using `temp', gen(`_merge')
+	qui count if `_merge' != 3
 	if `r(N)' {
-	    qui gen desc = "f2" if _m == 1
-		qui replace desc = "f1" if _m == 2
+	    qui gen desc = "f2" if `_merge' == 1
+		qui replace desc = "f1" if `_merge' == 2
 		local incon = `incon' + `r(N)'
 	}
 	* Compare labels
 	qui gen `equal_label' = (label_f1 == label_f2)
-	qui count if _m == 3 & `equal_label' == 0
+	qui count if `_merge' == 3 & `equal_label' == 0
 	if `r(N)' {
 		if `incon' {
-			qui replace desc = "different label" if _m == 3 & `equal_label' == 0
+			qui replace desc = "different label" if `_merge' == 3 & `equal_label' == 0
 		}
 		else {
-			qui gen desc = "different label" if _m == 3 & `equal_label' == 0
+			qui gen desc = "different label" if `_merge' == 3 & `equal_label' == 0
 		}
 		local incon = `incon' + `r(N)'
 	}
@@ -376,7 +380,7 @@ frame `frameold' {
 		put_summary, file("`export'") value(`sheet') num(`incon')
 		global CELLNUM = ${CELLNUM} + 1
 	    qui export excel value desc label_f2 label_f1 ///
-			using "`export'" if (_m != 3) | (_m == 3 & `equal_label' == 0) , ///
+			using "`export'" if (`_merge' != 3) | (`_merge' == 3 & `equal_label' == 0) , ///
 			sheet("`sheet'", modify) first(var)
 	}
 	
@@ -429,22 +433,23 @@ frame `framenew' {
 frame `frameold' {
     local incon = 0
 	* Compare chars
-	qui merge 1:1 char using `temp'
-	qui count if _m != 3
+	tempvar _merge
+	qui merge 1:1 char using `temp', gen(`_merge')
+	qui count if `_merge' != 3
 	if `r(N)' {
-	    qui gen desc = "f2" if _m == 1
-		qui replace desc = "f1" if _m == 2
+	    qui gen desc = "f2" if `_merge' == 1
+		qui replace desc = "f1" if `_merge' == 2
 		local incon = `incon' + `r(N)'
 	}
 	* Compare chars' values
 	qui gen `equal_value' = (value_f1 == value_f2)
-	qui count if _m == 3 & `equal_value' == 0
+	qui count if `_merge' == 3 & `equal_value' == 0
 	if `r(N)' {
 		if `incon' {
-			qui replace desc = "different value" if _m == 3 & `equal_value' == 0
+			qui replace desc = "different value" if `_merge' == 3 & `equal_value' == 0
 		}
 		else {
-			qui gen desc = "different value" if _m == 3 & `equal_value' == 0
+			qui gen desc = "different value" if `_merge' == 3 & `equal_value' == 0
 		}
 		local incon = `incon' + `r(N)'
 	}
@@ -452,7 +457,7 @@ frame `frameold' {
 		put_summary, file("`export'") value(`sheet') num(`incon')
 		global CELLNUM = ${CELLNUM} + 1
 	    qui export excel char desc value_f2 value_f1 ///
-			using "`export'" if (_m != 3) | (_m == 3 & `equal_value' == 0) , ///
+			using "`export'" if (`_merge' != 3) | (`_merge' == 3 & `equal_value' == 0) , ///
 			sheet("`sheet'", modify) first(var)
 	}
 }
@@ -483,14 +488,15 @@ frame `framenew' {
 }
 * Compare notes
 frame `frameold' {
-	qui merge 1:1 note using `temp'
-	qui count if _m != 3
+	tempvar _merge
+	qui merge 1:1 note using `temp', gen(`_merge')
+	qui count if `_merge' != 3
 	if `r(N)' {
 		put_summary, file("`export'") value(`sheet') num(`r(N)')
 		global CELLNUM = ${CELLNUM} + 1
-	    qui gen desc = "f2" if _m == 1
-		qui replace desc = "f1" if _m == 2
-	    qui export excel note desc using "`export'" if (_m != 3), ///
+	    qui gen desc = "f2" if `_merge' == 1
+		qui replace desc = "f1" if `_merge' == 2
+	    qui export excel note desc using "`export'" if (`_merge' != 3), ///
 			sheet("`sheet'", modify) first(var)
 	}
 }

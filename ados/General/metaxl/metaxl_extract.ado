@@ -1,4 +1,4 @@
-*! version 0.2 27Mar2024
+*! version 0.2 4Jul2025
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools, uselabel
 
@@ -357,23 +357,24 @@ preserve
 			frame put if lname == "`lbl'", into(`vlframe')
 			frame `vlframe' {
 				local merge_file = lname[1]
+				tempvar _merge
 				* merge_file may not exist 
-				cap merge 1:1 value using "``merge_file''"
+				cap merge 1:1 value using "``merge_file''", gen(`_merge')
 				if _rc {
 					// pass
 				}
 				else {
-					qui replace label = "" if _m == 2
-					qui count if _m == 1
+					qui replace label = "" if `_merge' == 2
+					qui count if `_merge' == 1
 					local m1_prob = `r(N)'
 					if `m1_prob' {
-						qui gen obs = "Label not used" if _m == 1
+						qui gen obs = "Label not used" if `_merge' == 1
 						local var_obs "obs"
 					}
 					else {
 						local var_obs ""
 					}
-					drop _m
+					drop `_merge'
 					qui export excel value label `var_obs' using `"`filename'"', ///
 						sheet("vl_`lbl'", replace) first(var)
 				}
