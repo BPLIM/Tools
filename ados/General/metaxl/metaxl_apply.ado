@@ -364,10 +364,12 @@ frame `frame' {
 	qui import excel using `metafile', sheet("vl_`value_label'") first clear
 	qui count 
 	if "`def'" == "def" {
-		forvalues i=1/`r(N)' {
+		forvalues i = 1/`r(N)' {
 			local value = value[`i']
 			local label = label[`i']
-			file write metado `"label define `value_label' `value' `"`label'"', add"' _n
+			if ("`value'" != "" & `"`label'"' != "") {
+				file write metado `"label define `value_label' `value' `"`label'"', add"' _n
+			}
 		}
 	}
 	file write metado `"label values `var' `value_label', nofix"' _n
