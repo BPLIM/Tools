@@ -1,4 +1,4 @@
-*! version 0.1 21May2024
+*! version 0.2 11Jul2025
 * Programmed by Gustavo Iglésias
 
 program define metaxl_stats
@@ -16,7 +16,13 @@ program define metaxl_stats
 		WEIGHT(varname)          ///
 	    REPLACEstats             ///
 		MISSdetail               ///
+		DECimalplaces(int -1)    ///
 	] 
+	
+	if `decimalplaces' < -1  | `decimalplaces' > 10 {
+		di "{err:{bf:decimalplaces} must be between 0 and 10}"
+		exit 198
+	}
 	
 	if "`panelvars'" != "" {
 		if "`timevar'" == "" {
@@ -169,27 +175,32 @@ program define metaxl_stats
 				di "{text:Working on variable {bf:`var'}}"
 				di 
 				qui sum `var' `weight_spec', detail
+				if `decimalplaces' != -1 {
+					local factor = 1 * 10 ^ (-`decimalplaces')
+					local prep = "round("
+					local appe = ", `factor')"
+				}
 				* Statistics
 				foreach stat in `stats' {
-					local `stat' = r(`stat')
+					local `stat' = `prep'r(`stat')`appe'
 				}
 				di "`stats'...done"
 				* Share of zeros
 				qui count if `var' == 0
-				local sharezeros = `r(N)' / _N
+				local sharezeros = `prep'`r(N)' / _N`appe'
 				di "Share of zeros...done"
 				* Share of negatives
 				qui count if `var' < 0
-				local shareneg = `r(N)' / _N
+				local shareneg = `prep'`r(N)' / _N`appe'
 				di "Share of negatives...done"
 				* Share of missing
 				qui count if missing(`var')
-				local sharemiss = `r(N)' / _N
+				local sharemiss = `prep'`r(N)' / _N`appe'
 				* Different missings
 				if "`missdetail'" == "missdetail" {
 					foreach miss_type in `missing_types' {
 						qui count if `var' == .`miss_type'
-						local sharemiss_`miss_type' = `r(N)' / _N
+						local sharemiss_`miss_type' = `prep'`r(N)' / _N`appe'
 					}
 				}
 				di "Share of missing...done"
@@ -207,7 +218,7 @@ program define metaxl_stats
 						}
 						qui gen `diff' = ((`var_max' - `var') > 0) * (!missing(`var'))
 						qui count if `diff' == 0
-						local shareinv = `r(N)' / _N
+						local shareinv = `prep'`r(N)' / _N`appe'
 						drop `var_max' `diff'
 						di "Share of time invariant...done"	
 					}
@@ -221,7 +232,7 @@ program define metaxl_stats
 				* Add shares for categorical variables 
 				if ("``var'_vl'" != "" & "`nofreq'" != "_all") {
 					add_probs, meta(`savefile') var(`var') vl(``var'_vl') ///
-						sharemiss(`sharemiss') `replacestats'
+						`replacestats' decimalplaces(`decimalplaces')
 				}
 			}
 		}
@@ -239,13 +250,13 @@ end
 
 program define add_probs
 
-	syntax, METAfile(str) var(str) vl(str) [sharemiss(real 0) replacestats]
+	syntax, METAfile(str) var(str) vl(str) [replacestats decimalplaces(int -1)]
 	
 	tempname frameprob
 	frame create `frameprob'
 	
 	* generate probabilities
-	qui tab `var', matcell(prob) matrow(value)
+	qui tab `var', miss matcell(prob) matrow(value)
 	mat prob = prob / _N
 	mat prob = value, prob
 
@@ -268,13 +279,17 @@ program define add_probs
 		forvalues i = 1/`rows' {
 			local value = prob[`i', 1]
 			local prob = prob[`i', 2]
-			qui replace freq_`var' = `prob' if value == `value'
+			qui replace freq_`var' = `prob' if value == "`value'"
 		}
 		qui replace freq_`var' = 0 if missing(freq_`var')
-		* Scale probabilities 
-		if (`sharemiss' > 0) {
-			qui replace freq_`var' = freq_`var' / (1 - `sharemiss')
+		if `decimalplaces' != -1 {
+			local factor = 1 * 10 ^ (-`decimalplaces')
+			qui replace freq_`var' = round(freq_`var', `factor')
 		}
+// 		* Scale probabilities 
+// 		if (`sharemiss' > 0) {
+// 			qui replace freq_`var' = freq_`var' / (1 - `sharemiss')
+// 		}
 		qui export excel using "`metafile'", sheet("vl_`vl'", replace) keepcellfmt first(var)
 	}
 	
