@@ -1,4 +1,4 @@
-*! version 0.1 10Apr2024
+*! version 0.2 22Jul2025
 * Programmed by Gustavo Iglésias
 
 program define metaxl_diff, rclass
@@ -225,6 +225,8 @@ program define data_history
 		foreach var in `r(varlist)' {
 			qui replace `var' = "." if missing(`var')
 		}
+		order *, seq 
+		order Features base
 		qui export excel using "`history'.xlsx", missing(".") ///
 			sheet("Data Characteristics") sheetreplace firstrow(variables)	
 	}
@@ -334,11 +336,10 @@ program define variables_sheet, rclass
 	local obs = `r(N)' 
 	
 	if `obs' {
-		qui export excel using "`history'.xlsx", ///
-			sheet("variables") sheetreplace firstrow(variables)	
-			
 		order *, seq
 		order variable
+		qui export excel using "`history'.xlsx", ///
+			sheet("variables") sheetreplace firstrow(variables)	
 				
 		put_legend, file("`history'.xlsx") sheet(variables) varinc(1) ///
 			varexc(0) num_lines(`obs') 
@@ -548,24 +549,30 @@ program define vl_history, rclass
 						first sheet("`worksheet_`i''")
 					qui gen _file = "`file'"
 					qui gen _vl = "`worksheet_`i''"
-					qui cap append using `temp_value_labels'
+					cap append using `temp_value_labels'
 					qui save `temp_value_labels', replace				
 				}
 			}
 		}
-		* Merge with indexed data
-		qui merge m:1 _file using `index_data', gen(`_merge')
-		drop `_merge'
-		keep value label index _file _vl
-		qui levelsof index, local(index_levels)
-		qui levelsof _vl, local(vl_levels)
-		foreach vl_level in `vl_levels' {
-			* Work on one value label form multiple metafiles 
-			preserve
-				vl_report, vl_level(`vl_level') index_levels(`index_levels') ///
-					history(`history') `diffonly' `verbose'
-				return add
-			restore
+		qui count 
+		if `r(N)' == 0 {
+			di "{err:Warning: no value labels found}"
+		}
+		else {
+			* Merge with indexed data
+			qui merge m:1 _file using `index_data', gen(`_merge')
+			drop `_merge'
+			keep value label index _file _vl
+			qui levelsof index, local(index_levels)
+			qui levelsof _vl, local(vl_levels)
+			foreach vl_level in `vl_levels' {
+				* Work on one value label form multiple metafiles 
+				preserve
+					vl_report, vl_level(`vl_level') index_levels(`index_levels') ///
+						history(`history') `diffonly' `verbose'
+					return add
+				restore
+			}			
 		}
 		clear
 	}
