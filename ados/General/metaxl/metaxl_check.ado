@@ -1,4 +1,4 @@
-*! version 0.2 11Apr2024
+*! version 0.3 18Jul2025
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools
 
@@ -416,6 +416,7 @@ frame `vlframe' {
 			    di as error "worksheet vl_`vl' not found"
 			}
 			else {
+				quietly tostring value, replace
 			    tempvar desc NN
 				* Generate variable with the description part of the label
 				if "`delimit'" != "" {
@@ -431,13 +432,24 @@ frame `vlframe' {
 					substr(label, 1, 1) == " " | ///
 					substr(label, length(label), 1) == " "
 				* Label not used
-				cap confirm var obs
+				cap unab obs_vars: obs* 
 				if !_rc {
-					qui replace problems = obs + " | " + problems ///
-						if !missing(obs) & !missing(problems)
-					qui replace problems = obs + problems ///
-						if !missing(obs) & missing(problems)
-					drop obs
+					local vars_count: word count `obs_vars'
+					foreach obs_var in `obs_vars' {
+						gen miss_`obs_var' = !missing(`obs_var')
+					}
+					egen nmiss_total = rowtotal(miss_*)
+					* Label not used in at least one variable
+					qui replace problems = "Label not used in >= 1 var" + ///
+						" | " + problems if nmiss_total > 0 ///
+						& !missing(problems)
+					qui replace problems = "Label not used in >= 1 var" + ///
+						problems if nmiss_total > 0 ///
+						& missing(problems)	
+						
+					drop miss_* 
+					drop nmiss_total
+					drop obs*
 				}
 				* Duplicated descriptions
 				bysort `desc': gen `NN' = _N
@@ -464,9 +476,9 @@ frame `vlframe' {
 				drop `NN'
 				* Missing labels 
 				qui replace problems = "Missing label | " + problems ///
-					if missing(label) & !missing(problems)
+					if missing(label) & !missing(problems) & !inlist(value, "", ".")
 				qui replace problems = "Missing label" + problems ///
-					if missing(label) & missing(problems)
+					if missing(label) & missing(problems) & !inlist(value, "", ".")
 				* Just to be safe
 				qui replace problems = trim(problems)
 				* Keep only inconsistencies
