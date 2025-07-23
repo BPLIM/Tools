@@ -1,4 +1,4 @@
-*! version 0.3 7Jul2025
+*! version 0.3 10Jul2025
 * Programmed by Gustavo Iglésias
 
 program define metaxl_apply
@@ -367,7 +367,7 @@ frame `frame' {
 		forvalues i = 1/`r(N)' {
 			local value = value[`i']
 			local label = label[`i']
-			if ("`value'" != "" & `"`label'"' != "") {
+			if (!inlist(trim("`value'"), ".", "") & trim(`"`label'"') != "") {
 				file write metado `"label define `value_label' `value' `"`label'"', add"' _n
 			}
 		}
