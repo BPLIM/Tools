@@ -1,4 +1,4 @@
-*! version 0.1 4Jul2025
+*! version 0.1 22Jul2025
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools
 
@@ -290,7 +290,7 @@ frame `frameold' {
 		put_summary, file("`export'") value(Sheets) num(`r(N)')
 		global CELLNUM = ${CELLNUM} + 1
 	    qui gen desc = "f2" if `_merge' == 1
-		replace desc = "f1" if `_merge' == 2
+		qui replace desc = "f1" if `_merge' == 2
 		rename `sheet' sheet 
 		qui export excel sheet desc using "`export'" if `_merge' != 3, ///
 			sheet("Sheets", modify) first(var)
@@ -345,10 +345,12 @@ frame create `framenew'
 * Read value labels worksheets
 frame `frameold' {
     qui import excel using "`old'", sheet(`sheet')  first
+	qui tostring value, replace
 	rename label label_f2
 }
 frame `framenew' {
     qui import excel using "`new'", sheet(`sheet')  first
+	qui tostring value, replace
 	rename label label_f1
 	qui save "`temp'", replace
 }
