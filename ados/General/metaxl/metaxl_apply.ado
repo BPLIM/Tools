@@ -1,4 +1,4 @@
-*! version 0.3 10Jul2025
+*! version 0.3 24Jul2025
 * Programmed by Gustavo Iglésias
 
 program define metaxl_apply
@@ -127,37 +127,36 @@ if ("`notes'" == "notes") {
 	}
 }
 
-if ("`chars'" == "chars") {
-	if ("`r(data_chars)'" == "") local data_chars 0
-	else local data_chars `r(data_chars)'
-	if (`data_chars)') {
-		frame `metaframe' {
-			cap import excel using `metafile', sheet("char__dta") first clear
-			if (_rc == 601) {
-				di
-				di "{err:Worksheet {bf:char__dta} not found in metafile}"
-			}
-			else {
-				* Remove Stata default chars 
-				qui drop if substr(char, 1, 1) == "_" | ///
-					substr(char, 1, length("datasignature")) == "datasignature" | ///
-					substr(char, 1, 4) == "note"
-				qui count 
-				if `r(N)' {
-					forvalues i=1/`r(N)' {
-						local char = char[`i']
-						local value = value[`i']
-						file write metado `"char _dta[`char'] `value'"' _n
-					}	
-				}				
-			}
+
+if ("`r(data_chars)'" == "") local data_chars 0
+else local data_chars `r(data_chars)'
+if (`data_chars)') {
+	frame `metaframe' {
+		cap import excel using `metafile', sheet("char_dta") first clear
+		if (_rc == 601) {
+			di
+			di "{err:Worksheet {bf:char_dta} not found in metafile}"
+		}
+		else {
+			* Remove Stata default chars 
+			qui drop if substr(char, 1, 1) == "_" | ///
+				substr(char, 1, 4) == "note"
+			qui count 
+			if `r(N)' {
+				forvalues i=1/`r(N)' {
+					local char = char[`i']
+					local value = value[`i']
+					file write metado `"char _dta[`char'] `value'"' _n
+				}	
+			}				
 		}
 	}
-	else {
-		di 
-		di "{err:Data characteristics not available in metadata file}"		
-	}
 }
+else {
+	di 
+	di "{err:Data characteristics not available in metadata file}"		
+}
+
 
 
 file write metado _n(2)
