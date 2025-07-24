@@ -1,9 +1,9 @@
-*! version 1.0 21Jul2025
+*! version 1.1 24Jul2025
 * Programmed by Ana Isabel Sá
 //Program to calculate the total value of balance sheet items across all countries in the Monetary Financial Institutions Balance Sheet Database (BBS)
 //Only for extractions up to JUN22
 //Ana Isabel Sá
-//Version 1.0 (21Jul2025)
+//Version 1.1 (24Jul2025)
 
 cap program drop bbs_allcountries
 program define bbs_allcountries
@@ -17,7 +17,12 @@ syntax varlist (min=1)
 	// Check if the file name contains "JUN23"
 	local filename: data label
 	if "`filename'"==""{
-		di as error "Data label not found. Please use the original datalabel."
+		di as error "Dataset label not found. Please use the original dataset label."
+		exit 198
+	}
+	
+	if strpos("`filename'", "BBS")==0 | (strpos("`filename'", "SEP1997DEC")==0 & strpos("`filename'", "DEC2014DEC")==0)  {
+		di as error "This command requires an original BBS file with a dataset label that follows one of the approved formats: BBS_x_MBNK_SEP1997MMMYYYY_xxxx_xxxx_Vxx.dta (harmonized dataset) or BBS_x_MBNK_DEC2014MMMYYYY_xxxx_xxxx_Vxx.dta (non-harmonized dataset). Other formats are not supported."
 		exit 198
 	}
 	
@@ -25,6 +30,7 @@ syntax varlist (min=1)
 		di as error "This program is not valid for JUN23 extraction. Please use the JUN22 extraction."
 		exit 198
 	}
+	
 	
 	if strpos("`filename'", "JUN24") {
 		di as error "This program is not valid for JUN24 extraction. Please use the JUN22 extraction."
