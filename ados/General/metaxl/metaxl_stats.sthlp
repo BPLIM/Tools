@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1 21May2024}{...}{smcl}
+{* *! version 0.2 11Jul2025}{...}{smcl}
 {.-}
 help for {cmd:metaxl stats} {right:}
 {.-}
@@ -66,6 +66,10 @@ statistics (see {help weight}).
 {p_end}
 {synopt :{opt miss:detail}} reports information about extended 
 missing values (see {help missing:missing}).
+{p_end}
+{synopt :{opt dec:imalplaces(num)}} sets the number of decimal places for 
+reported statistics. Must be an integer between 0 and 10. The default is to 
+export statistics as stored in Stata. 
 {p_end}
 {synopt :{opt replace:stats}} replaces statistics and frequencies 
 on the metadata file in case they exist.

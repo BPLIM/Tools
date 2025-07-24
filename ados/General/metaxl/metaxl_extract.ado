@@ -1,4 +1,4 @@
-*! version 0.2 4Jul2025
+*! version 0.3 18Jul2025
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools, uselabel
 
@@ -241,7 +241,7 @@ Extracts variables' metadata
 syntax, filename(string) descframe(string) labellang(string) ///
 		[problems report(string) chars NOTES]
 
-metavars, filename(`filename') descframe(`descframe') labellang(`labellang')
+qui metavars, filename(`filename') descframe(`descframe') labellang(`labellang')
 
 metavallab, filename(`filename') labellang(`labellang') `problems' 
 
@@ -318,71 +318,106 @@ value label. The sheet contains every possible value for the variables and
 its corresponding label
 */
 
-syntax, filename(string) labellang(string)  [problems] 
+syntax, filename(string) labellang(string) [problems] 
 
 /* Generate data with values with all the values for variables and the respective 
 value label name. This will be used later to check if all values have labels */
-tempname valframe
-qui ds
-foreach var in `r(varlist)' {
-	foreach lang in `labellang' {
-		qui label language `lang'
-		local vl: value label `var'
-		if trim("`vl'") != "" {
-			frame put `var', into(`valframe')
-			frame `valframe' {
-				quietly {
-					tempfile `vl'
-					drop if missing(`var')
-					bysort `var': drop if _n > 1
-					rename `var' value
-					gen lname = "`vl'"
-					save ``vl'', replace
-					clear
-				}
-			}
-			frame drop `valframe'
-		}
-	}
-}
 
 * value labels 
 preserve 
 	tempname vlframe
-	uselabel, clear
+	qui uselabel, clear
 	qui describe
 	if `r(N)' != 0 & `r(k)' != 0 {
 		qui glevelsof lname, local(lbls)
 		foreach lbl in `lbls' {
 			frame put if lname == "`lbl'", into(`vlframe')
 			frame `vlframe' {
-				local merge_file = lname[1]
-				tempvar _merge
-				* merge_file may not exist 
-				cap merge 1:1 value using "``merge_file''", gen(`_merge')
-				if _rc {
-					// pass
-				}
-				else {
-					qui replace label = "" if `_merge' == 2
-					qui count if `_merge' == 1
-					local m1_prob = `r(N)'
-					if `m1_prob' {
-						qui gen obs = "Label not used" if `_merge' == 1
-						local var_obs "obs"
-					}
-					else {
-						local var_obs ""
-					}
-					drop `_merge'
-					qui export excel value label `var_obs' using `"`filename'"', ///
-						sheet("vl_`lbl'", replace) first(var)
-				}
+				qui tostring value, replace
+				tempfile `lbl'
+				qui save ``lbl'', replace
 			}
 			frame drop `vlframe'
 		}
 	}
 restore
+
+tempname valframe
+qui ds
+local varlist "`r(varlist)'"
+
+foreach lang in `labellang' {
+	qui label language `lang'
+	foreach var in `varlist' {
+		local var_obs ""
+		
+		local vl: value label `var'
+
+		if trim("`vl'") != "" {
+			noi di "`vl'"
+			frame put `var', into(`valframe')
+			frame `valframe' {
+				quietly {
+					bysort `var': drop if _n > 1
+					tostring `var', gen(value)
+
+					tempvar _merge
+					* Expose errors in merge
+					cap merge 1:1 value using ``vl'', gen(`_merge')
+					if _rc {
+						di "{err:Error exporting value labels for {bf:`vl'}}"
+						exit _rc
+					}
+					else {
+						qui count if `_merge' == 2
+						if `r(N)' {
+							qui gen obs_`var' = "Label not used" if `_merge' == 2
+							local var_obs = "`var_obs'" + " obs_`var'"
+						}
+
+						drop `_merge'
+						* Same vl for multiple variables
+						local vl_exists: list vl in vl_list
+						if `vl_exists' {
+							append using ``vl'_file'
+							save ``vl'_file', replace
+						}
+						else {
+							tempfile `vl'_file
+							save ``vl'_file', replace
+						}
+						
+						local var_obs = trim("`var_obs'")
+						order value label `var_obs' 
+
+
+						* Expand the values in obs_var
+						foreach ovar in `var_obs' {
+							// With strings, missings go first
+							bysort value (`ovar'): replace `ovar' = `ovar'[_N] ///
+								if missing(`ovar')
+						}
+						
+						bysort value: keep if _n == 1
+						
+						* Sort value as if it was numeric
+						tempvar sortvar
+						destring value, gen(`sortvar') force
+						sort `sortvar'
+						drop `sortvar'
+
+						qui export excel value label `var_obs' using `"`filename'"', ///
+							sheet("vl_`vl'", replace) first(var)
+						clear						
+					}
+				}
+			}
+			frame drop `valframe'
+			local vl_list `vl_list' `vl'
+			local vl_list: list uniq vl_list
+		}
+	}
+}
 
 end
 

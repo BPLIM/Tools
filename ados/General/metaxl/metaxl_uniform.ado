@@ -89,8 +89,10 @@ frame `frharm' {
 	}
 	else {
 		qui bpencode `code', gen(`num_code')
-		qui replace value = `num_code'
-		drop `code' `num_code'
+		drop value 
+		rename `num_code' value 
+		drop `code'
+		order value
 		sort value
 		di
 		di as text "Codes in sheet " as res "`sheet'" as text " harmonized"
