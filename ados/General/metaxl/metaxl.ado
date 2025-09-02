@@ -1,4 +1,4 @@
-*! version 0.6 22Jul2025
+*! version 0.6 2Sep2025
 * Programmed by Gustavo Iglésias
 
 program define metaxl
@@ -42,6 +42,13 @@ else if "`command'" == "cmp" {
 	metaxl_cmp, `options'
 }
 else if "`command'" == "uniform" {
+    cap which bpencode
+	local rc = _rc 
+	if `rc' == 111 {
+		di `"{err:{browse "https://github.com/BPLIM/Tools/tree/master/ados/General/bpencode":bpencode}}"' ///
+		   "{err: not found. It must be installed to run {bf:metaxl uniform}}"
+		exit `rc'
+	}
 	metaxl_uniform, `options'
 }
 else if "`command'" == "morph" {
