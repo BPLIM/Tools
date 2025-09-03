@@ -4,10 +4,10 @@
 
 ## Install
 
-`metaxl` is not available in SSC. To install run the following in Stata:
+To install run the following in Stata:
 
 ```
-net install metaxl, from("https://github.com/BPLIM/Tools/raw/master/ados/General/metaxl/")
+ssc install metaxl
 ```
 
 ## Dependencies
