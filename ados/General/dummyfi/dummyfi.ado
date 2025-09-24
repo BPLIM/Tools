@@ -1,4 +1,4 @@
-*! version 0.2 18Oct2024
+*! version 0.2 10Jul2025
 * Programmed by Gustavo Iglésias
 
 program define dummyfi
@@ -206,19 +206,19 @@ program define write_commands_cat
 		}
 	}
 	file write `handler' "drop runif" _n
-	* Replace values with missings according to share
-	if (`miss') {
-		if ("`options'" != "") {
-			process_extra_kwargs, var(`var') share_miss(`miss') ///
-				extra_kwargs(`options') handler(`handler')
-		}
-		else {
-			file write `handler' "* Replace `var' with missing (`miss')" _n
-			file write `handler' "gen runif = runiform(0, 1)" _n
-			file write `handler' "replace `var' = . if runif <= `miss'" _n
-			file write `handler' "drop runif" _n
-		}
-	}
+// 	* Replace values with missings according to share
+// 	if (`miss') {
+// 		if ("`options'" != "") {
+// 			process_extra_kwargs, var(`var') share_miss(`miss') ///
+// 				extra_kwargs(`options') handler(`handler')
+// 		}
+// 		else {
+// 			file write `handler' "* Replace `var' with missing (`miss')" _n
+// 			file write `handler' "gen runif = runiform(0, 1)" _n
+// 			file write `handler' "replace `var' = . if runif <= `miss'" _n
+// 			file write `handler' "drop runif" _n
+// 		}
+// 	}
 	* Change values if time invariant
 	if "`inv'" != "" {
 		if (`inv') {
@@ -294,6 +294,7 @@ program define prob_matrix, rclass
 		gen prob_min = cumprob[_n - 1]
 		replace prob_min = 0 if _n == 1
 		* Create and return matrix
+		qui destring value, replace
 		mkmat value prob_min cumprob, mat(`vl')
 		return matrix `vl' = `vl'
 	restore
