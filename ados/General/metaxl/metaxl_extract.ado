@@ -1,4 +1,4 @@
-*! version 0.3 18Jul2025
+*! version 0.3 21Oct2025
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools, uselabel
 
@@ -330,12 +330,12 @@ preserve
 	qui describe
 	if `r(N)' != 0 & `r(k)' != 0 {
 		qui glevelsof lname, local(lbls)
-		foreach lbl in `lbls' {
-			frame put if lname == "`lbl'", into(`vlframe')
+		foreach _lbl_ in `lbls' {
+			frame put if lname == "`_lbl_'", into(`vlframe')
 			frame `vlframe' {
 				qui tostring value, replace
-				tempfile `lbl'
-				qui save ``lbl'', replace
+				tempfile `_lbl_'
+				qui save ``_lbl_'', replace
 			}
 			frame drop `vlframe'
 		}
