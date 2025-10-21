@@ -1,4 +1,4 @@
-*! version 0.2 11Jul2025
+*! version 0.2 21Oct2025
 * Programmed by Gustavo Iglésias
 
 program define metaxl_stats
@@ -256,7 +256,19 @@ program define add_probs
 	frame create `frameprob'
 	
 	* generate probabilities
-	qui tab `var', miss matcell(prob) matrow(value)
+	cap tab `var', miss matcell(prob) matrow(value)
+	local rc = _rc
+	if `rc' == 134 {
+		di 
+		qui gunique `var'
+		di "{err:Too many values in {bf:`var'} (`r(unique)'). See {help limits:limits} for {bf:tabulate}}"
+		exit `rc'
+	}
+	else if `rc' != 0 {
+		di 
+		di "{err:Error while computing frequencies for variable {bf:`var'}}"
+		exit `rc'
+	}
 	mat prob = prob / _N
 	mat prob = value, prob
 
