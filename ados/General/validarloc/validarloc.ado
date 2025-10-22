@@ -1,4 +1,4 @@
-*! 0.2 17Jul2024
+*! 0.2 22Oct2024
 * Programmed by Gustavo Iglésias
 * Dependencies:
 * 	labmask
@@ -50,12 +50,17 @@ program define validarloc, sortpreserve
 			name(`varlist') 
 	restore
 	
-	tempvar _merge
-	cap merge m:1 `loc_code' using `valid_loc', gen(`_merge')
-	if !_rc {
+	tempvar _merge 
+	cap merge m:1 `varlist' using `valid_loc', gen(`_merge')
+	local rc = _rc
+	if !`rc' {
 		qui drop if `_merge' == 2
 		drop `_merge'
 		qui replace _valid_loc = . if missing(`varlist')
+	}
+	else {
+		di "{err:Error merging validated codes with original data}"
+		exit `rc'
 	}
 	tab _valid_loc, miss
 	
