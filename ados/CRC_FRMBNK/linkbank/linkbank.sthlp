@@ -1,99 +1,161 @@
-
 {smcl}
+{* *! version 2.0.0 October 2025}{...}
+{vieweralsosee "" "--"}{...}
+{viewerjumpto "Syntax" "linkbank##syntax"}{...}
+{viewerjumpto "Description" "linkbank##description"}{...}
+{viewerjumpto "Options" "linkbank##options"}{...}
+{viewerjumpto "Results" "linkbank##results"}{...}
+{viewerjumpto "Examples" "linkbank##examples"}{...}
+{viewerjumpto "Remarks" "linkbank##remarks"}{...}
+{viewerjumpto "Author" "linkbank##author"}{...}
 {.-}
-help for {cmd:linkbank} {right:()}
+help for {cmd:linkbank} {right:}
 {.-}
 
 {title:Title}
 
-linkbank - Creates linking ids for financial institutions in Central Credit Register (CRC) for the purpose of merging with Bank Balance Sheet (BBS)
-or Historical Series of the Portuguese Banking Sector (SLB).
+{pstd}
+{cmd:linkbank} {hline 1} Creates linking IDs for financial institutions in Central Credit Register (CRC) and related datasets for 
+merging with Bank Balance Sheet (BBS) or Historical Series of the Portuguese Banking Sector (SLB)
 
 
+{marker syntax}{...}
 {title:Syntax}
 
-{p 8 15}
-{cmd:linkbank} {it:bankid} {it:timeid}, [{it:options}]
+{p 8 17 2}
+{cmd:linkbank}
+{it:bankid} {it:timeid}{cmd:,} {opt base(string)}
 
-{p}
+{synoptset 25 tabbed}{...}
+{marker table_options}{...}
+{synopthdr}
+{synoptline}
+{syntab:Main}
+{p2coldent:* {opt base(string)}}specifies the dataset to link with; options are {cmd:bbs} or {cmd:slb}{p_end}
+{synoptline}
+{p 4 6 2}
+* required{p_end}
+{p2colreset}{...}
+{p 4 6 2}
 
+{pstd}
+where {it:bankid} is the variable containing the financial institution identifier (e.g., {it:bina}) and {it:timeid} is the time variable (e.g., {it:date}).
+
+
+{marker description}{...}
 {title:Description}
 
-{p}
+{pstd}
+{cmd:linkbank} is a tool developed by BPLIM to accurately match individual entity records from datasets based on Central 
+Credit Register data (such as CRC and HCRC) with datasets that use different units of analysis, such as SLB (banking 
+groups or stand-alone institutions) or BBS (stand-alone institutions). Its main objectives are:
 
-This command aims to harmonize bank ids in CRC
-{space 4}1) with BBS, given that CRC reports includes all credit-granting institutions while BBS only includes monetary financial institutions;
-{space 4}2) or with SLB given that SLB reports consolidated information while CRC reports individual-level information.
+{phang2}
+1) Ensure consistent linking across datasets with different units of observation
 
-{title:Option}
-{p 0 4}
+{phang2}
+2) Clarify the scope differences between datasets
 
-{cmd: base} specifies the database to link with (BBS or SLB)
+{pstd}
+The command works by merging your data with a crosswalk table maintained by BPLIM that tracks institutional relationships 
+over time, including mergers, acquisitions, and changes in group structure. The matching is time-aware, meaning it correctly 
+handles cases where an institution's status or group membership changes over time.
 
-{cmd: method} specifies the linking method
+{pstd}
+It should be applied to the dataset with the most granular information (i.e., CRC-like datasets). It supports 
+linking from December 1999 onward and is updated annually to extend coverage. To verify that your version includes the 
+period you need, type {cmd:which linkbank}.
 
-{p 8 16}
+{pstd}
+It adds two new variables to your dataset: {cmd:id_}{it:`base'} and {cmd:note_}{it:`base'}, while keeping the original {it:bankid}
+unchanged. All observations from your original dataset are preserved. 
 
-{space 4}group: For the non-monetary financial institutions that are not present in BBS or SLB, this option allows to assign ids of the parent banks.
-
-{space 4}MA: In the events of Mergers and Acquisitions (M&As) credit transfer (shown in CRC) may occur later than asset restructuring (shown in BBS and SLB).
-{space 8}This option allows to assign the id of the acquiring bank if the acquired bank continues to report credits in CRC while stops to be reported
-{space 8}in BBS/SLB.
-
-{space 4}Both: This is the default option, allowing to assign ids considering both situations.
-
-
-{p 0 4}
-
-{cmd: replace} replace the bank id with the new linking bank id that users can use to merge CRC with BBS/SLB
-
-{cmd: generate} creates a variable {it: new_var} with the new linking bank id that users can use to merge CRC with BBS/SLB
-
-{cmd: keepindicator} indicates the situations in which the new linking bank id is assigned
-
-{cmd: add} includes further information on the institutions
-
-{space 4}group: indicates the banking group to which a financial institution belongs and the type of affiliation.
-
-{space 4}event: indicates banking events - Mergers and Acquisitions (M&As), sales, and resolutions, and the type of counterparties.
-
-{space 4}all: includes all information.
+{pstd}
+It does not clear previous results from other bases, so you can add both SLB and BBS IDs to the same dataset 
+by running the command twice with different {opt base()} options. For more details, consult the user guide for {cmd:linkbank}.
 
 
+{marker options}{...}
+{title:Options}
 
+{dlgtab:Main}
+
+{phang}
+{opt base(string)} specifies the dataset to link with. This option is required. Available options are:
+
+{phang2}
+{cmd:bbs} - Link with Bank Balance Sheet data (available from December 2014 onward)
+
+{phang2}
+{cmd:slb} - Link with Historical Series of the Portuguese Banking Sector
+
+
+{marker results}{...}
+{title:Results}
+
+{pstd}
+The command creates two variables:
+
+{phang2}
+{cmd:id_}{it:`base'} - The corresponding identifier in the target dataset (e.g., {cmd:id_bbs} or {cmd:id_slb})
+
+{phang2}
+{cmd:note_}{it:`base'} - Contextual information explaining the match (e.g., {cmd:note_bbs} or {cmd:note_slb})
+
+{pstd}
+It preserves all observations from your original dataset. Observations that cannot be matched to the target 
+dataset will have missing values for {cmd:id_}{it:`base'}, with {cmd:note_}{it:`base'} explaining why no match was found. For complete 
+explanations of all possible notes, consult the {cmd:linkbank} user guide.
+
+
+{marker examples}{...}
 {title:Examples}
 
 {pstd}
-Example 1:
+Add the corresponding BBS ID and explanation for financial institutions ({it:bina}) over time ({it:date}):
 
-{space 4}Replace the bank id with the linking id for financial institutions (bina) over time (date), accounting for bank M&As
-
-{p 8 16}{inp:. linkbank bina date, base(BBS) method(MA) replace}{p_end}
+{p 8 16}{inp:. linkbank bina date, base(bbs)}{p_end}
 
 {pstd}
-Example 2:
+This adds variables {cmd:id_bbs} and {cmd:note_bbs} to your dataset.
 
-{space 4}Creates a new linking id ({it:newid}) between CRC and SLB and indicating the linking type for financial institutions (bina)over time (date),
-{space 4}accounting for bank M&As and banking groups. In the case of bank M&As, specifies the event and the counterparty types.
+{pstd}
+Add the corresponding SLB ID and explanation:
 
-{p 8 16}{inp:. linkbank bina date, base(SLB) gen(newid) method(both) keepind add(event)}{p_end}
+{p 8 16}{inp:. linkbank bina date, base(slb)}{p_end}
+
+{pstd}
+This adds variables {cmd:id_slb} and {cmd:note_slb}. 
 
 
-
+{marker remarks}{...}
 {title:Remarks}
 
-Please notice that this software is provided "as is", without warranty of any kind, whether express, implied, or statutory, including, but not limited
-to, any warranty of merchantability or fitness for a particular purpose or any warranty that the contents of the item will be error-free.
-In no respect shall the author incur any liability for any damages, including, but limited to, direct, indirect, special, or consequential damages
-arising out of, resulting from, or any way connected to the use of the item, whether or not based upon warranty, contract, tort, or otherwise.
+{pstd}
+Please note that this software is provided "as is", without warranty of any kind, whether express, implied, or
+statutory, including, but not limited to, any warranty of merchantability or fitness for a particular purpose, or
+any warranty that the contents will be error-free. In no respect shall the author incur any liability
+for any damages, including, but not limited to, direct, indirect, special, or consequential damages arising out of, 
+resulting from, or in any way connected to the use of this software, whether or not based upon warranty, contract, tort, 
+or otherwise.
 
 
+{marker author}{...}
 {title:Author}
 
-{p}
-Sujiao (Emma) Zhao, BPLIM, Banco de Portugal, Portugal.
+{pstd}
+Sujiao (Emma) Zhao
 
-{p}
-Email: {browse "mailto:szhao@bportugal.pt":szhao@bportugal.pt}
+{pstd}
+Ana Isabel Sá, BPLIM, Banco de Portugal, Portugal
 
-I appreciate your feedback. Comments are welcome!
+{title:Contact}
+
+{pstd}
+Ana Isabel Sá, BPLIM, Banco de Portugal, Portugal
+
+{pstd}
+Email: {browse "mailto:aisa@bportugal.pt":aisa@bportugal.pt}
+
+{pstd}
+We appreciate your feedback. Comments are welcome!
