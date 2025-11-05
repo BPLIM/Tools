@@ -2,14 +2,16 @@
 
 
 Last Version: 2.0.0
+
 Release Date: 04Nov2025
 
 
 `linkbank' is a [Stata](http://www.stata.com/) tool developed by BPLIM to accurately match individual entity records from datasets based on Central Credit Register data (such as CRC and HCRC) with datasets that use different units of analysis, such as SLB (banking groups or stand-alone institutions) or BBS (stand-alone institutions). Its main objectives are:
 
-        1) Ensure consistent linking across datasets with different units of observation
+1) Ensure consistent linking across datasets with different units of observation
 
-        2) Clarify the scope differences between datasets
+2) Clarify the scope differences between datasets
+
 
 The 2.0.0 version replaces older versions, as well as similar commands like mergebbs, mergecrc, and mergecrcslb.
 
