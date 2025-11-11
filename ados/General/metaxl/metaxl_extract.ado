@@ -1,4 +1,4 @@
-*! version 0.3 21Oct2025
+*! version 0.4 11Nov2025
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools, uselabel
 
@@ -76,7 +76,7 @@ quietly {
 	descdata, filename(`metafile') descframe(`descframe') ///
 		labellang(`labellang') `problems' `chars' `notes'
 	
-	descvars, filename(`metafile') descframe(`descframe') ///
+	noi descvars, filename(`metafile') descframe(`descframe') ///
 		labellang(`labellang') `problems' `chars' `notes'
 		
 	export_data_chars, filename(`metafile')
@@ -354,7 +354,11 @@ foreach lang in `labellang' {
 		local vl: value label `var'
 
 		if trim("`vl'") != "" {
-			noi di "`vl'"
+			if trim("``vl''") == "" {
+				noi di "{err:Value label {bf:`vl'} assigned to {bf:`var'} but}" /// 
+				       "{err: contains no data (see {bf:uselabel}).}"	
+				continue
+			}
 			frame put `var', into(`valframe')
 			frame `valframe' {
 				quietly {
@@ -365,7 +369,7 @@ foreach lang in `labellang' {
 					* Expose errors in merge
 					cap merge 1:1 value using ``vl'', gen(`_merge')
 					if _rc {
-						di "{err:Error exporting value labels for {bf:`vl'}}"
+						noi di "{err:Error exporting value labels for {bf:`vl'}}"
 						exit _rc
 					}
 					else {
