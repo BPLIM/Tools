@@ -6,13 +6,12 @@
 
 capture program drop linkbank
 program define linkbank
-	version 19
+	version 15
 	syntax varlist (min=2 max=2) [if] [in] , [ ///
 		BASE(string)                       /// Database to match with
 	]
 
 	di
-	version 19
 	local version_ado "2.0.0"
 
 	tokenize `varlist'
