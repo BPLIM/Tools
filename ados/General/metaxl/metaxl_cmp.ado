@@ -1,4 +1,4 @@
-*! version 0.1 22Jul2025
+*! version 0.1 22Jan2026
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools
 
@@ -80,6 +80,7 @@ program define put_summary
 
 syntax, file(string) value(string) [num(int 0)]
 
+cap putexcel save
 qui putexcel set "`file'", open modify sheet("${MAINSHEET}")
 qui putexcel A${CELLNUM} = "`value'"
 qui putexcel B${CELLNUM} = `num'
@@ -135,6 +136,7 @@ frame `frameold' {
 	* Second section 
 	compare_columns
 	if `r(col_inc)' {
+		cap putexcel save
 		qui putexcel set "`export'", open modify sheet("Variables' Features")
 		putexcel A1 = "feature"
 		putexcel B1 = "desc" 
