@@ -1,4 +1,4 @@
-*! version 0.2 21Oct2025
+*! version 0.2 21Jan2026
 * Programmed by Gustavo Iglésias
 
 program define metaxl_stats
@@ -17,6 +17,7 @@ program define metaxl_stats
 	    REPLACEstats             ///
 		MISSdetail               ///
 		DECimalplaces(int -1)    ///
+		TRUNCate                 ///
 	] 
 	
 	if `decimalplaces' < -1  | `decimalplaces' > 10 {
@@ -63,7 +64,7 @@ program define metaxl_stats
 		}
 		* Else -> create metadata file to add the statistics
 		else {
-			metaxl extract, meta(`savefile')
+			metaxl extract, meta(`savefile') `truncate'
 			local savefile "`savefile'.xlsx"
 		}
 	}

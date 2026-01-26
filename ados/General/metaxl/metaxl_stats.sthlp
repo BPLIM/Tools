@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.2 11Jul2025}{...}{smcl}
+{* *! version 0.2 21Jan2026}{...}{smcl}
 {.-}
 help for {cmd:metaxl stats} {right:}
 {.-}
@@ -73,6 +73,10 @@ export statistics as stored in Stata.
 {p_end}
 {synopt :{opt replace:stats}} replaces statistics and frequencies 
 on the metadata file in case they exist.
+{p_end}
+{synopt :{opt trunc:ate}} truncates variables and value labels names if their length is 
+larger than 25 characters. This may become a problem because 
+the name of worksheets in Excel cannot exceed 30 characters.
 {p_end}
 {synoptline}
 {p2colreset}{...}
