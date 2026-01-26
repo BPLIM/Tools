@@ -1,9 +1,9 @@
-*! version 0.1 16Apr2024
+*! version 0.2 13Nov2025
 * Programmed by Gustavo Iglésias
 
 program define metaxl_combine
 
-syntax, f1(string) f2(string) [METAfile(string) CLEAN REPLACE]
+syntax, f1(string) f2(string) [METAfile(string) CLEAN REPLACE keep(str)]
 
 local f1 "`f1'.xlsx"
 local f2 "`f2'.xlsx"
@@ -25,6 +25,12 @@ else {
 	cap rm "`metafile'"
 }
 
+if "`keep'" != "" & !inlist("`keep'", "f1", "f2") {
+	di "{err:Invalid {bf:`keep'} for option {bf:keep}.}" ///
+	   "{err: Possible values: {bf:f1} or {bf:f2}}"
+	   exit 198
+}
+
 match_sheets, f1(`f1') f2(`f2')
 local f1_only "`r(f1_only)'"
 local f2_only "`r(f2_only)'"
@@ -39,34 +45,36 @@ forvalues i = 1/2 {
 di
 di as text "Combining meta files " as result `"`f1'"' as text " and " ///
 	as result `"`f2'"'
+di 
 * Append matched sheets and export 
 foreach sheet in `r(matched)' {
     * Data features - general
 	if "`sheet'" == "data_features_gen" {
 	    combine_sheets, sheet(`sheet') f1(`f1') f2(`f2') meta(`metafile') ///
-			unique_on(Features Content) first `clean'   
+			unique_on(Features Content) first `clean' keep(`keep') 
 	}
 	* Data features - specific
 	if "`sheet'" == "data_features_spec" continue
 	* Variables 
 	if "`sheet'" == "variables" {
 	    combine_sheets, sheet(`sheet') f1(`f1') f2(`f2') meta(`metafile') ///
-			unique_on(variable label* value_label*) sort_on(variable) first `clean'
+			unique_on(variable label* value_label*) sort_on(variable) ///
+			first `clean' keep(`keep') 
 	}
 	* Value labels
 	if substr("`sheet'", 1, 2) == "vl" {
 	    combine_sheets, sheet(`sheet') f1(`f1') f2(`f2') meta(`metafile') ///
-			unique_on(value label) sort_on(value) first `clean'
+			unique_on(value label) sort_on(value) first `clean' keep(`keep') 
 	}	
 	* Chars
 	if substr("`sheet'", 1, 4) == "char" {
 	    combine_sheets, sheet(`sheet') f1(`f1') f2(`f2') meta(`metafile') ///
-			unique_on(char value) first `clean'
+			unique_on(char value) first `clean' keep(`keep') 
 	}		
 	* Notes
 	if substr("`sheet'", 1, 4) == "note" {
 	    combine_sheets, sheet(`sheet') f1(`f1') f2(`f2') meta(`metafile') ///
-			unique_on(note) first `clean'
+			unique_on(note) first `clean' keep(`keep') 
 	}	
 }
 * Export unmatched sheets
@@ -91,8 +99,11 @@ end
 program define combine_sheets
 
 syntax, sheet(string) f1(string) f2(string) meta(string) ///
-	unique_on(string) [sort_on(string) first clean]
+	unique_on(string) [sort_on(string) first clean keep(str)]
 
+local vl_sheet = 0
+local var_value: word 1 of `unique_on' 
+if ("`var_value'" == "value") local vl_sheet = 1
 tempfile temp
 tempname sh_frame
 frame create `sh_frame'
@@ -102,10 +113,12 @@ frame `sh_frame' {
 	cap ds file* 
 	local fc =  `:word count `r(varlist)'' + 1
 	qui gen file`fc' = "f1"
+	if (`vl_sheet') qui tostring value, replace force
 	qui gen `file1' = 1
 	qui save `temp', replace 
 	qui import excel using "`f2'", sheet(`sheet') `first' clear
 	qui gen file`fc' = "f2"
+	if (`vl_sheet') qui tostring value, replace force
 	qui append using `temp', force
 	local fb = `fc' - 1
 	if `fb' {
@@ -117,7 +130,28 @@ frame `sh_frame' {
 	}
 	drop `file1'
 	drop_dups `unique_on', fc(`fc')
+	
+	* Keep only one observation on conflict
+	if "`keep'" != "" {
+		local keep = trim("`keep'")
+		local idvar: word 1 of `unique_on'
+		qui count 
+		local obs = `r(N)'
+		tempvar NN
+		bys `idvar': gen `NN' = _N 
+		qui count if `NN' > 1
+		if `r(N)' {
+			qui drop if `NN' > 1 & file`fc' != "`keep'"
+			qui count 
+			local deleted = `obs' - `r(N)'
+			di "{text:[`sheet'] Removed {bf:`deleted'} duplicates based on {bf:`idvar'}}" ///
+			   "{text:. Kept observations from file {bf:`keep'}}"			
+		}
+		drop `NN'
+	}
+	
 	if ("`sort_on'" != "") sort `sort_on'
+	
 	if ("`clean'" == "clean") cap drop file*
 	if "`first'" == "first" {
 	    qui export excel using "`meta'", sheet("`sheet'", replace) first(var)

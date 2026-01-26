@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1 16Apr2024}{...}{smcl}
+{* *! version 0.1 11Nov2025}{...}{smcl}
 {.-}
 help for {cmd:metaxl combine} {right:}
 {.-}
@@ -29,6 +29,12 @@ metadata is stored.
 {p_end}
 {synopt :{opt meta:file(fn)}} saves the combined metadata in the Excel file {it:fn.xlsx}.
 Defaults to {it:metafile.xlsx}.
+{p_end}
+{synopt :{opt keep(f#)}} Keeps only observations from metafile {it:f#} in cases 
+of duplicated information. Deduplication is performed based on the first 
+variable of each sheet (e.g., {it:value} in value label sheets). Possible values 
+are {it:f1} or {it:f2}. Leave empty to use the default behavior, which is 
+to skip deduplication.
 {p_end}
 {synopt :{opt clean}} does not export column {it:file#}.
 {p_end}
@@ -68,6 +74,13 @@ So the resulting meta file of the current combination will include a column {it:
 Combine metadata from files {it:meta_auto1.xlsx} and {it:meta_auto2.xlsx}. Save the combined metadata in {it:meta_comb.xlsx}
 
 {p 8 16}{inp:. metaxl combine, f1(meta_auto1) f2(meta_auto2) meta(meta_comb)}{p_end}
+
+{pstd}
+Combine metadata from files {it:meta1.xlsx} and {it:meta2.xlsx}. Do not save 
+column {it:file#} and deduplicate information, keeping observations from file 2. 
+Save the combined metadata in {it:comb.xlsx}
+
+{p 8 16}{inp:. metaxl combine, f1(meta1) f2(meta2) keep(f2) clean meta(comb)}{p_end}
 
 
 {title:Remarks}
