@@ -1,4 +1,4 @@
-*! version 0.1 28Aug2024
+*! version 0.2 12Nov2025
 * Programmed by Paulo Guimaraes
 * Changed by Gustavo Iglésias (remove chars from dta)
 
@@ -35,10 +35,6 @@ foreach var of varlist * {
 		char `var'[`j']
 	}
 }
-local chardta: char  _dta[ ]
-foreach j of local chardta {
-	char _dta[`j']
-}
 * drop notes
 qui notes drop _all
 * drop languages
@@ -56,5 +52,10 @@ sort `dum'
 drop `dum'
 * reset format 
 qui metaxl_setdefaultfmt *	
+
+local chardta: char  _dta[ ]
+foreach j of local chardta {
+	char _dta[`j']
+}
 
 end
