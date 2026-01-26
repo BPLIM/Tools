@@ -1,4 +1,4 @@
-*! version 0.6 2Sep2025
+*! version 0.8 22Jan2026
 * Programmed by Gustavo Iglésias
 
 program define metaxl
