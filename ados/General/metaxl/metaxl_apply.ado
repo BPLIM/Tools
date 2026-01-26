@@ -1,4 +1,4 @@
-*! version 0.3 24Jul2025
+*! version 0.4 21Jan2026
 * Programmed by Gustavo Iglésias
 
 program define metaxl_apply
@@ -6,7 +6,9 @@ program define metaxl_apply
 Applies metadata to data in memory. 
 */
 
-syntax, METAfile(string) [DOfile(string) TRUNCate CHARS NOTES NOBackup]
+syntax, METAfile(string) [ ///
+    DOfile(string) TRUNCate CHARS NOTES skip(varlist) NOBackup NOSort NOCompress ///
+]
 
 qui describe 
 if `r(N)' == 0 | `r(k)' == 0 {
@@ -41,7 +43,6 @@ if "`truncate'" == "" {
 else {
 	metaxl_truncate
 }
-
 qui metaxl_check, meta(`metafile')
 
 if trim(`"`r(inconsistencies)'"') != "" {
@@ -58,9 +59,15 @@ if "`nobackup'" != "nobackup" {
 	di 
 	di "{text:Backup meta file {bf:_bk_meta.xlsx} saved in the current}" ///
 		"{text: working directory}"
+	di 
 }
 
-metaxl clear, force
+
+if trim("`skip'") == "" {
+	metaxl clear, force
+	di 
+	di "Clearing metadata from memory"
+}
 
 tempname metaframe
 frame create `metaframe'
@@ -73,17 +80,20 @@ else {
 	qui file open metado using "`dofile'.do", write replace
 }
 
-write_data_features, metafile(`metafile') metaframe(`metaframe') `chars' `notes'
+write_data_features, metafile(`metafile') metaframe(`metaframe') `chars' ///
+	`notes' skip(`skip') `nosort'
 
 get_data_features, metafile(`metafile') metaframe(`metaframe')
 local labellang "`r(labellang)'"
 
 write_var_features, metafile(`metafile') metaframe(`metaframe') labellang(`labellang') ///
-	`chars' `notes'
+	`chars' `notes' skip(`skip')
 
 // file write metado `"save "`file'", replace"' _n
 
-file write metado `"compress"' _n
+if "`nocompress'" != "nocompress" {
+    file write metado `"compress"' _n
+}
 
 file close metado
 
@@ -97,20 +107,37 @@ else {
 	di as text "File " as result "`dofile'.do" as text " saved"
 }
 
-
 end
 
 
 program define write_data_features
 
-syntax, metafile(string) metaframe(string) [CHARS NOTES]
+syntax, metafile(string) metaframe(string) [CHARS NOTES skip(str) NOSORT]
+
+* clear not called 
+qui label language
+local langs `r(languages)'
 
 get_data_features, metafile(`metafile') metaframe(`metaframe')
 
 file write metado `"* Data features"' _n
 if ("`r(datalabel)'" != "") file write metado `"label data "`r(datalabel)'""' _n
-if ("`r(sorted_by)'" != "") file write metado `"capture sort `r(sorted_by)'"' _n
+if ("`r(sorted_by)'" != "" & "`nosort'" == "") {
+	file write metado `"capture sort `r(sorted_by)'"' _n
+} 
 local labellang "`r(labellang)'"
+
+if "`skip'" != "" {
+	local langs: list sort langs
+	local labellang: list sort labellang
+	if itrim("`langs'") != itrim("`labellang'") {
+		di "{err:Inconsistent languages between the data in memory ({bf:`langs'})}" ///
+		   "{err: and the metadata ({bf:`labellang'}). Please ensure that both }" ///
+		   "{err:use the same language settings}" 
+		exit 109
+	}
+}
+
 foreach lang in `labellang' {
     file write metado `"cap label language `lang', new"' _n
 }
@@ -128,9 +155,8 @@ if ("`notes'" == "notes") {
 }
 
 
-if ("`r(data_chars)'" == "") local data_chars 0
-else local data_chars `r(data_chars)'
-if (`data_chars)') {
+local data_chars = !inlist("`r(data_chars)'", "", "0") 
+if (`data_chars') {
 	frame `metaframe' {
 		cap import excel using `metafile', sheet("char_dta") first clear
 		if (_rc == 601) {
@@ -152,12 +178,6 @@ if (`data_chars)') {
 		}
 	}
 }
-else {
-	di 
-	di "{err:Data characteristics not available in metadata file}"		
-}
-
-
 
 file write metado _n(2)
 
@@ -196,7 +216,7 @@ end
 
 program define write_var_features
 
-syntax, metafile(string) metaframe(string) labellang(string) [CHARS NOTES]
+syntax, metafile(string) metaframe(string) labellang(string) [CHARS NOTES skip(str)]
 
 tempfile temp
 tempname fvallab fchars fnotes
@@ -205,6 +225,10 @@ foreach frm in fvallab fchars fnotes {
 }
 qui ds
 local variables "`r(varlist)'"
+
+if ("`chars'" == "chars" | "`notes'" == "notes") & ("`skip'" != "") {
+	clean_var_chars_notes, vars(`variables') skip(`skip') `chars' `notes'
+}
 
 frame `metaframe' {
 	qui local_to_column, local(`variables') col(variable)
@@ -215,6 +239,11 @@ frame `metaframe' {
 	qui count 
 	forvalues i=1/`r(N)' {
 		local var = variable[`i']
+		local var_in_skip: list var in skip 
+		if (`var_in_skip')  {
+			di "{text:Skipping variable {bf:`var'}}"
+			continue
+		} 
 		if `_merge'[`i'] == 1 {
 			di as error `"variable "`var'" only available in "`metafile'""'
 		}
@@ -232,7 +261,7 @@ frame `metaframe' {
 					local label_`lang' = label_`lang'[`i']
 					write_label, var(`var') lang(`lang') label(`"`label_`lang''"')
 				}
-				if !missing(value_label_`lang'[`i']) {
+				if !missing(trim(value_label_`lang'[`i'])) {
 					local value_label_`lang' = value_label_`lang'[`i']
 					* Check if value label is already defined
 					check_vldef, vl(`value_label_`lang'') vls(`vls')
@@ -282,6 +311,34 @@ foreach frm in fvallab fchars fnotes {
 end
 
 
+program define clean_var_chars_notes
+
+	syntax, varlist(str) skip(str) [CHARS NOTES]
+	
+	* Chars
+	if "`chars'" == "chars" {
+		foreach var in `varlist' {
+			local var_in_skip: list var in skip 
+			if (`var_in_skip') continue 
+			local charvar: char `var'[ ]
+			foreach j of local charvar {
+				char `var'[`j']
+			}	
+		}		
+	}
+	
+	* Notes 
+	if "`notes'" == "notes" {
+		foreach var in `varlist' {
+			local var_in_skip: list var in skip 
+			if (`var_in_skip') continue 
+			notes drop `var'
+		}		
+	}	
+
+end
+
+
 program define check_vldef, rclass
 
 syntax, vl(string) [vls(string)] 
@@ -325,7 +382,8 @@ program define write_var_type
 syntax, var(string) type(string) 
 
 file write metado `"* Type"' _n
-file write metado `"recast `type' `var'"' _n
+file write metado `"local vtype: type `var'"' _n
+file write metado `"if (""' _char(96) "vtype" _char(39) `"" != "`type'") recast `type' `var'"' _n
 
 end
 
@@ -335,7 +393,8 @@ program define write_var_format
 syntax, var(string) format(string) 
 
 file write metado `"* Format"' _n
-file write metado `"format `format' `var'"' _n
+file write metado `"local vformat: format `var'"' _n
+file write metado `"if (""' _char(96) "vformat" _char(39) `"" != "`format'") format `format' `var'"' _n
 
 end
 
@@ -363,6 +422,7 @@ frame `frame' {
 	qui import excel using `metafile', sheet("vl_`value_label'") first clear
 	qui count 
 	if "`def'" == "def" {
+		file write metado `"cap label drop `value_label'"' _n
 		forvalues i = 1/`r(N)' {
 			local value = value[`i']
 			local label = label[`i']

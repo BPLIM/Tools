@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.2 8Nov2023}{...}{smcl}
+{* *! version 0.4 14Nov2025}{...}{smcl}
 {.-}
 help for {cmd:metaxl apply} {right:}
 {.-}
@@ -26,6 +26,9 @@ metadata is stored.
 {p_end}
 {synopt :{opt do:file(fn)}} saves a do-file with all the code used to apply the metadata.
 {p_end}
+{synopt :{opt skip(varlist)}} skip applying metadata to specified 
+variables.
+{p_end}
 {synopt :{opt chars}} applies information about variables and data {help char:characteristics}. 
 The default behavior is to not apply characteristics to variables and data.
 {p_end}
@@ -38,6 +41,11 @@ length is larger than 25 and 27 characters, respectively.
 {synopt :{opt nob:ackup}} changes the default behavior of saving a backup of the
  metadata in memory to a file ({it:_bk_meta.xlsx}). With this option the backup 
 file is not created meaning that the changes to the metadata cannot be reversed.
+{p_end}
+{synopt :{opt nos:ort}} do not sort the data (see {help sort:sort}).
+{p_end}
+{synopt :{opt noc:ompress}} do not compress the data 
+(see {help compress:compress}).
 {p_end}
 {synoptline}
 {p 4 6 2}
