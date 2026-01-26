@@ -1,4 +1,4 @@
-*! version 0.3 18Jul2025
+*! version 0.4 12Nov2025
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools
 
@@ -115,6 +115,10 @@ if `keep_check' {
 	}
 }
 else {
+	if (`no_inc') {
+		di 
+		di as text "No warnings or inconsistencies found"
+	}
     cap rm "`checkfile'"
 }
 
