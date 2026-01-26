@@ -31,7 +31,7 @@ The default behavior is to not extract variables and data characteristics.
 The default behavior is to not extract variables and data notes.
 {p_end}
 {synopt :{opt trunc:ate}} truncates variables and value labels names if their length is 
-larger than 25 and 27 characters, respectively. This may become a problem because 
+larger than 25 characters. This may become a problem because 
 the name of worksheets in Excel cannot exceed 30 characters.
 {p_end}
 {synopt :{opt replace}} replaces the meta file if it exists.

@@ -1,4 +1,4 @@
-*! version 0.1 5Feb2021
+*! version 0.1 21Jan2026
 * Programmed by Gustavo Iglésias
 
 program define metaxl_truncate
@@ -43,8 +43,8 @@ foreach var in `r(varlist)' {
 		qui label language `lang'
 		local vl: value label `var'
 		if "`vl'" != "" {
-			if length("`vl'") > 27 {
-				local new_vl = substr("`vl'", 1, 27)
+			if length("`vl'") > 25 {
+				local new_vl = substr("`vl'", 1, 25)
 				di 
 				di as text "Truncating value label " as result "`vl'"
 				cap label copy `vl' `new_vl'

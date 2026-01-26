@@ -1,4 +1,4 @@
-*! version 0.4 11Nov2025
+*! version 0.4 21Jan2026
 * Programmed by Gustavo Iglésias
 * Dependencies: gtools, uselabel
 
@@ -49,10 +49,10 @@ if "`truncate'" == "" {
 	foreach vl in `r(names)' {
 		local len = length("`vl'")
 		if `len' > 25 {
-			di as error "Length of value label `vl' longer than 27 characters. This will" ///
+			di as error "Length of value label `vl' longer than 25 characters. This will" ///
 			" generate an error when creating the xlsx file with the metadata." ///
 			`" Please specify the option "truncate" to truncate value label names"' ///
-			" longer than 27 characters"
+			" longer than 25 characters"
 			exit 198
 		}		
 	}
@@ -383,12 +383,12 @@ foreach lang in `labellang' {
 						* Same vl for multiple variables
 						local vl_exists: list vl in vl_list
 						if `vl_exists' {
-							append using ``vl'_file'
-							save ``vl'_file', replace
+							append using ``vl'f'
+							save ``vl'f', replace
 						}
 						else {
-							tempfile `vl'_file
-							save ``vl'_file', replace
+							tempfile `vl'f
+							save ``vl'f', replace
 						}
 						
 						local var_obs = trim("`var_obs'")
