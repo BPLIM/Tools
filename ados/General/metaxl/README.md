@@ -10,6 +10,12 @@ To install run the following in Stata:
 ssc install metaxl
 ```
 
+To get the most recent version, please type the following in Stata:
+
+```
+net install metaxl, from("https://github.com/BPLIM/Tools/raw/master/ados/General/metaxl/") replace
+```
+
 ## Dependencies
 
 - filelist
