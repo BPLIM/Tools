@@ -1,4 +1,4 @@
-*! version 0.4 21Jan2026
+*! version 0.4 28Jan2026
 * Programmed by Gustavo Iglésias
 
 program define metaxl_apply
@@ -234,6 +234,14 @@ frame `metaframe' {
 	qui local_to_column, local(`variables') col(variable)
 	qui save "`temp'", replace
     qui import excel using `metafile', sheet("variables") first clear
+	* force string for variables label* and value_label* 
+	foreach var of varlist label_* value_label_* {
+		cap confirm string var `var'
+		if _rc {
+			qui tostring `var', replace
+			qui replace `var' = "" if trim(`var') == "."
+		}
+	}
 	tempvar _merge
 	qui merge 1:1 variable using `temp', gen(`_merge')
 	qui count 
