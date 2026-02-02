@@ -200,7 +200,7 @@ def get_mult_series(info: list) -> list:
     stata_frame = Frame.connect(FRAME)
     stata_frame.setObsTotal(len(df))
     for item in df.columns:
-        if str(df[item].dtype)[:3] == 'obj':
+        if str(df[item].dtype)[:3] in ['str', 'obj']:
             stata_frame.addVarStr(item, 1)
             stata_frame.store(item, None, df[item])
             if item == 'date':
@@ -301,3 +301,4 @@ def browse(series: str) -> None:
 	
 	
 end
+
