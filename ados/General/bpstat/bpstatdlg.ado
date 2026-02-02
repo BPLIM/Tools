@@ -460,7 +460,7 @@ class SeriesWindow:
         finally:
             stata_frame.setObsTotal(len(df))
             for item in df.columns:
-                if str(df[item].dtype)[:3] == 'obj':
+                if str(df[item].dtype)[:3] in ['str', 'obj']:
                     stata_frame.addVarStr(item, 1)
                     stata_frame.store(item, None, df[item])
                     if item == 'date':
@@ -891,4 +891,5 @@ def main(file: str, frame: str, replace: str):
 
 
 end 
+
 
