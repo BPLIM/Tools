@@ -11,6 +11,12 @@ To install run the following in Stata:
 ssc install validarcae
 ```
 
+To get the most recent version, please type the following in Stata:
+
+```
+net install validarcae, from("https://github.com/BPLIM/Tools/raw/master/ados/General/validarcae/") replace
+```
+
 ## Files 
 
 The command uses the ancillary file "caecodes.txt" to validate CAE codes. This file is installed in your adopath (PLUS) when you run the previous command in Stata.
