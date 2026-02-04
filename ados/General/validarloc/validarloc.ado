@@ -1,5 +1,5 @@
-*! 0.2 22Oct2024
-* Programmed by Gustavo Iglésias
+*! 0.3 4Feb2026
+* Programmed by Gustavo Iglésias and Diogo Peres
 * Dependencies:
 * 	labmask
 
@@ -250,6 +250,12 @@ program define convert_to_numeric
 			replace `code' = subinstr(`code', "F", "15", .)
 			replace `code' = subinstr(`code', "G", "16", .)
 			replace `code' = subinstr(`code', "H", "17", .)
+			replace `code' = subinstr(`code', "I", "18", .)
+			replace `code' = subinstr(`code', "J", "19", .)
+			replace `code' = subinstr(`code', "K", "20", .)
+			replace `code' = subinstr(`code', "L", "21", .)
+			replace `code' = subinstr(`code', "M", "22", .)
+			replace `code' = subinstr(`code', "N", "23", .)
 		}
 	}
 
