@@ -1,4 +1,4 @@
-*! 1.0 6Feb2024
+*! 1.1 15Jan2025
 * Programmed by Gustavo Iglésias
 * Dependencies: 
 * savesome (version 1.1.0 23feb2015)
@@ -11,6 +11,11 @@ version 15
 syntax varlist(min=1 max=1) [if], [ ///
 	rev(int 3) fromlabel dropzero keep getlevels(string) solve(string) SIMilarity(str) ///
 ]
+
+if !inlist(`rev', 1, 2, 21, 3, 4) {
+	di "{err:Invalid value for option {bf:rev}. Possible values: 1, 2, 21, 3 or 4}"
+	exit 198
+}
 
 if ("`solve'" != "") {
 	cap which jarowinkler
@@ -103,7 +108,7 @@ if "`fromlabel'" == "fromlabel" {
 	}
 }
 else {
-	if substr("`vartype'",1,3) == "str" {
+	if substr("`vartype'", 1, 3) == "str" {
 		qui clonevar _cae_str = `varlist'
 	}
 	else {
@@ -176,7 +181,7 @@ if `rev' == 1 {
 	
 }
 
-/* Codes from revisions 2, 21 and 3 have 5 digits and may start with a zero. So 
+/* Codes from revisions 2, 21, 3 and 4 have 5 digits and may start with a zero. So 
 we want to check if numbers with a length smaller than 5 can still be valid 
 codes if we add a 0 to the left of the code. For string variables this should 
 not happen, because the zero is not lost on conversion. The same is true for 
@@ -219,7 +224,7 @@ else {
 				* invalid
 				qui replace _valid_cae_`rev' = 200000 if (`_m1' == 1 & `_m2' == 1) 
 				qui drop `_m1' `_m2'
-				qui replace _cae_str = substr(_cae_str,2,.)
+				qui replace _cae_str = substr(_cae_str, 2, .)
 				tempfile temp`i'
 				qui save "`temp`i''", replace
 			}
@@ -329,14 +334,14 @@ if "`getlevels'" != "" {
 	local force = "`r(force)'"
 	foreach item in `levels' {
 		local levelscount: word count `levels'
-		if `rev' == 3 {
+		if inlist(`rev', 3, 4) {
 			if `levelscount' > 5 {
-				di as error "CAE Rev. 3 only admits 5 levels"
+				di as error "CAE Rev. `rev' only admits 5 levels"
 				error 198
 			}
 			if ("`item'" != "1" & "`item'" != "2" & "`item'" != "3" &  /// 
 				"`item'" != "4" & "`item'" != "5") {
-				di as error "CAE Rev. 3 only admits 5 values for levels: "///
+				di as error "CAE Rev. `rev' only admits 5 values for levels: "///
 					"1, 2, 3, 4 and 5"
 				error 198
 			}
@@ -366,8 +371,12 @@ if "`getlevels'" != "" {
 		validarcae_div21 `varlist', file(`temp') levels(`levels') `keep' `en' ///
 			`force' `_solved'
 	}
-	else {
+	else if `rev' == 3 {
 		validarcae_div3 `varlist', file(`temp') levels(`levels') `keep' `en' ///
+			`force' `_solved'
+	}
+	else {
+		validarcae_div4 `varlist', file(`temp') levels(`levels') `keep' `en' ///
 			`force' `_solved'
 	}
 	qui count if inlist(_valid_cae_`rev', 30, 300, 3000)

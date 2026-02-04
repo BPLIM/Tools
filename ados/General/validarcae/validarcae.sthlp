@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.0 5Jun2024}{...}{smcl}
+{* *! version 1.0 15Jan2025}{...}{smcl}
 {.-}
 help for {cmd:validarcae} {right:}
 {.-}
@@ -28,7 +28,7 @@ where {it:varname} is either a string or numeric variable containing CAE codes
 {synoptline}
 {syntab :Options}
 {synopt :{opt rev(#)}} allows the user to specify which CAE Revision to use.
-The user may choose between 1, 2, 21, or 3. If the option is not specified it defaults
+The user may choose between 1, 2, 21, 3 or 4. If the option is not specified it defaults
 to Revision 3.
 {p_end}
 
@@ -40,7 +40,8 @@ Below we present the levels for each CAE revision and their designations:{break}
 {hline 1} CAE Rev. 1 : Division (1); Subdivision (2); Class (3); Group (4); Subgroup (5); Split(6){break}
 {hline 1} CAE Rev. 2 : Section (1); Subsection (2); Division (3); Group (4); Class (5); Subclass(6){break}
 {hline 1} CAE Rev. 21: Section (1); Subsection (2); Division (3); Group (4); Class (5); Subclass(6){break}
-{hline 1} CAE Rev. 3 : Section (1); Division (2); Group (3); Class (4); Subclass(5){break}{space 5}{break}
+{hline 1} CAE Rev. 3 : Section (1); Division (2); Group (3); Class (4); Subclass(5){break}
+{hline 1} CAE Rev. 4 : Section (1); Division (2); Group (3); Class (4); Subclass(5){break}{space 5}{break}
 The user may select all the levels (1 2 3 4 5 (6)), which will create 5 (6) new variables, depending
 on the CAE revision. These newly created variables are numerical and have value labels associated with
 each code.{break}
@@ -132,7 +133,9 @@ and english. The command works with all revisions of the CAE:
 {pstd}
 {hline 1}  CAE Revision 21:   2003 - 2007{p_end}
 {pstd}
-{hline 1}  CAE Revision 3{space 1}:    2008 - ...{p_end}
+{hline 1}  CAE Revision 3{space 1}:    2008 - 2024{p_end}
+{pstd}
+{hline 1}  CAE Revision 4{space 1}:    2025 - ...{p_end}
 
 {pstd}
 {opt Note}: the time interval represents the official dates in which a revision
@@ -140,7 +143,7 @@ came into force.
 
 {pstd}
 The command produces the variable {opt _valid_cae_#} signaling valid and invalid codes
-for CAE Revision # as specified by the user, where # equals 1, 2, 21 or 3.
+for CAE Revision # as specified by the user, where # equals 1, 2, 21, 3 or 4.
 Codes from revision 1 have 6 digits (at the highest level of disaggregation) and
 always start with a number greater than 0, so the possible values for
 {opt _valid_cae_#} are:
@@ -163,7 +166,7 @@ always start with a number greater than 0, so the possible values for
 {hline 1} 200000:   invalid code.{p_end}
 
 {pstd}
-Codes from revisions 2, 21 and 3 have 5 digits (at the highest level of
+Codes from revisions 2, 21, 3 and 4 have 5 digits (at the highest level of
 disaggregation) and may start with a zero. Zeros on the left are sometimes
 inadvertently lost (for example if the codes are converted to numeric format),
 so we check if codes with a length smaller than 5 will still be valid
@@ -237,7 +240,7 @@ connected to the use of the item, whether or not based upon warranty, contract, 
 {pstd}
 {cmd:savesome} by Nicholas Cox {p_end}
 {pstd}
-{cmd:ustrdist} by Michael Barker and Felix Pöge (for option {opt solve}){p_end}
+{cmd:jarowinkler} by James J Feigenbaum{p_end}
 
 {title:Author}
 
