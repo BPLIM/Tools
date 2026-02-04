@@ -1,6 +1,6 @@
 # VALIDARCAE: Utility tool to deal with Portuguese Classification of Economic Activities (CAE) codes
 
-There have been several revisions of the Portuguese Economic Activities Classification, namely Revision 1, 2, 2.1 and 3.
+There have been several revisions of the Portuguese Economic Activities Classification, namely Revision 1, 2, 2.1, 3 and 4.
 `validarcae` verifies if a CAE code is valid under one of the aforementioned revisions, as specified by the user. Moreover, it also allows for the user to get different types of aggregations for valid codes according to each revision.
 
 ## Installation:
