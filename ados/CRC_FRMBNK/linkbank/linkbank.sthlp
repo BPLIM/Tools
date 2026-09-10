@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.0.0 October 2025}{...}
+{* *! version 2.1.0 July 2026}{...}
 {vieweralsosee "" "--"}{...}
 {viewerjumpto "Syntax" "linkbank##syntax"}{...}
 {viewerjumpto "Description" "linkbank##description"}{...}
@@ -16,7 +16,7 @@ help for {cmd:linkbank} {right:}
 
 {pstd}
 {cmd:linkbank} {hline 1} Creates linking IDs for financial institutions in Central Credit Register (CRC) and related datasets for 
-merging with Bank Balance Sheet (BBS) or Historical Series of the Portuguese Banking Sector (SLB)
+merging with Historical Series of the Portuguese Banking Sector (SLB), Individual MFI Balance Sheet Items Portugal (iBSIPT) or Bank Balance Sheet (BBS).
 
 
 {marker syntax}{...}
@@ -31,7 +31,7 @@ merging with Bank Balance Sheet (BBS) or Historical Series of the Portuguese Ban
 {synopthdr}
 {synoptline}
 {syntab:Main}
-{p2coldent:* {opt base(string)}}specifies the dataset to link with; options are {cmd:bbs} or {cmd:slb}{p_end}
+{p2coldent:* {opt base(string)}}specifies the dataset to link with; options are {cmd:slb}, {cmd:ibsipt} or {cmd:bbs}{p_end}
 {synoptline}
 {p 4 6 2}
 * required{p_end}
@@ -48,7 +48,7 @@ where {it:bankid} is the variable containing the financial institution identifie
 {pstd}
 {cmd:linkbank} is a tool developed by BPLIM to accurately match individual entity records from datasets based on Central 
 Credit Register data (such as CRC and HCRC) with datasets that use different units of analysis, such as SLB (banking 
-groups or stand-alone institutions) or BBS (stand-alone institutions). Its main objectives are:
+groups or stand-alone institutions) or iBSIPT and BBS (stand-alone institutions). Its main objectives are:
 
 {phang2}
 1) Ensure consistent linking across datasets with different units of observation
@@ -63,7 +63,7 @@ handles cases where an institution's status or group membership changes over tim
 
 {pstd}
 It should be applied to the dataset with the most granular information (i.e., CRC-like datasets). It supports 
-linking from December 1999 onward and is updated annually to extend coverage. To verify that your version includes the 
+linking from December 1999 onward for SLB, and from December 2014 onward for iBSIPT and BBS. It is updated annually to extend coverage. To verify that your version includes the 
 period you need, type {cmd:which linkbank}.
 
 {pstd}
@@ -71,8 +71,8 @@ It adds two new variables to your dataset: {cmd:id_}{it:`base'} and {cmd:note_}{
 unchanged. All observations from your original dataset are preserved. 
 
 {pstd}
-It does not clear previous results from other bases, so you can add both SLB and BBS IDs to the same dataset 
-by running the command twice with different {opt base()} options. For more details, consult the user guide for {cmd:linkbank}.
+It does not clear previous results from other bases, so you can add SLB, iBSIPT and BBS IDs simultaneously to the same dataset 
+by running the command again with different {opt base()} options. For more details, consult the user guide for {cmd:linkbank}.
 
 
 {marker options}{...}
@@ -84,10 +84,15 @@ by running the command twice with different {opt base()} options. For more detai
 {opt base(string)} specifies the dataset to link with. This option is required. Available options are:
 
 {phang2}
-{cmd:bbs} - Link with Bank Balance Sheet data (available from December 2014 onward)
+{cmd:slb} - Link with Historical Series of the Portuguese Banking Sector (available from December 1999 onward)
 
 {phang2}
-{cmd:slb} - Link with Historical Series of the Portuguese Banking Sector
+{cmd:ibsipt} - Link with Individual MFI Balance Sheet Items Portugal (available from December 2014 onward)
+
+{phang2}
+{cmd:bbs} - Link with Bank Balance Sheet data (available from December 2014 onward)
+
+
 
 
 {marker results}{...}
@@ -97,10 +102,10 @@ by running the command twice with different {opt base()} options. For more detai
 The command creates two variables:
 
 {phang2}
-{cmd:id_}{it:`base'} - The corresponding identifier in the target dataset (e.g., {cmd:id_bbs} or {cmd:id_slb})
+{cmd:id_}{it:`base'} - The corresponding identifier in the target dataset (e.g., {cmd:id_slb}, {cmd:id_ibsipt} or {cmd:id_bbs})
 
 {phang2}
-{cmd:note_}{it:`base'} - Contextual information explaining the match (e.g., {cmd:note_bbs} or {cmd:note_slb})
+{cmd:note_}{it:`base'} - Contextual information explaining the match (e.g., {cmd:note_slb}, {cmd:note_ibsipt} or {cmd:note_bbs})
 
 {pstd}
 It preserves all observations from your original dataset. Observations that cannot be matched to the target 
@@ -112,12 +117,12 @@ explanations of all possible notes, consult the {cmd:linkbank} user guide.
 {title:Examples}
 
 {pstd}
-Add the corresponding BBS ID and explanation for financial institutions ({it:bina}) over time ({it:date}):
+Add the corresponding iBSIPT ID and explanation for financial institutions ({it:bina}) over time ({it:date}):
 
-{p 8 16}{inp:. linkbank bina date, base(bbs)}{p_end}
+{p 8 16}{inp:. linkbank bina date, base(ibsipt)}{p_end}
 
 {pstd}
-This adds variables {cmd:id_bbs} and {cmd:note_bbs} to your dataset.
+This adds variables {cmd:id_ibsipt} and {cmd:note_ibsipt} to your dataset.
 
 {pstd}
 Add the corresponding SLB ID and explanation:

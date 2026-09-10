@@ -1,7 +1,7 @@
-*! linkbank v2.0.0
+*! linkbank v2.1.0
 *! Author: Emma Zhao and Ana Isabel Sa
-*! Date:04nov2025
-*! Description: Link credit data to BBS and SLB data
+*! Date:21jul2026
+*! Description: Link credit data to SLB, iBSIPT and BBS data
 *! Coverage period: December 1999 to December 2024
 
 capture program drop linkbank
@@ -12,7 +12,7 @@ program define linkbank
 	]
 
 	di
-	local version_ado "2.0.0"
+	local version_ado "2.1.0"
 
 	tokenize `varlist'
 
@@ -66,15 +66,25 @@ program define linkbank
 	gen tmp_bina = `1'
 	
 	
-**************	
+	* Adds the correspondence id variables to the original dataset
+
+	**************	
 	
 	*For base==BBS
 	if "`base'" == "bbs" {
 		qui merge m:1 tmp_bina tmp_date using "`file_corresp'", keep(1 3) keepusing(id_bbs note_bbs) nogen
 		drop tmp_date tmp_bina
 	}
+	
+	*************	
+	
+	*For base==iBSIPT
+	if "`base'" == "ibsipt" {
+		qui merge m:1 tmp_bina tmp_date using "`file_corresp'", keep(1 3) keepusing(id_ibsipt note_ibsipt) nogen
+		drop tmp_date tmp_bina
+	}
 
-**************	
+	**************	
 	
 	*For base==SLB
 	if "`base'" == "slb" {
@@ -82,6 +92,7 @@ program define linkbank
 		drop tmp_date tmp_bina
 	}
 	
+	*************	
 	
 	*Final setup
 	order `2' `1' id_`base' note_`base'
